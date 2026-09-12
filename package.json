@@ -1,0 +1,19 @@
+{
+  "name": "jogos-interdisciplinares",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jogos digitais da Sala de Recursos da EEMTI José Cláudio de Araújo.",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write \"index.html\" \"README.md\" \"CONTRIBUTING.md\" \"assets/css/*.css\" \"assets/js/*.js\" \"jogos/*.html\" \"jogos/*.js\"",
+    "format:check": "prettier --check \"index.html\" \"README.md\" \"CONTRIBUTING.md\" \"assets/css/*.css\" \"assets/js/*.js\" \"jogos/*.html\" \"jogos/*.js\"",
+    "validate:html": "html-validate index.html jogos/*.html",
+    "validate:js": "for f in assets/js/*.js jogos/*.js; do node --check \"$f\" || exit 1; done",
+    "validate": "npm run format:check && npm run validate:html && npm run validate:js",
+    "serve": "python3 -m http.server 8765"
+  },
+  "devDependencies": {
+    "html-validate": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}

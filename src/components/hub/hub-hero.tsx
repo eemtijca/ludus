@@ -1,20 +1,12 @@
 "use client";
 
 /**
- * HubHero — abertura do hub com identidade, promessa e progresso geral.
- * Números vivos (X/12) puxados do store de progresso + decoração lúdica
- * (peças de jogo flutuantes, sem imagens externas — SVG inline).
+ * HubHero: abertura do hub com identidade, promessa e progresso geral.
+ * O progresso é dinâmico (derivado do catálogo), então a coleção pode
+ * crescer sem alterar o texto. Decoração em SVG inline, sem imagens.
  */
 
-import {
-  Dices,
-  HeartHandshake,
-  TimerOff,
-  Volume2,
-  Sparkles,
-  Star,
-  Zap,
-} from "lucide-react";
+import { Dices, HeartHandshake, TimerOff, Volume2, Sparkles, Star, Zap } from "lucide-react";
 import { GAMES } from "@/lib/catalog";
 import { countCompleted, useProgress } from "@/lib/progress";
 
@@ -31,26 +23,21 @@ export function HubHero() {
 
   return (
     <section
-      className="relative overflow-hidden rounded-3xl border-2 p-6 pb-8 sm:p-10 sm:pb-10"
-      style={{
-        background:
-          "linear-gradient(135deg, #a560e8 0%, #8941d4 55%, #7a35c9 100%)",
-        borderColor: "#8941d4",
-      }}
+      className="hub-hero relative overflow-hidden rounded-3xl border-2 p-6 pb-8 sm:p-10 sm:pb-10"
       aria-labelledby="hub-title"
     >
-      {/* decoração: peças de jogo flutuando */}
+      {/* Decoração: peças de jogo flutuando. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <Sparkles
           className="absolute right-[12%] top-[18%] size-8 text-white/25 anim-float"
           style={{ animationDelay: "0ms" }}
         />
         <Star
-          className="absolute right-[30%] top-[64%] size-6 text-hint/60 anim-float"
+          className="absolute right-[30%] top-[64%] size-6 text-hint/70 anim-float"
           style={{ animationDelay: "600ms" }}
         />
         <Zap
-          className="absolute left-[6%] bottom-[20%] size-7 text-matematica/70 anim-float"
+          className="absolute bottom-[20%] left-[6%] size-7 text-matematica/80 anim-float"
           style={{ animationDelay: "1200ms" }}
         />
         <Dices
@@ -70,14 +57,13 @@ export function HubHero() {
             id="hub-title"
             className="mt-2 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl"
           >
-            Doze jogos,
+            Jogos de investigação,
             <br />
-            quatro áreas,
-            <span className="block text-hint">um só ritmo: o seu.</span>
+            <span className="text-hint">no ritmo que for o seu.</span>
           </h1>
           <p className="mt-4 max-w-md text-base font-semibold leading-relaxed text-white/95 sm:text-lg">
-            Investigações curtas de Linguagens, Matemática, Natureza e Humanas —
-            resolvidas por toque, teclado ou voz, no tempo que você precisar.
+            Casos curtos de sala de aula, resolvidos por toque, teclado ou voz, no tempo que você
+            precisar.
           </p>
 
           <ul className="mt-6 flex flex-wrap gap-2">
@@ -94,10 +80,10 @@ export function HubHero() {
         </div>
 
         {/* Progresso geral */}
-        <div className="w-full max-w-xs rounded-3xl border-2 border-white/40 bg-white p-5 text-ink shadow-[0_6px_0_rgba(60,26,120,0.45)] sm:w-auto">
+        <div className="w-full max-w-xs rounded-3xl border-2 border-white/40 bg-surface p-5 text-ink shadow-[0_6px_0_rgba(0,60,32,0.5)] sm:w-auto">
           <div className="flex items-center gap-3">
             <span
-              className="flex size-12 items-center justify-center rounded-2xl bg-linguagens text-white anim-float"
+              className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-success text-white"
               aria-hidden
             >
               <Dices className="size-6" strokeWidth={2.4} />

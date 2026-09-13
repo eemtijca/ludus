@@ -1,11 +1,12 @@
 "use client";
 
 /**
- * AppHeader — barra superior do hub.
- * Navegação entre Jogos / Progresso / Professores + atalhos DUA.
+ * AppHeader: barra superior fixa.
+ * Marca à esquerda e atalhos de acessibilidade à direita; a navegação
+ * entre visões fica na barra inferior (mobile) e aqui a partir de sm.
  */
 
-import { Dices, Contrast, Type } from "lucide-react";
+import { Dices, Contrast, Type, Trophy, GraduationCap } from "lucide-react";
 import { useA11y } from "@/components/a11y/a11y-provider";
 import { hrefFor, type Route } from "@/lib/router";
 import { cn } from "@/lib/utils";
@@ -21,33 +22,32 @@ export function AppHeader({ current }: { current: Route["view"] }) {
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-border bg-paper/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2.5 sm:gap-4 sm:px-6">
+      <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-2 sm:px-6">
         {/* Marca */}
         <a
           href={hrefFor({ view: "hub" })}
-          className="flex items-center gap-2.5 rounded-xl focus-visible:outline-offset-4"
-          aria-label="Ludus — página inicial"
+          className="flex min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-offset-4"
+          aria-label="Ludus, página inicial"
         >
           <span
-            className="flex size-10 items-center justify-center rounded-2xl border-2 text-white shadow-[0_3px_0_#8941d4] sm:size-11"
-            style={{ background: "#a560e8", borderColor: "#8941d4" }}
+            className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-success text-white shadow-[0_3px_0_var(--success-dark)] sm:size-11"
             aria-hidden
           >
             <Dices className="size-5 sm:size-6" strokeWidth={2.4} />
           </span>
-          <span className="hidden flex-col leading-none sm:flex">
-            <span className="font-display text-xl font-bold tracking-tight text-ink">
+          <span className="flex min-w-0 flex-col leading-none">
+            <span className="font-display text-lg font-bold tracking-tight text-ink sm:text-xl">
               Ludus
             </span>
-            <span className="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-ink-faint">
+            <span className="truncate text-[0.6rem] font-bold uppercase tracking-[0.12em] text-ink-faint sm:text-[0.66rem]">
               Jogos do Ensino Médio
             </span>
           </span>
         </a>
 
-        {/* Navegação */}
+        {/* Navegação (a partir de sm; no mobile vive na barra inferior) */}
         <nav
-          className="ml-auto flex items-center gap-1 sm:gap-1.5"
+          className="ml-auto hidden items-center gap-1.5 sm:flex"
           aria-label="Navegação principal"
         >
           {NAV.map((item) => {
@@ -58,55 +58,58 @@ export function AppHeader({ current }: { current: Route["view"] }) {
                 href={hrefFor(item.route)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "inline-flex min-h-11 items-center rounded-xl px-3 font-display text-[0.82rem] font-bold transition-colors sm:px-4 sm:text-sm",
+                  "inline-flex min-h-11 items-center gap-1.5 rounded-xl px-4 font-display text-sm font-bold transition-colors",
                   active
                     ? "bg-ink text-white shadow-[0_3px_0_#26242f]"
                     : "text-ink-soft hover:bg-cloud hover:text-ink",
                 )}
               >
+                {item.match === "hub" && <Dices className="size-4" strokeWidth={2.4} aria-hidden />}
+                {item.match === "progress" && (
+                  <Trophy className="size-4" strokeWidth={2.4} aria-hidden />
+                )}
+                {item.match === "teacher" && (
+                  <GraduationCap className="size-4" strokeWidth={2.4} aria-hidden />
+                )}
                 {item.label}
               </a>
             );
           })}
-
-          {/* Atalhos DUA (persistentes) */}
-          <span
-            className="mx-1 hidden h-8 w-0.5 rounded-full bg-border sm:block"
-            aria-hidden
-          />
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => a11y.toggle("highContrast")}
-              aria-pressed={a11y.highContrast}
-              aria-label="Alternar alto contraste"
-              title="Alto contraste"
-              className={cn(
-                "flex size-11 items-center justify-center rounded-xl border-2 transition-colors",
-                a11y.highContrast
-                  ? "border-linguagens bg-linguagens-soft text-linguagens-dark"
-                  : "border-border bg-white text-ink-soft hover:border-ink-faint",
-              )}
-            >
-              <Contrast className="size-5" strokeWidth={2.2} aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => a11y.toggle("largeText")}
-              aria-pressed={a11y.largeText}
-              aria-label="Alternar texto amplo"
-              title="Texto amplo"
-              className={cn(
-                "flex size-11 items-center justify-center rounded-xl border-2 transition-colors",
-                a11y.largeText
-                  ? "border-linguagens bg-linguagens-soft text-linguagens-dark"
-                  : "border-border bg-white text-ink-soft hover:border-ink-faint",
-              )}
-            >
-              <Type className="size-5" strokeWidth={2.2} aria-hidden />
-            </button>
-          </div>
         </nav>
+
+        {/* Atalhos de acessibilidade (sempre visíveis) */}
+        <div className="ml-auto flex items-center gap-1.5 sm:ml-2">
+          <button
+            type="button"
+            onClick={() => a11y.toggle("highContrast")}
+            aria-pressed={a11y.highContrast}
+            aria-label="Alternar alto contraste"
+            title="Alto contraste"
+            className={cn(
+              "flex size-11 shrink-0 items-center justify-center rounded-xl border-2 transition-colors",
+              a11y.highContrast
+                ? "border-success bg-success-soft text-success-dark"
+                : "border-border bg-surface text-ink-soft hover:border-ink-faint",
+            )}
+          >
+            <Contrast className="size-5" strokeWidth={2.2} aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => a11y.toggle("largeText")}
+            aria-pressed={a11y.largeText}
+            aria-label="Alternar texto amplo"
+            title="Texto amplo"
+            className={cn(
+              "flex size-11 shrink-0 items-center justify-center rounded-xl border-2 transition-colors",
+              a11y.largeText
+                ? "border-success bg-success-soft text-success-dark"
+                : "border-border bg-surface text-ink-soft hover:border-ink-faint",
+            )}
+          >
+            <Type className="size-5" strokeWidth={2.2} aria-hidden />
+          </button>
+        </div>
       </div>
     </header>
   );

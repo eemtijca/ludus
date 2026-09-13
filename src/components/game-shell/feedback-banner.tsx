@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * FeedbackBanner — retorno imediato de acerto, erro ou informação.
+ * FeedbackBanner: retorno imediato de acerto, erro ou informação.
  * Sempre com ícone + texto + cor (dupla codificação, nunca só cor).
  * role="status" + aria-live="polite" para leitores de tela.
  */
@@ -10,11 +10,7 @@ import { useEffect, useRef } from "react";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import type { FeedbackMessage } from "@/games/_shared/use-game-session";
 
-export function FeedbackBanner({
-  feedback,
-}: {
-  feedback: FeedbackMessage | null;
-}) {
+export function FeedbackBanner({ feedback }: { feedback: FeedbackMessage | null }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,14 +22,7 @@ export function FeedbackBanner({
   }, [feedback]);
 
   if (!feedback) {
-    return (
-      <div
-        className="min-h-[3.25rem]"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      />
-    );
+    return <div className="min-h-[3.25rem]" role="status" aria-live="polite" aria-atomic="true" />;
   }
 
   const styles = {
@@ -52,11 +41,7 @@ export function FeedbackBanner({
   }[feedback.kind];
 
   const Icon =
-    feedback.kind === "success"
-      ? CheckCircle2
-      : feedback.kind === "error"
-        ? AlertCircle
-        : Info;
+    feedback.kind === "success" ? CheckCircle2 : feedback.kind === "error" ? AlertCircle : Info;
 
   return (
     <div
@@ -72,9 +57,7 @@ export function FeedbackBanner({
       >
         <Icon className="size-5" strokeWidth={2.6} />
       </span>
-      <p className="text-[0.95rem] leading-snug sm:text-base">
-        {feedback.text}
-      </p>
+      <p className="text-[0.95rem] leading-snug sm:text-base">{feedback.text}</p>
     </div>
   );
 }

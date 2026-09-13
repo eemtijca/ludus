@@ -1,16 +1,15 @@
 "use client";
 
 /**
- * useGameSession — motor de partida compartilhado pelos 12 jogos.
+ * useGameSession: motor de partida compartilhado pelos jogos.
  *
  * Responsabilidades:
- * - Fases (1 Explorar · 2 Testar · 3 Decidir) com selos automáticos;
- * - Feedback imediato (acerto/erro/infos) com som e animação;
+ * - Fases (1 Explorar, 2 Testar, 3 Decidir) com selos automáticos;
+ * - Feedback imediato (acerto, erro, informação) com som e animação;
  * - Veredito final com confete, som de vitória e registro de progresso;
  * - Reinício limpo (generation key) que zera o palco sem recarregar a página.
  *
- * Princípios DUA/AEE preservados: sem cronômetro, sem punição,
- * progresso só soma, toda mensagem também pode ser lida em voz alta.
+ * Princípios DUA/AEE: sem cronômetro, sem punição, progresso só soma.
  */
 
 import { useCallback, useRef, useState } from "react";
@@ -36,7 +35,7 @@ export interface VerdictPayload {
   title: string;
   text: string;
   /** Bastidor pedagógico opcional (expande no veredito). */
-  detail?: { label: string; text: string };
+  detail?: { label: string; text: string; speech?: string };
   /** Id do caso/variante concluído para o progresso. */
   caseId?: string;
 }
@@ -47,7 +46,7 @@ export interface GameSession {
   badges: BadgeId[];
   feedback: FeedbackMessage | null;
   verdict: VerdictPayload | null;
-  /** Muda a cada reinício — use como `key` do palco para zerar o jogo. */
+  /** Muda a cada reinício; use como key do palco para zerar o jogo. */
   generation: number;
   setPhase: (phase: Phase) => void;
   showSuccess: (text: string, opts?: { speakText?: boolean }) => void;

@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * Revisor Crítico — palco do jogo.
+ * Revisor Crítico: palco do jogo.
  *
- * Fase 1 · Explorar: o rascunho aparece com os trechos problemáticos;
- *   o estudante lê os 3 trechos (cartas de leitura).
- * Fase 2 · Testar: escolhe o reparo certo entre as alternativas.
- * Fase 3 · Decidir: publica a versão final (antes/depois) → veredito.
+ * Fase 1 (Explorar): o rascunho aparece com os trechos problemáticos;
+ *   o estudante lê os 3 trechos em cartas de leitura.
+ * Fase 2 (Testar): escolher o reparo certo entre as alternativas.
+ * Fase 3 (Decidir): publicar a versão final (comparação antes e depois).
  */
 
 import { useState } from "react";
@@ -52,8 +52,8 @@ export function RevisorCriticoGame({ onExit }: { onExit: () => void }) {
         key={`${textIndex}-${session.generation}`}
         session={session}
         texto={TEXTS[textIndex]}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
         onPhase2={() => session.setPhase(2)}
         onPhase3={() => session.setPhase(3)}
       />
@@ -90,7 +90,7 @@ function Stage({
     }
   };
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const allRead = read.length === 3;
     return (
@@ -100,12 +100,10 @@ function Stage({
           <div className="flex items-center gap-2 text-xs font-bold text-ink-soft">
             <Newspaper className="size-4" aria-hidden />
             {texto.context.journal}
-            <span className="ml-auto font-semibold text-ink-faint">
-              {texto.context.deadline}
-            </span>
+            <span className="ml-auto font-semibold text-ink-faint">{texto.context.deadline}</span>
           </div>
           <blockquote
-            className="mt-3 rounded-2xl border-2 border-border bg-white p-4 text-[0.95rem] leading-relaxed text-ink"
+            className="mt-3 rounded-2xl border-2 border-border bg-surface p-4 text-[0.95rem] leading-relaxed text-ink"
             style={{ borderLeft: `6px solid ${areaColor}` }}
           >
             {texto.draft.lead}
@@ -122,9 +120,7 @@ function Stage({
               </mark>
             ))}
           </blockquote>
-          <p className="mt-2 text-xs font-semibold text-ink-soft">
-            Pauta: {texto.context.brief}
-          </p>
+          <p className="mt-2 text-xs font-semibold text-ink-soft">Pauta: {texto.context.brief}</p>
         </div>
 
         {/* Cartas de leitura */}
@@ -159,13 +155,11 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-4">
-        <p className="font-display text-lg font-bold text-ink sm:text-xl">
-          {texto.repairQuestion}
-        </p>
+        <p className="font-display text-lg font-bold text-ink sm:text-xl">{texto.repairQuestion}</p>
         <div className="flex flex-col gap-3">
           {texto.repairOptions.map((option, i) => (
             <OptionTile
@@ -180,14 +174,10 @@ function Stage({
               onPick={() => {
                 if (i === texto.repairCorrect) {
                   setRepairSolved(true);
-                  session.showSuccess(
-                    "Reparo certeiro. A versão final está pronta.",
-                  );
+                  session.showSuccess("Reparo certeiro. A versão final está pronta.");
                   return true;
                 }
-                session.showError(
-                  `Ainda não. ${texto.repairWrong[i] ?? texto.repairHint}`,
-                );
+                session.showError(`Ainda não. ${texto.repairWrong[i] ?? texto.repairHint}`);
                 return false;
               }}
             />
@@ -208,7 +198,7 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   return (
     <div className="flex flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-2">
@@ -218,8 +208,7 @@ function Stage({
             Rascunho
           </p>
           <p className="mt-2 text-sm leading-relaxed text-ink">
-            {texto.draft.lead}{" "}
-            {texto.draft.segments.map((s) => s.text).join(" ")}
+            {texto.draft.lead} {texto.draft.segments.map((s) => s.text).join(" ")}
           </p>
         </div>
         <div className="rounded-2xl border-2 border-success bg-success-soft p-4">
@@ -227,9 +216,7 @@ function Stage({
             <Check className="size-4" strokeWidth={3} aria-hidden />
             Versão final
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-ink">
-            {texto.published}
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-ink">{texto.published}</p>
         </div>
       </div>
       <button

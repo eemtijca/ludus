@@ -4,11 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   LUDUS · Design System
-   Jogos do Ensino Médio — EEMTI José Cláudio de Araújo (Sala de Recursos)
-   Direção: lúdico premium (referências: Duolingo, Kahoot, Khan Academy)
-   Princípios: bordas grossas, sombras "chunky" 3D, cantos arredondados,
-   cores vivas por área BNCC, tipografia amigável, juice em marcos.
+   Ludus: sistema de design.
+   Tokens de cor apontam para variáveis de runtime (definidas em :root),
+   permitindo a troca de tema (alto contraste) sem reconstruir o CSS.
    ========================================================================== */
 
 @theme inline {
@@ -52,75 +50,116 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* --- Identidade Ludus ----------------------------------------------- */
-  --color-ink: #3c3a4e;
-  --color-ink-soft: #635f7c;
-  --color-ink-faint: #6f6a85;
-  --color-paper: #fdfaf3;
-  --color-paper-deep: #f7f1e4;
-  --color-cloud: #f4f1ea;
+  /* Identidade (definidas em :root para permitir temas). */
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-cloud: var(--cloud);
+  --color-line: var(--line);
 
-  --color-success: #58cc02;
-  --color-success-light: #89e219;
-  --color-success-dark: #46a302;
-  --color-success-soft: #eaffd6;
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-success-dark: var(--success-dark);
+  --color-success-soft: var(--success-soft);
 
-  --color-danger: #ff4b4b;
-  --color-danger-dark: #d33a3a;
-  --color-danger-soft: #ffe9e9;
+  --color-danger: var(--danger);
+  --color-danger-dark: var(--danger-dark);
+  --color-danger-soft: var(--danger-soft);
 
-  --color-hint: #ffc800;
-  --color-hint-dark: #dda500;
-  --color-hint-soft: #fff6d6;
+  --color-hint: var(--hint);
+  --color-hint-dark: var(--hint-dark);
+  --color-hint-soft: var(--hint-soft);
 
-  /* --- Áreas BNCC ------------------------------------------------------- */
-  --color-linguagens: #a560e8;
-  --color-linguagens-dark: #8941d4;
-  --color-linguagens-soft: #f3e9fd;
-  --color-matematica: #14b8a6;
-  --color-matematica-dark: #0d9488;
-  --color-matematica-soft: #e0f7f4;
-  --color-natureza: #10b981;
-  --color-natureza-dark: #0b8a61;
-  --color-natureza-soft: #e0f8ee;
-  --color-humanas: #ff9600;
-  --color-humanas-dark: #db7e00;
-  --color-humanas-soft: #fff1da;
+  /* Áreas BNCC. */
+  --color-linguagens: var(--linguagens);
+  --color-linguagens-dark: var(--linguagens-dark);
+  --color-linguagens-soft: var(--linguagens-soft);
+  --color-matematica: var(--matematica);
+  --color-matematica-dark: var(--matematica-dark);
+  --color-matematica-soft: var(--matematica-soft);
+  --color-natureza: var(--natureza);
+  --color-natureza-dark: var(--natureza-dark);
+  --color-natureza-soft: var(--natureza-soft);
+  --color-humanas: var(--humanas);
+  --color-humanas-dark: var(--humanas-dark);
+  --color-humanas-soft: var(--humanas-soft);
 }
 
 :root {
   --radius: 1rem;
-  --background: #fdfaf3;
-  --foreground: #3c3a4e;
-  --card: #ffffff;
-  --card-foreground: #3c3a4e;
-  --popover: #ffffff;
-  --popover-foreground: #3c3a4e;
-  --primary: #58cc02;
+
+  /* Texto e fundos. */
+  --ink: #3c3a4e;
+  --ink-soft: #55516b;
+  --ink-faint: #5b566f;
+  --surface: #ffffff;
+  --paper: #fdfaf3;
+  --paper-deep: #f7f1e4;
+  --cloud: #f4f1ea;
+  --line: #e9e2d2;
+
+  /* Verde institucional (cor principal). */
+  --success: #008241;
+  --success-light: #2fa25f;
+  --success-dark: #005c2e;
+  --success-soft: #e6f4ec;
+
+  --danger: #ff4b4b;
+  --danger-dark: #d33a3a;
+  --danger-soft: #ffe9e9;
+
+  --hint: #ffc800;
+  --hint-dark: #b98f00;
+  --hint-soft: #fff6d6;
+
+  --linguagens: #a560e8;
+  --linguagens-dark: #8941d4;
+  --linguagens-soft: #f3e9fd;
+  --matematica: #1899d6;
+  --matematica-dark: #116fa0;
+  --matematica-soft: #e3f2fd;
+  --natureza: #0b9e6f;
+  --natureza-dark: #077a55;
+  --natureza-soft: #e0f8ee;
+  --humanas: #e07400;
+  --humanas-dark: #a85500;
+  --humanas-soft: #fff1da;
+
+  /* Base shadcn. */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: #008241;
   --primary-foreground: #ffffff;
-  --secondary: #f4f1ea;
-  --secondary-foreground: #3c3a4e;
-  --muted: #f4f1ea;
-  --muted-foreground: #635f7c;
-  --accent: #f3e9fd;
-  --accent-foreground: #3c3a4e;
+  --secondary: var(--cloud);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cloud);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--success-soft);
+  --accent-foreground: var(--success-dark);
   --destructive: #ff4b4b;
-  --border: #e9e2d2;
-  --input: #e9e2d2;
-  --ring: #a560e8;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: #008241;
   --chart-1: #a560e8;
-  --chart-2: #14b8a6;
-  --chart-3: #10b981;
+  --chart-2: #1899d6;
+  --chart-3: #008241;
   --chart-4: #ff9600;
   --chart-5: #ffc800;
   --sidebar: #ffffff;
-  --sidebar-foreground: #3c3a4e;
-  --sidebar-primary: #a560e8;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: #008241;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f3e9fd;
-  --sidebar-accent-foreground: #3c3a4e;
-  --sidebar-border: #e9e2d2;
-  --sidebar-ring: #a560e8;
+  --sidebar-accent: var(--success-soft);
+  --sidebar-accent-foreground: var(--success-dark);
+  --sidebar-border: var(--line);
+  --sidebar-ring: #008241;
 }
 
 .dark {
@@ -130,7 +169,7 @@
   --card-foreground: #f4f1ea;
   --popover: #2b2838;
   --popover-foreground: #f4f1ea;
-  --primary: #58cc02;
+  --primary: #2fa25f;
   --primary-foreground: #ffffff;
   --secondary: #353142;
   --secondary-foreground: #f4f1ea;
@@ -141,7 +180,7 @@
   --destructive: #ff4b4b;
   --border: #3b3749;
   --input: #3b3749;
-  --ring: #a560e8;
+  --ring: #2fa25f;
 }
 
 @layer base {
@@ -151,15 +190,16 @@
 
   html {
     scroll-behavior: smooth;
-    /* deixa a barra sticky livre ao rolar elementos focados/clicados */
+    /* Compensa a barra fixa superior e a navegação inferior ao rolar até alvos. */
     scroll-padding-top: 6rem;
-    scroll-padding-bottom: 4rem;
+    scroll-padding-bottom: 7rem;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-background text-foreground font-sans;
-    line-height: 1.55;
+    font-weight: 600;
+    line-height: 1.6;
     text-rendering: optimizeLegibility;
   }
 
@@ -169,22 +209,22 @@
   h4 {
     @apply font-display;
     letter-spacing: -0.01em;
-    /* cor herdada do contexto — nunca fixar aqui (hero usa branco) */
+    /* Cor herdada do contexto: o hero usa texto branco sobre fundo verde. */
   }
 
   ::selection {
-    background: #f3e9fd;
-    color: #3c3a4e;
+    background: var(--success-soft);
+    color: var(--success-dark);
   }
 
-  /* Foco visível e generoso (WCAG 2.4.7 + alvos amplos) */
+  /* Foco visível (WCAG 2.4.7). */
   :focus-visible {
-    outline: 3px solid #a560e8;
+    outline: 3px solid var(--success);
     outline-offset: 3px;
     border-radius: 8px;
   }
 
-  /* Realce do trecho sendo lido em voz alta */
+  /* Realce do trecho lido em voz alta. */
   .reading-aloud {
     outline: 3px solid #ffc800 !important;
     outline-offset: 3px;
@@ -194,10 +234,7 @@
 }
 
 @layer components {
-  /* =====================================================================
-     Botão 3D — assinatura tátil do lúdico premium.
-     Uso: <button className="ludus-btn ludus-btn-green">Continuar</button>
-     ===================================================================== */
+  /* Botão 3D com sombra inferior. As variantes definem as variáveis locais. */
   .ludus-btn {
     @apply relative inline-flex select-none items-center justify-center gap-2
            font-display font-bold leading-none tracking-wide
@@ -208,8 +245,8 @@
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
     min-height: 52px;
-    box-shadow: 0 5px 0 var(--btn-shadow, #46a302);
-    background: var(--btn-bg, #58cc02);
+    box-shadow: 0 5px 0 var(--btn-shadow, var(--success-dark));
+    background: var(--btn-bg, var(--success));
     color: var(--btn-fg, #ffffff);
     border-color: var(--btn-border, transparent);
   }
@@ -218,103 +255,114 @@
   }
   .ludus-btn:active:not(:disabled) {
     transform: translateY(5px);
-    box-shadow: 0 0 0 var(--btn-shadow, #46a302);
+    box-shadow: 0 0 0 var(--btn-shadow, var(--success-dark));
   }
   .ludus-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    box-shadow: 0 5px 0 #d8d2c2;
-    background: #ece7db;
-    color: #9693ab;
+    box-shadow: 0 5px 0 var(--line);
+    background: var(--cloud);
+    color: var(--ink-faint);
   }
 
   .ludus-btn-green {
-    --btn-bg: #58cc02;
-    --btn-shadow: #46a302;
+    --btn-bg: var(--success);
+    --btn-shadow: var(--success-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-linguagens {
-    --btn-bg: #a560e8;
-    --btn-shadow: #8941d4;
+    --btn-bg: var(--linguagens);
+    --btn-shadow: var(--linguagens-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-matematica {
-    --btn-bg: #14b8a6;
-    --btn-shadow: #0d9488;
+    --btn-bg: var(--matematica);
+    --btn-shadow: var(--matematica-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-natureza {
-    --btn-bg: #10b981;
-    --btn-shadow: #0b8a61;
+    --btn-bg: var(--natureza);
+    --btn-shadow: var(--natureza-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-humanas {
-    --btn-bg: #ff9600;
-    --btn-shadow: #db7e00;
+    --btn-bg: var(--humanas);
+    --btn-shadow: var(--humanas-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-danger {
-    --btn-bg: #ff4b4b;
-    --btn-shadow: #d33a3a;
+    --btn-bg: var(--danger);
+    --btn-shadow: var(--danger-dark);
     --btn-fg: #ffffff;
   }
   .ludus-btn-ink {
-    --btn-bg: #3c3a4e;
+    --btn-bg: var(--ink);
     --btn-shadow: #26242f;
     --btn-fg: #ffffff;
   }
   .ludus-btn-paper {
-    --btn-bg: #ffffff;
-    --btn-shadow: #d8d2c2;
-    --btn-fg: #3c3a4e;
-    --btn-border: #e9e2d2;
+    --btn-bg: var(--surface);
+    --btn-shadow: var(--line);
+    --btn-fg: var(--ink);
+    --btn-border: var(--line);
   }
   .ludus-btn-sm {
     min-height: 44px;
     padding: 0.625rem 1.125rem;
     font-size: 0.9rem;
     border-radius: 14px;
-    box-shadow: 0 4px 0 var(--btn-shadow, #46a302);
+    box-shadow: 0 4px 0 var(--btn-shadow, var(--success-dark));
   }
   .ludus-btn-sm:active:not(:disabled) {
     transform: translateY(4px);
-    box-shadow: 0 0 0 var(--btn-shadow, #46a302);
+    box-shadow: 0 0 0 var(--btn-shadow, var(--success-dark));
   }
   .ludus-btn-xl {
     min-height: 64px;
     padding: 1.125rem 2.25rem;
     font-size: 1.15rem;
     border-radius: 18px;
-    box-shadow: 0 6px 0 var(--btn-shadow, #46a302);
+    box-shadow: 0 6px 0 var(--btn-shadow, var(--success-dark));
   }
   .ludus-btn-xl:active:not(:disabled) {
     transform: translateY(6px);
-    box-shadow: 0 0 0 var(--btn-shadow, #46a302);
+    box-shadow: 0 0 0 var(--btn-shadow, var(--success-dark));
   }
 
-  /* =====================================================================
-     Cartão lúdico — borda grossa + sombra chunky inferior.
-     ===================================================================== */
+  /* Cartão com borda grossa e sombra inferior. */
   .ludus-card {
-    @apply bg-white cursor-pointer text-left select-none
+    @apply bg-surface cursor-pointer text-left select-none
            transition-[transform,box-shadow] duration-150 ease-out;
-    border: 2px solid #e9e2d2;
+    border: 2px solid var(--line);
     border-radius: 20px;
-    box-shadow: 0 5px 0 #e9e2d2;
+    box-shadow: 0 5px 0 var(--line);
   }
   .ludus-card:hover:not(:disabled) {
     transform: translateY(-3px);
-    box-shadow: 0 8px 0 #e9e2d2;
+    box-shadow: 0 8px 0 var(--line);
   }
   .ludus-card:active:not(:disabled) {
     transform: translateY(2px);
-    box-shadow: 0 3px 0 #e9e2d2;
+    box-shadow: 0 3px 0 var(--line);
   }
   .ludus-card:disabled {
     cursor: default;
   }
+  /* Estado de escolha correta (borda e sombra verdes). */
+  .ludus-card-correct {
+    border-color: var(--success);
+    box-shadow: 0 5px 0 var(--success-dark);
+  }
 
-  /* Chip/etiqueta arredondada */
+  /* Painel de conteúdo branco com sombra inferior. */
+  .ludus-panel {
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 24px;
+    box-shadow: 0 5px 0 var(--line);
+  }
+
+  /* Chip/etiqueta arredondada. */
   .ludus-chip {
     @apply inline-flex items-center gap-1.5 font-display font-bold
            text-[0.72rem] uppercase tracking-[0.08em];
@@ -323,37 +371,87 @@
     border: 2px solid currentColor;
   }
 
-  /* Trilha de progresso */
+  /* Trilha de progresso. */
   .ludus-track {
     @apply relative w-full overflow-hidden;
-    background: #ece7db;
+    background: var(--cloud);
     border-radius: 999px;
     height: 16px;
     box-shadow: inset 0 2px 4px rgba(60, 58, 78, 0.12);
   }
   .ludus-track > i {
     @apply block h-full;
-    background: #58cc02;
+    background: var(--success);
     border-radius: 999px;
     transition: width 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Área da instrução da fase (fundo suave da área). */
+  .instruction-box {
+    background: var(--instruction-bg, var(--cloud));
+  }
+
+  /* Hero do hub (gradiente institucional). */
+  .hub-hero {
+    background: linear-gradient(135deg, #00914a 0%, #008241 45%, #005228 100%);
+    border-color: #005228;
+  }
+
+  /* Cenário do quintal (gene-dilema). */
+  .scene-sol {
+    background: linear-gradient(180deg, #f7ecd9 0%, #e8d5b5 100%);
+    border-color: #d9bf95;
+  }
+  .scene-neve {
+    background: linear-gradient(180deg, #f0f6ff 0%, #dbe9fa 100%);
+    border-color: #b8cbe8;
+  }
+
+  /* Navegação inferior fixa (mobile). */
+  .bottom-nav {
+    background: var(--paper);
+    border-top: 2px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bottom-nav-link {
+    @apply flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl
+           py-2 font-display text-[0.68rem] font-bold tracking-wide
+           transition-colors;
+    color: var(--ink-faint);
+    min-height: 60px;
+  }
+  .bottom-nav-link[aria-current="page"] {
+    color: var(--success-dark);
+    background: var(--success-soft);
   }
 }
 
 @layer utilities {
-  /* Fonte display rápida */
   .font-display {
     font-family: var(--font-baloo), var(--font-nunito), sans-serif;
   }
 
-  /* Texto com stroke estilo Kahoot (para números gigantes do HUD) */
+  /* Contorno branco para números grandes sobre fundo colorido. */
   .text-outline {
     -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
     paint-order: stroke fill;
   }
 
-  /* =====================================================================
-     Animações (juice) — desativadas com prefers-reduced-motion.
-     ===================================================================== */
+  /* Respiro extra no conteúdo quando a navegação inferior está visível. */
+  .pb-nav {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Carta com virada 3D: as duas faces ocupam a mesma célula do grid,
+     então a altura acompanha o conteúdo do verso (sem transbordo). */
+  .flip-scene {
+    display: grid;
+  }
+  .flip-face {
+    grid-area: 1 / 1;
+  }
+
+  /* Animações de feedback; desativadas por prefers-reduced-motion. */
   .anim-pop {
     animation: ludus-pop 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -378,7 +476,7 @@
   .anim-sheen {
     animation: ludus-sheen 2.4s ease-in-out infinite;
   }
-  /* Fluxo de corrente (elétrons) nos diagramas de circuito */
+  /* Fluxo de corrente nos diagramas de circuito. */
   .flow-dash {
     animation: ludus-flow 700ms linear infinite;
   }
@@ -482,15 +580,14 @@
     }
   }
 
-  /* Confete simples via CSS (fallback do framer-motion) */
+  /* Confete em CSS (fallback leve do framer-motion). */
   .confetti-piece {
     position: absolute;
     width: 10px;
     height: 14px;
     top: -16px;
     border-radius: 3px;
-    animation: ludus-confetti-fall var(--dur, 2400ms) ease-in var(--delay, 0ms)
-      forwards;
+    animation: ludus-confetti-fall var(--dur, 2400ms) ease-in var(--delay, 0ms) forwards;
   }
   @keyframes ludus-confetti-fall {
     0% {
@@ -506,85 +603,19 @@
     }
   }
 
-  /* =====================================================================
-     Modos de acessibilidade (DUA) — aplicados em <html>.
-     ===================================================================== */
+  /* ------------------------------------------------------------------
+     Modos de acessibilidade (aplicados como classes em <html>).
+     ------------------------------------------------------------------ */
 
-  /* Texto amplo: base tipográfica maior e respiro extra */
+  /* Texto amplo: base tipográfica maior e entrelinha mais aberta. */
   html.a11y-text-large {
     font-size: 118%;
   }
   html.a11y-text-large body {
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
-  /* Alto contraste: fundo escuro, bordas amarelas vivas, cores puras */
-  html.a11y-contrast {
-    --background: #000000;
-    --foreground: #ffffff;
-    --card: #0d0d0d;
-    --card-foreground: #ffffff;
-    --popover: #0d0d0d;
-    --popover-foreground: #ffffff;
-    --secondary: #1a1a1a;
-    --secondary-foreground: #ffffff;
-    --muted: #1a1a1a;
-    --muted-foreground: #e6e6e6;
-    --accent: #1a1a1a;
-    --accent-foreground: #ffffff;
-    --border: #ffd600;
-    --input: #ffd600;
-    --ring: #ffd600;
-    --color-ink: #ffffff;
-    --color-ink-soft: #f0f0f0;
-    --color-ink-faint: #cfcfcf;
-    --color-paper: #000000;
-    --color-paper-deep: #0a0a0a;
-    --color-cloud: #111111;
-    --color-success: #37e816;
-    --color-success-dark: #1fbe00;
-    --color-success-soft: #00230a;
-    --color-danger: #ff5c5c;
-    --color-danger-dark: #ff8080;
-    --color-danger-soft: #2a0000;
-    --color-hint: #ffd600;
-    --color-hint-dark: #ffe14d;
-    --color-hint-soft: #241f00;
-    --color-linguagens: #c48aff;
-    --color-linguagens-dark: #e3c2ff;
-    --color-linguagens-soft: #170026;
-    --color-matematica: #2ee6cf;
-    --color-matematica-dark: #7df2e3;
-    --color-matematica-soft: #00201c;
-    --color-natureza: #2ee88f;
-    --color-natureza-dark: #7df2bb;
-    --color-natureza-soft: #002412;
-    --color-humanas: #ffb43d;
-    --color-humanas-dark: #ffd07a;
-    --color-humanas-soft: #2a1700;
-  }
-  html.a11y-contrast body {
-    background: #000000;
-    color: #ffffff;
-  }
-  html.a11y-contrast .ludus-card,
-  html.a11y-contrast .ludus-btn:not(:disabled) {
-    box-shadow: 0 5px 0 #ffd600;
-    border-color: #ffd600;
-  }
-  html.a11y-contrast .ludus-btn-paper:not(:disabled) {
-    background: #000000;
-    color: #ffd600;
-  }
-  html.a11y-contrast .ludus-track {
-    background: #1a1a1a;
-    box-shadow: inset 0 0 0 2px #ffd600;
-  }
-  html.a11y-contrast :focus-visible {
-    outline-color: #ffd600;
-  }
-
-  /* Movimento reduzido (SC 2.3.3) — desliga juice automático */
+  /* Movimento reduzido: desliga animações de décor e transições longas. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -598,12 +629,166 @@
   html.a11y-reduced-motion .anim-float,
   html.a11y-reduced-motion .anim-pulse-soft,
   html.a11y-reduced-motion .anim-sheen,
-  html.a11y-reduced-motion .confetti-piece {
+  html.a11y-reduced-motion .anim-pop,
+  html.a11y-reduced-motion .anim-wiggle,
+  html.a11y-reduced-motion .anim-bounce-in,
+  html.a11y-reduced-motion .confetti-piece,
+  html.a11y-reduced-motion .flow-dash {
     animation: none !important;
   }
 }
 
-/* Scrollbar amigável */
+/* Alto contraste: fundo preto, bordas amarelas, cores vivas.
+   Os tokens de runtime são redefinidos aqui e propagam por todas as
+   utilities que os referenciam. */
+html.a11y-contrast {
+  --ink: #ffffff;
+  --ink-soft: #f0f0f0;
+  --ink-faint: #cfcfcf;
+  --surface: #0d0d0d;
+  --paper: #000000;
+  --paper-deep: #0a0a0a;
+  --cloud: #1a1a1a;
+  --line: #ffd600;
+
+  --success: #37e816;
+  --success-light: #6df23f;
+  --success-dark: #7bffa1;
+  --success-soft: #00230a;
+
+  --danger: #ff5c5c;
+  --danger-dark: #ff9d9d;
+  --danger-soft: #2a0000;
+
+  --hint: #ffd600;
+  --hint-dark: #ffe14d;
+  --hint-soft: #241f00;
+
+  --linguagens: #c48aff;
+  --linguagens-dark: #e3c2ff;
+  --linguagens-soft: #170026;
+  --matematica: #4dc3f7;
+  --matematica-dark: #8dd9fa;
+  --matematica-soft: #00202e;
+  --natureza: #2ee88f;
+  --natureza-dark: #7df2bb;
+  --natureza-soft: #002412;
+  --humanas: #ffb43d;
+  --humanas-dark: #ffd07a;
+  --humanas-soft: #2a1700;
+
+  --background: #000000;
+  --foreground: #ffffff;
+  --border: #ffd600;
+  --input: #ffd600;
+  --ring: #ffd600;
+  --primary: #37e816;
+  --primary-foreground: #000000;
+  --accent: #1a1a1a;
+  --accent-foreground: #ffffff;
+}
+html.a11y-contrast body {
+  background: #000000;
+  color: #ffffff;
+}
+html.a11y-contrast ::selection {
+  background: #ffd600;
+  color: #000000;
+}
+html.a11y-contrast :focus-visible {
+  outline-color: #ffd600;
+}
+html.a11y-contrast .reading-aloud {
+  background: #241f00;
+}
+
+/* Botões e cartões ganham borda amarela e texto preto sobre cores vivas. */
+html.a11y-contrast .ludus-card,
+html.a11y-contrast .ludus-panel,
+html.a11y-contrast .ludus-btn:not(:disabled) {
+  box-shadow: 0 5px 0 #ffd600;
+  border-color: #ffd600;
+}
+html.a11y-contrast .ludus-btn-sm:not(:disabled) {
+  box-shadow: 0 4px 0 #ffd600;
+}
+html.a11y-contrast .ludus-btn-xl:not(:disabled) {
+  box-shadow: 0 6px 0 #ffd600;
+}
+html.a11y-contrast .ludus-btn:not(:disabled) {
+  --btn-fg: #000000;
+  color: #000000;
+}
+html.a11y-contrast .ludus-btn-ink:not(:disabled),
+html.a11y-contrast .ludus-btn-danger:not(:disabled) {
+  --btn-fg: #ffffff;
+  color: #ffffff;
+}
+html.a11y-contrast .ludus-btn-paper:not(:disabled) {
+  --btn-bg: #000000;
+  --btn-fg: #ffd600;
+  background: #000000;
+  color: #ffd600;
+}
+html.a11y-contrast .ludus-btn:disabled {
+  box-shadow: 0 5px 0 #4a4a4a;
+  background: #1a1a1a;
+  color: #9a9a9a;
+}
+html.a11y-contrast .ludus-card-correct {
+  border-color: #37e816;
+  box-shadow: 0 5px 0 #ffd600;
+}
+html.a11y-contrast .ludus-track {
+  background: #1a1a1a;
+  box-shadow: inset 0 0 0 2px #ffd600;
+}
+html.a11y-contrast .ludus-chip {
+  background: #000000;
+}
+
+/* Painéis com cor de área aplicada por variável local. */
+html.a11y-contrast .instruction-box {
+  --instruction-bg: #111111;
+  background: #111111;
+  border-color: #ffd600;
+}
+
+/* Hero e cenários ilustrados viram blocos pretos com borda amarela. */
+html.a11y-contrast .hub-hero {
+  background: #000000 !important;
+  border-color: #ffd600 !important;
+}
+html.a11y-contrast .scene-sol,
+html.a11y-contrast .scene-neve {
+  background: #0d0d0d !important;
+  border-color: #ffd600 !important;
+}
+
+/* Elementos cinza de gráficos SVG ganham tons visíveis no preto. */
+html.a11y-contrast svg [stroke="#e9e2d2"] {
+  stroke: #5a5a5a;
+}
+html.a11y-contrast svg [stroke="#c8c2b2"] {
+  stroke: #8a8a8a;
+}
+html.a11y-contrast svg [stroke="#ece7db"] {
+  stroke: #3a3a3a;
+}
+html.a11y-contrast svg [fill="#8783a0"] {
+  fill: #d6d6d6;
+}
+html.a11y-contrast svg [stroke="#8783a0"] {
+  stroke: #d6d6d6;
+}
+html.a11y-contrast svg [fill="#9693ab"] {
+  fill: #cfcfcf;
+}
+html.a11y-contrast svg text {
+  fill: #eeeeee;
+}
+
+/* Barra de rolagem. */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -612,10 +797,10 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d8d2c2;
+  background: var(--line);
   border-radius: 999px;
-  border: 3px solid #fdfaf3;
+  border: 3px solid var(--paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b9b2a0;
+  background: var(--ink-faint);
 }

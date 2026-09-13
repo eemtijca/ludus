@@ -1,8 +1,7 @@
 /**
- * Store de progresso do estudante (Zustand + persistência em localStorage).
- * Registra por jogo: melhor estado da partida, selos conquistados,
- * contagem de partidas concluídas e data da última vitória.
- * Nada aqui vira punição: progresso só soma (princípio DUA/AEE).
+ * Store de progresso do estudante (Zustand, persistência em localStorage).
+ * Registra por jogo: selos conquistados, contagem de partidas concluídas
+ * e data da última conclusão. Progresso só soma (princípio DUA/AEE).
  */
 
 "use client";
@@ -52,14 +51,10 @@ function readStorage(): ProgressMap {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw) as ProgressMap;
-    if (
-      typeof parsed !== "object" ||
-      parsed === null ||
-      Array.isArray(parsed)
-    ) {
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
       return {};
     }
-    // Sanitiza entradas malformadas sem travar a app.
+    // Sanitiza entradas malformadas sem travar a aplicação.
     const safe: ProgressMap = {};
     for (const game of GAMES) {
       const entry = parsed[game.id];
@@ -67,20 +62,15 @@ function readStorage(): ProgressMap {
       safe[game.id] = {
         badges: Array.isArray(entry.badges)
           ? entry.badges.filter(
-              (b): b is BadgeId =>
-                b === "lente" || b === "chave" || b === "selo-final",
+              (b): b is BadgeId => b === "lente" || b === "chave" || b === "selo-final",
             )
           : [],
         completions:
           typeof entry.completions === "number" && entry.completions > 0
             ? Math.floor(entry.completions)
             : 0,
-        lastCompletedAt:
-          typeof entry.lastCompletedAt === "string"
-            ? entry.lastCompletedAt
-            : null,
-        lastCaseId:
-          typeof entry.lastCaseId === "string" ? entry.lastCaseId : undefined,
+        lastCompletedAt: typeof entry.lastCompletedAt === "string" ? entry.lastCompletedAt : null,
+        lastCaseId: typeof entry.lastCaseId === "string" ? entry.lastCaseId : undefined,
       };
     }
     return safe;
@@ -94,7 +84,7 @@ function writeStorage(progress: ProgressMap): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   } catch {
-    /* armazenamento bloqueado — progresso vive só em memória */
+    /* armazenamento bloqueado: progresso vive só em memória */
   }
 }
 
@@ -157,10 +147,7 @@ export function countCompleted(progress: ProgressMap): number {
 }
 
 export function totalBadges(progress: ProgressMap): number {
-  return GAMES.reduce(
-    (acc, g) => acc + (progress[g.id]?.badges.length ?? 0),
-    0,
-  );
+  return GAMES.reduce((acc, g) => acc + (progress[g.id]?.badges.length ?? 0), 0);
 }
 
 export const TOTAL_BADGES = GAMES.length * 3;

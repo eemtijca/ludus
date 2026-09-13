@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * Fonte Histórica — palco do jogo (mesma gramática da Fonte Suspeita,
- * com foco em crítica documental: data, autor e intenção).
+ * Fonte Histórica: palco do jogo. Mesma estrutura da Fonte Suspeita,
+ * com foco em crítica documental (data, autor e intenção).
  *
- * Fase 1 · Explorar: o post agendado + as 3 peças documentais.
- * Fase 2 · Testar: cruzar as peças (pergunta de verificação).
- * Fase 3 · Decidir: o que sobe no mural → veredito com lastro.
+ * Fase 1 (Explorar): o post agendado e as 3 peças documentais.
+ * Fase 2 (Testar): cruzar as peças (pergunta de verificação).
+ * Fase 3 (Decidir): decidir o que sobe no mural.
  */
 
 import { useState } from "react";
@@ -52,8 +52,8 @@ export function FonteHistoricaGame({ onExit }: { onExit: () => void }) {
         key={`${caseIndex}-${session.generation}`}
         session={session}
         caso={CASES[caseIndex]}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
         onPhase2={() => session.setPhase(2)}
         onPhase3={() => session.setPhase(3)}
       />
@@ -86,13 +86,11 @@ function Stage({
     const next = [...flipped, index];
     setFlipped(next);
     if (next.length === 3) {
-      session.showSuccess(
-        "Peças catalogadas. Quem produziu, quando e para quê — hora de cruzar.",
-      );
+      session.showSuccess("Peças catalogadas. Quem produziu, quando e para quê: hora de cruzar.");
     }
   };
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const allFlipped = flipped.length === 3;
     return (
@@ -101,12 +99,10 @@ function Stage({
           <div className="flex items-center gap-2 text-xs font-bold text-ink-soft">
             <MessageCircle className="size-4" aria-hidden />
             {caso.context.channel}
-            <span className="ml-auto font-semibold text-ink-faint">
-              {caso.context.meta}
-            </span>
+            <span className="ml-auto font-semibold text-ink-faint">{caso.context.meta}</span>
           </div>
           <blockquote
-            className="mt-3 rounded-2xl rounded-tl-md border-2 border-humanas/30 bg-white p-4 font-semibold leading-relaxed text-ink"
+            className="mt-3 rounded-2xl rounded-tl-md border-2 border-humanas/30 bg-surface p-4 font-semibold leading-relaxed text-ink"
             style={{ borderLeft: `6px solid ${areaColor}` }}
           >
             {caso.context.message}
@@ -148,13 +144,11 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-4">
-        <p className="font-display text-lg font-bold text-ink sm:text-xl">
-          {caso.crossQuestion}
-        </p>
+        <p className="font-display text-lg font-bold text-ink sm:text-xl">{caso.crossQuestion}</p>
         <div className="flex flex-col gap-3">
           {caso.crossOptions.map((option, i) => (
             <OptionTile
@@ -169,14 +163,10 @@ function Stage({
               onPick={() => {
                 if (i === caso.crossCorrect) {
                   setCrossSolved(true);
-                  session.showSuccess(
-                    "Peça-chave identificada. A decisão agora tem lastro.",
-                  );
+                  session.showSuccess("Peça-chave identificada. A decisão agora tem lastro.");
                   return true;
                 }
-                session.showError(
-                  `Ainda não. ${caso.crossWrong[i] ?? caso.crossHint}`,
-                );
+                session.showError(`Ainda não. ${caso.crossWrong[i] ?? caso.crossHint}`);
                 return false;
               }}
             />
@@ -197,16 +187,14 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-2xl border-2 border-dashed border-border bg-cloud/50 p-4 text-sm leading-relaxed text-ink-soft">
         <strong className="text-ink">Ficha das peças:</strong>{" "}
         {caso.cards.map((c) => c.evidence).join(" ")}
       </div>
-      <p className="font-display text-lg font-bold text-ink sm:text-xl">
-        {caso.decisionPrompt}
-      </p>
+      <p className="font-display text-lg font-bold text-ink sm:text-xl">{caso.decisionPrompt}</p>
       <div className="flex flex-col gap-3">
         {caso.decisions.map((decision) => (
           <OptionTile
@@ -228,7 +216,7 @@ function Stage({
               }
               if (decision.id === "publicar") {
                 session.showError(
-                  "Publicar sem lastro documental usa o mural como megafone de uma versão só — e a história cobra caro por isso.",
+                  "Publicar sem lastro documental usa o mural como megafone de uma versão só, e a história cobra caro por isso.",
                 );
               } else {
                 session.showError(`Quase! ${caso.crossHint}`);

@@ -1,7 +1,7 @@
 /**
- * Motor de leitura em voz alta (Web Speech API, pt-BR).
- * - Escolhe a melhor voz disponível (Google/Microsoft/Luciana/Felipe...).
- * - Destaca o elemento sendo lido (classe .reading-aloud).
+ * Leitura em voz alta (Web Speech API, pt-BR).
+ * - Escolhe a melhor voz disponível (Google, Microsoft, Luciana, Felipe).
+ * - Destaca o elemento sendo lido (classe reading-aloud).
  * - Tolerante a navegadores sem suporte e a bloqueios de permissão.
  */
 
@@ -10,14 +10,13 @@
 type SpeakOptions = {
   /** Elemento que recebe o realce durante a leitura. */
   highlight?: HTMLElement | null;
-  /** Velocidade 0.5–1.3. Padrão 0.95 (calmo, didático). */
+  /** Velocidade de 0.5 a 1.3. Padrão 0.95. */
   rate?: number;
   /** Chamado ao terminar (natural, cancelado ou com erro). */
   onEnd?: () => void;
 };
 
-const PREFERRED_VOICE =
-  /google|luciana|felipe|daniel|helo[íi]sa|francisca|natalia|thal[íi]a/i;
+const PREFERRED_VOICE = /google|luciana|felipe|daniel|helo[íi]sa|francisca|natalia|thal[íi]a/i;
 const FALLBACK_VOICE = /^pt/i;
 
 let cachedVoices: SpeechSynthesisVoice[] = [];
@@ -71,17 +70,14 @@ function pickVoice(): SpeechSynthesisVoice | null {
   const voices = availableVoices();
   if (voices.length === 0) return null;
   const br = voices.filter((v) => v.lang === "pt-BR");
-  const pool =
-    br.length > 0 ? br : voices.filter((v) => FALLBACK_VOICE.test(v.lang));
+  const pool = br.length > 0 ? br : voices.filter((v) => FALLBACK_VOICE.test(v.lang));
   if (pool.length === 0) return null;
   return pool.find((v) => PREFERRED_VOICE.test(v.name)) ?? pool[0];
 }
 
 function clearHighlight(): void {
   if (typeof document === "undefined") return;
-  document
-    .querySelectorAll(".reading-aloud")
-    .forEach((el) => el.classList.remove("reading-aloud"));
+  document.querySelectorAll(".reading-aloud").forEach((el) => el.classList.remove("reading-aloud"));
 }
 
 /** Interrompe qualquer leitura em andamento. */
@@ -148,15 +144,12 @@ export function speak(text: string, options: SpeakOptions = {}): void {
   }
 }
 
-/** Lê uma lista de trechos em sequência (ex.: instrução + transcrição). */
-export function speakSequence(
-  parts: string[],
-  options: SpeakOptions = {},
-): void {
+/** Lê uma lista de trechos em sequência (ex.: instrução e transcrição). */
+export function speakSequence(parts: string[], options: SpeakOptions = {}): void {
   speak(parts.filter(Boolean).join(". "), options);
 }
 
-/** Interrompe antes de desmontar telas (evita voz órfã). */
+/** Interrompe a leitura antes de desmontar telas. */
 export function cleanupSpeech(): void {
   stopSpeech();
 }

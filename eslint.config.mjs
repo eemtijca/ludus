@@ -55,7 +55,11 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "examples/**",
-      "skills",
+      "skills/**",
+      "public/mathjax/**",
+      "public/**/*.js",
+      "download/**",
+      "qa/**",
     ],
   },
 ];

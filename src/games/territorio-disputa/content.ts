@@ -1,8 +1,8 @@
 /**
- * Território em Disputa — conteúdo (reescrita profunda).
+ * Território em Disputa: conteúdo do jogo.
  *
- * 6 lotes com características reais (relevo, risco, serviço),
- * 3 projetos da comissão para alocar e a chuva de março como juiz.
+ * 6 lotes com características de relevo e risco, 3 projetos da
+ * comissão para alocar e a chuva de março como teste final.
  */
 
 export interface Lot {
@@ -18,7 +18,7 @@ export const LOTS: Lot[] = [
   {
     id: 0,
     name: "Baixada do rio",
-    terrain: "Ponto mais baixo do bairro — a água de tudo que desce para aqui.",
+    terrain: "Ponto mais baixo do bairro: a água de tudo que desce para aqui.",
     floodRisk: true,
     icon: "gota",
   },
@@ -46,7 +46,7 @@ export const LOTS: Lot[] = [
   {
     id: 4,
     name: "Nascente",
-    terrain: "Área de recarga do aquífero — alaga e abastece a vila inteira.",
+    terrain: "Área de recarga do aquífero: alaga e abastece a vila inteira.",
     floodRisk: true,
     icon: "folha",
   },
@@ -78,7 +78,7 @@ export const PROJECTS: Project[] = [
     hook: "Piso permeável + área verde",
     brief:
       "A associação de moradores pediu uma praça com piso que bebe a chuva. Vai bem na baixada: segura a água que desce do bairro e ainda vira point da vila.",
-    rule: "Pode ir em qualquer lote — brilha nos lotes de risco.",
+    rule: "Pode ir em qualquer lote: brilha nos lotes de risco.",
   },
   {
     id: "galpao",
@@ -97,13 +97,13 @@ export const PROJECTS: Project[] = [
     hook: "Lazer de fim de semana",
     brief:
       "O time da vila precisa de um campo com vestiário. Uso coletivo, fim de semana, e a comunidade já cuida do que é dela.",
-    rule: "Combina melhor perto da vila — mas vale em qualquer lote.",
+    rule: "Combina melhor perto da vila, mas vale em qualquer lote.",
   },
 ];
 
 export const RAIN_NARRATIVE = {
   title: "A chuva de março chega",
-  text: "Em março, a chuva forte bate no bairro por três dias seguidos. A baixada vira lago, a nascente transborda — e cada escolha da comissão aparece debaixo d’água… ou não.",
+  text: "Em março, a chuva forte bate no bairro por três dias seguidos. A baixada vira lago, a nascente transborda, e cada escolha da comissão aparece debaixo d’água… ou não.",
 };
 
 export const VERDICT = {
@@ -111,6 +111,6 @@ export const VERDICT = {
   text: "A praça drenante segurou a água onde ela costuma parar, o galpão ficou longe do alagamento e o campo serviu a vila. Planejar território é isso: ler o relevo antes de assinar a planta.",
   detail: {
     label: "Ver o plano dos urbanistas",
-    text: "Regra de ouro do planejamento: uso compatível com o relevo. Áreas de risco hidrológico pedem ocupação permeável (praças, parques) — nunca estoque nem moradia. Infraestrutura nova (como a drenagem da avenida) muda o mapa do risco, mas a natureza sempre tem voto.",
+    text: "Regra de ouro do planejamento: uso compatível com o relevo. Áreas de risco hidrológico pedem ocupação permeável (praças, parques): nunca estoque nem moradia. Infraestrutura nova (como a drenagem da avenida) muda o mapa do risco, mas a natureza sempre tem voto.",
   },
 };

@@ -1,5 +1,5 @@
 /**
- * catálogo de jogos — fonte única de verdade sobre os 12 jogos.
+ * Catálogo de jogos: fonte única de verdade sobre a coleção.
  * Cada entrada alimenta o hub, o shell do jogo, o painel de progresso
  * e o modo professor (códigos BNCC e habilidades).
  */
@@ -43,50 +43,41 @@ export const AREAS: Record<AreaId, AreaMeta> = {
     color: "#a560e8",
     colorDark: "#8941d4",
     colorSoft: "#f3e9fd",
-    description:
-      "Língua portuguesa, mídia, argumentação e os textos que circulam na escola.",
+    description: "Língua portuguesa, mídia, argumentação e os textos que circulam na escola.",
   },
   matematica: {
     id: "matematica",
     name: "Matemática e suas Tecnologias",
     shortName: "Matemática",
     icon: "Calculator",
-    color: "#14b8a6",
-    colorDark: "#0d9488",
-    colorSoft: "#e0f7f4",
-    description:
-      "Funções, probabilidade e as finanças da vida real — com simuladores vivos.",
+    color: "#1899d6",
+    colorDark: "#116fa0",
+    colorSoft: "#e3f2fd",
+    description: "Funções, probabilidade e finanças do dia a dia, com simuladores interativos.",
   },
   natureza: {
     id: "natureza",
     name: "Ciências da Natureza e suas Tecnologias",
     shortName: "Natureza",
     icon: "FlaskConical",
-    color: "#10b981",
-    colorDark: "#0b8a61",
+    color: "#0b9e6f",
+    colorDark: "#077a55",
     colorSoft: "#e0f8ee",
-    description:
-      "Física, química e biologia em bancadas de experimento seguras e visíveis.",
+    description: "Física, química e biologia em bancadas de experimento seguras e visíveis.",
   },
   humanas: {
     id: "humanas",
     name: "Ciências Humanas e Sociais Aplicadas",
     shortName: "Humanas",
     icon: "Globe2",
-    color: "#ff9600",
-    colorDark: "#db7e00",
+    color: "#e07400",
+    colorDark: "#a85500",
     colorSoft: "#fff1da",
-    description:
-      "História, geografia, filosofia e as decisões que moldam a vida em comunidade.",
+    description: "História, geografia, filosofia e as decisões que moldam a vida em comunidade.",
   },
 };
 
-export const AREA_ORDER: AreaId[] = [
-  "linguagens",
-  "matematica",
-  "natureza",
-  "humanas",
-];
+export const AREA_ORDER: AreaId[] = ["linguagens", "matematica", "natureza", "humanas"];
 
 export const LEVEL_LABEL: Record<Level, string> = {
   1: "Nível 1 · Descoberta",
@@ -101,10 +92,10 @@ export const GAMES: GameMeta[] = [
     title: "Fonte Suspeita",
     tagline: "Uma notícia bomba caiu no canal do grêmio. Segura ou espalha?",
     description:
-      "Três cartas de evidência — autoria, tempo e prova — esperam ser viradas antes de qualquer publicação. Investigue o boato, cruze as pistas e decida o que fazer com o mural da escola.",
+      "Três cartas de evidência (autoria, tempo e prova) esperam ser viradas antes de qualquer publicação. Investigue o boato, cruze as pistas e decida o que fazer com o mural da escola.",
     area: "linguagens",
     level: 1,
-    bncc: ["EM13LGG102"],
+    bncc: ["EM13LP39"],
     tags: ["Língua Portuguesa", "Mídia", "Checagem"],
     icon: "Newspaper",
     minutes: 8,
@@ -113,18 +104,17 @@ export const GAMES: GameMeta[] = [
       "Cruzar autoria, data e prova antes de compartilhar",
       "Decidir com responsabilidade em canais reais",
     ],
-    objective:
-      "Exercitar a checagem de informação em casos de desinformação escolar.",
+    objective: "Exercitar a checagem de informação em casos de desinformação escolar.",
   },
   {
     id: "revisor-critico",
     title: "Revisor Crítico",
     tagline: "O jornal da escola fecha hoje. O rascunho ainda engasga.",
     description:
-      "Trechos com conectivos perdidos, registro errado e repetições. Leia com calma, encontre o reparo certo e publique a versão final no mural — com coesão e registro adequados.",
+      "Trechos com conectivos perdidos, registro errado e repetições. Leia com calma, encontre o reparo certo e publique a versão final no mural, com coesão e registro adequados.",
     area: "linguagens",
     level: 2,
-    bncc: ["EM13LGG104"],
+    bncc: ["EM13LP15"],
     tags: ["Língua Portuguesa", "Revisão", "Coesão"],
     icon: "PenLine",
     minutes: 8,
@@ -133,8 +123,7 @@ export const GAMES: GameMeta[] = [
       "Escolher o reparo que preserva o sentido",
       "Publicar texto revisado com clareza",
     ],
-    objective:
-      "Revisar textos verificando coesão, coerência e adequação ao registro formal.",
+    objective: "Revisar textos verificando coesão, coerência e adequação ao registro formal.",
   },
   {
     id: "tese-antitese",
@@ -153,8 +142,7 @@ export const GAMES: GameMeta[] = [
       "Selecionar prova com fonte e número",
       "Responder objeções com argumento, não com ataque",
     ],
-    objective:
-      "Estruturar argumentação sólida: tese, prova, resposta à objeção e síntese.",
+    objective: "Estruturar argumentação sólida: tese, prova, resposta à objeção e síntese.",
   },
   // --------------------------------------------------------------- Matemática
   {
@@ -162,7 +150,7 @@ export const GAMES: GameMeta[] = [
     title: "Orçamento no Limite",
     tagline: "O balcão da loja sorri. A planilha não.",
     description:
-      "Parcelar ou guardar? Mexa na taxa e no prazo, veja os juros compostos crescerem ao vivo e decida no caixa sem estourar o limite de 30% da renda.",
+      "Parcelar ou guardar? Ajuste taxa e prazo, veja os juros compostos crescerem ao vivo e decida no caixa sem estourar o limite de 30% da renda.",
     area: "matematica",
     level: 1,
     bncc: ["EM13MAT303"],
@@ -174,15 +162,14 @@ export const GAMES: GameMeta[] = [
       "Comparar parcela com o limite orçamentário",
       "Escolher entre parcelar e guardar com critério",
     ],
-    objective:
-      "Modelar juros compostos e decidir compras dentro de um orçamento seguro.",
+    objective: "Modelar juros compostos e decidir compras dentro de um orçamento seguro.",
   },
   {
     id: "funcao-viva",
     title: "Função Viva",
     tagline: "Toda reta conta uma história. Toda curva esconde um topo.",
     description:
-      "Escolha entre a reta das entregas e a parábola da cantina, mova os controles, veja o gráfico respirar e cace o zero e o ponto de máximo como um detetive de coordenadas.",
+      "Escolha entre a reta das entregas e a parábola da cantina, mova os controles, acompanhe o gráfico e encontre o zero e o ponto de máximo como um detetive de coordenadas.",
     area: "matematica",
     level: 2,
     bncc: ["EM13MAT302"],
@@ -194,8 +181,7 @@ export const GAMES: GameMeta[] = [
       "Ler zero e vértice no gráfico ao vivo",
       "Relacionar tabela, expressão e curva",
     ],
-    objective:
-      "Explorar comportamento de funções do 1º e 2º grau com simulador interativo.",
+    objective: "Explorar comportamento de funções do 1º e 2º grau com simulador interativo.",
   },
   {
     id: "risco-provavel",
@@ -214,8 +200,7 @@ export const GAMES: GameMeta[] = [
       "Comparar frequência teórica e simulada",
       "Avaliar justiça em jogos de azar",
     ],
-    objective:
-      "Confrontar cálculo probabilístico com simulação de sorteios em urna.",
+    objective: "Confrontar cálculo probabilístico com simulação de sorteios em urna.",
   },
   // ----------------------------------------------------------------- Natureza
   {
@@ -223,10 +208,10 @@ export const GAMES: GameMeta[] = [
     title: "O Circuito Falhou",
     tagline: "A bancada aponta o defeito. Você aponta a solução.",
     description:
-      "Celular que não carrega, quarto que apaga inteiro, curto que esquenta o fio. Monte a bancada, acione chave e lâmpada, meça a corrente e explique cada defeito.",
+      "Celular que não carrega, quarto que apaga inteiro, fio que esquenta demais. Monte a bancada, acione chave e lâmpada, meça a corrente e explique cada defeito.",
     area: "natureza",
     level: 1,
-    bncc: ["EM13CNT306"],
+    bncc: ["EM13CNT107"],
     tags: ["Física", "Circuitos", "Medição"],
     icon: "Zap",
     minutes: 8,
@@ -235,18 +220,17 @@ export const GAMES: GameMeta[] = [
       "Ler corrente com a Lei de Ohm",
       "Explicar defeitos com evidência medida",
     ],
-    objective:
-      "Diagnosticar falhas em circuitos elétricos manipulando uma bancada virtual.",
+    objective: "Diagnosticar falhas em circuitos elétricos manipulando uma bancada virtual.",
   },
   {
     id: "reacao-equilibrada",
     title: "Reação Equilibrada",
     tagline: "A balança dos átomos não mente. Equilibre-a.",
     description:
-      "Água, gás de cozinha e o etano do motor: três receitas químicas com números a ajustar. Conte os átomos de cada lado, iguale os coeficientes e feche a reação sem sobras.",
+      "A síntese da água, a chama do gás natural e a queima do etano: três receitas químicas com números a ajustar. Conte os átomos de cada lado, iguale os coeficientes e feche a reação sem sobras.",
     area: "natureza",
     level: 2,
-    bncc: ["EM13CNT104"],
+    bncc: ["EM13CNT101"],
     tags: ["Química", "Estequiometria", "Balanceamento"],
     icon: "FlaskConical",
     minutes: 10,
@@ -262,7 +246,7 @@ export const GAMES: GameMeta[] = [
     title: "Dilema do Gene",
     tagline: "O quintal tem coelhos. O ambiente tem planos.",
     description:
-      "Escolha sol ou neve, lobo ou comida dura, e avance as gerações. Veja a frequência dos pelos mudar — não por vontade dos coelhos, mas por seleção do ambiente.",
+      "Escolha sol ou neve, lobo ou comida escassa, e avance as gerações. Acompanhe a frequência dos pelos mudar: não por vontade dos coelhos, mas por seleção do ambiente.",
     area: "natureza",
     level: 3,
     bncc: ["EM13CNT205"],
@@ -274,8 +258,7 @@ export const GAMES: GameMeta[] = [
       "Observar seleção natural agindo nas gerações",
       "Explicar mudança de frequência sem teleologia",
     ],
-    objective:
-      "Simular herança dominante e seleção natural em populações de coelhos.",
+    objective: "Simular herança dominante e seleção natural em populações de coelhos.",
   },
   // ----------------------------------------------------------------- Humanas
   {
@@ -283,7 +266,7 @@ export const GAMES: GameMeta[] = [
     title: "Fonte Histórica",
     tagline: "O mural da escola quer um post. A história pede método.",
     description:
-      "Fotos de 1911, portarias com número, depoimentos ribeirinhos. Vire as peças, cruze data e autor, e decida o que sobe no mural — com lastro documental.",
+      "Fotos de 1911, portarias com número, depoimentos ribeirinhos. Vire as peças, cruze data e autor, e decida o que sobe no mural com lastro documental.",
     area: "humanas",
     level: 1,
     bncc: ["EM13CHS101"],
@@ -295,15 +278,14 @@ export const GAMES: GameMeta[] = [
       "Cruzar versões de um mesmo fato",
       "Decidir publicação com lastro documental",
     ],
-    objective:
-      "Aplicar crítica de fontes históricas em decisões de publicação escolar.",
+    objective: "Aplicar crítica de fontes históricas em decisões de publicação escolar.",
   },
   {
     id: "territorio-disputa",
     title: "Território em Disputa",
     tagline: "Seis lotes, três projetos e uma chuva de março a caminho.",
     description:
-      "Praça, galpão ou campo: aloque os projetos no mapa do bairro e deixe a chuva testar suas escolhas. Onde a água entra, o erro aparece — e a cidade aprende.",
+      "Praça, galpão ou campo: aloque os projetos no mapa do bairro e deixe a chuva testar suas escolhas. Onde a água entra, o erro aparece, e a cidade aprende.",
     area: "humanas",
     level: 2,
     bncc: ["EM13CHS206"],
@@ -315,15 +297,14 @@ export const GAMES: GameMeta[] = [
       "Alocar projetos respeitando riscos ambientais",
       "Justificar planejamento com evidências",
     ],
-    objective:
-      "Planejar o uso do território considerando áreas de risco hidrológico.",
+    objective: "Planejar o uso do território considerando áreas de risco hidrológico.",
   },
   {
     id: "dilema-etico",
     title: "Dilema Ético",
     tagline: "Uma semana, três turnos, escolhas com preço.",
     description:
-      "Contrato sem folga, casa pedindo ajuda, lei limitando as horas. Viva três turnos, veja dinheiro, tempo e saúde se moverem — e descubra o custo real de cada decisão.",
+      "Contrato sem folga, casa pedindo ajuda, lei limitando as horas. Viva três turnos, acompanhe dinheiro, tempo e saúde se moverem, e descubra o custo real de cada decisão.",
     area: "humanas",
     level: 3,
     bncc: ["EM13CHS502"],
@@ -335,14 +316,11 @@ export const GAMES: GameMeta[] = [
       "Antecipar consequências de escolhas",
       "Refletir sobre trabalho decente e juventude",
     ],
-    objective:
-      "Vivenciar dilemas éticos do mundo do trabalho acompanhando seus custos.",
+    objective: "Vivenciar dilemas éticos do mundo do trabalho acompanhando seus custos.",
   },
 ];
 
-export const GAME_BY_ID: Record<string, GameMeta> = Object.fromEntries(
-  GAMES.map((g) => [g.id, g]),
-);
+export const GAME_BY_ID: Record<string, GameMeta> = Object.fromEntries(GAMES.map((g) => [g.id, g]));
 
 export function gamesByArea(area: AreaId): GameMeta[] {
   return GAMES.filter((g) => g.area === area);

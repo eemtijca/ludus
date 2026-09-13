@@ -1,9 +1,9 @@
 /**
- * Tese e Antítese — conteúdo dos 3 temas de debate (reescrita profunda).
+ * Tese e Antítese: conteúdo dos temas de debate.
  *
- * Estrutura: 2 teses (forte/fraca) + 2 provas (forte/fraca),
- * objeção da banca com detalhe, 2 formas de responder (prova vs ataque)
- * e 3 sínteses candidatas (uma fecha o debate com honestidade).
+ * Estrutura: 2 teses (forte e fraca), 2 provas (forte e fraca), objeção
+ * da banca com detalhe, 2 formas de responder (prova ou ataque) e
+ * 3 sínteses candidatas (uma fecha o debate com honestidade).
  */
 
 export interface DebateTheme {
@@ -62,7 +62,7 @@ export const THEMES: DebateTheme[] = [
     mission: "Debate: celular no intervalo",
     theme: "Celular no intervalo: liberar ou restringir?",
     scenario:
-      "O grêmio levou ao debate da semana a pergunta que divide a escola inteira. A banca adversária está afiada — e você abre a defesa.",
+      "O grêmio levou ao debate da semana a pergunta que divide a escola inteira. A banca adversária está afiada, e você abre a defesa.",
     theses: [
       {
         id: "regras",
@@ -81,7 +81,7 @@ export const THEMES: DebateTheme[] = [
         strong: false,
         evidence: "Opinião pura, sem regra, sem recorte, sem prova.",
         weakReason:
-          "“É legal” é gosto, não tese. Uma tese precisa dizer O QUE se defende e COM que regra — opinião não segura banca nenhuma.",
+          "“É legal” é gosto, não tese. Uma tese precisa dizer O QUE se defende e e COM que regra; opinião não segura banca nenhuma.",
       },
     ],
     proofs: [
@@ -92,7 +92,7 @@ export const THEMES: DebateTheme[] = [
         hook: "180 respostas, datadas",
         strong: true,
         evidence:
-          "Enquete aplicada em outubro com 180 respostas de cinco turmas: 68% preferem regra clara com zonas de silêncio. Fonte, número e data — prova que sustenta pergunta dura.",
+          "Enquete aplicada em outubro com 180 respostas de cinco turmas: 68% preferem regra clara com zonas de silêncio. Fonte, número e data: prova que sustenta pergunta dura.",
       },
       {
         id: "relato",
@@ -108,7 +108,7 @@ export const THEMES: DebateTheme[] = [
     objection: {
       title: "Liberar celular amplia o cyberbullying",
       detail:
-        "A banca adversária apresenta os registros do CEPAIS do ano passado: 14 ocorrências envolvendo telas no horário de aula. O risco é real e documentado.",
+        "A banca adversária apresenta os registros da coordenação pedagógica do ano passado: 14 ocorrências envolvendo telas no horário de aula. O risco é real e documentado.",
       speaker: "Banca adversária · Escola Irma",
     },
     responses: [
@@ -152,15 +152,15 @@ export const THEMES: DebateTheme[] = [
         subtitle: "Ignorar a objeção e recitar o placar",
         correct: false,
         feedback:
-          "Repetir a tese sem responder à objeção mostra que você não ouviu a banca — síntese costura os dois lados.",
+          "Repetir a tese sem responder à objeção mostra que você não ouviu a banca; a síntese costura os dois lados.",
       },
     ],
     verdict: {
       title: "Debate vencido com honestidade",
-      text: "Você integrou a objeção em vez de negá-la: regra de zonas sem tela + monitoramento das ocorrências + prova datada da enquete. A plateia viu alguém que ouve, responde e fecha — o perfil que as bancas respeitam.",
+      text: "Você integrou a objeção em vez de negá-la: regra de zonas sem tela + monitoramento das ocorrências + prova datada da enquete. A plateia viu alguém que ouve, responde e fecha: o perfil que as bancas respeitam.",
       detail: {
         label: "Ver a anatomia do argumento",
-        text: "TESE (recortada): liberar com regras. PROVA (verificável): enquete de 180 respostas. RESPOSTA À OBJEÇÃO: o risco existe — por isso as zonas sem tela e o monitoramento. SÍNTESE: a regra responde ao risco com dados. Tese forte + prova forte + objeção acolhida = argumento de campeão.",
+        text: "TESE (recortada): liberar com regras. PROVA (verificável): enquete de 180 respostas. RESPOSTA À OBJEÇÃO: o risco existe, e por isso as zonas sem tela e o monitoramento. SÍNTESE: a regra responde ao risco com dados. Tese forte + prova forte + objeção acolhida = argumento de campeão.",
       },
     },
   },
@@ -169,7 +169,7 @@ export const THEMES: DebateTheme[] = [
     mission: "Debate: a verba da festa junina",
     theme: "Para onde vai a verba da festa: só festa, ou festa + laboratório?",
     scenario:
-      "A diretoria liberou uma verba inédita e o conselho estudantil abre a palavra à escola. Cada centavo tem dono — e cada argumento, um preço.",
+      "A diretoria liberou uma verba inédita e o conselho estudantil abre a palavra à escola. Cada centavo tem dono, e cada argumento, um preço.",
     theses: [
       {
         id: "divisao",
@@ -188,7 +188,7 @@ export const THEMES: DebateTheme[] = [
         strong: false,
         evidence: "Opinião sem número nem destino para a verba.",
         weakReason:
-          "“É boa demais” não diz para onde vai o dinheiro: sem número, a banca pergunta o óbvio — quanto, para quê?",
+          "“É boa demais” não diz para onde vai o dinheiro: sem número, a banca pergunta o óbvio: quanto, para quê?",
       },
     ],
     proofs: [
@@ -209,13 +209,13 @@ export const THEMES: DebateTheme[] = [
         strong: false,
         evidence: "Frase de corredor, sem planilha nem fonte.",
         weakReason:
-          "Sem número não há debate financeiro: a planilha existe e está aberta — use-a ou a banca usará contra você.",
+          "Sem número não há debate financeiro: a planilha existe e está aberta; use-a ou a banca usará contra você.",
       },
     ],
     objection: {
       title: "A festa sustenta a cultura (e a arrecadação) da escola",
       detail:
-        "A banca lembra que a quadrilha leva três turmas de ensaio, que a comunidade espera a festa há um ano e que a arrecadação do ano passado pagou os uniformes do time. Cortar a festa custa cultura — e moral.",
+        "A banca lembra que a quadrilha leva três turmas de ensaio, que a comunidade espera a festa há um ano e que a arrecadação do ano passado pagou os uniformes do time. Cortar a festa custa cultura, e moral.",
       speaker: "Banca adversária · Escola Irma",
     },
     responses: [
@@ -234,7 +234,7 @@ export const THEMES: DebateTheme[] = [
         subtitle: "Desqualificar quem discorda",
         correct: false,
         feedback:
-          "Chamou a banca de ultrapassada? Você trocou a planilha por uma briga — e quem briga, perde. Responda com o número.",
+          "Chamou a banca de ultrapassada? Você trocou a planilha por uma briga, e quem briga perde. Responda com o número.",
       },
     ],
     syntheses: [
@@ -295,7 +295,7 @@ export const THEMES: DebateTheme[] = [
         strong: false,
         evidence: "Frase de simpatia ao transporte, sem proposta.",
         weakReason:
-          "“Ônibus é bom” é elogio, não tese: sem recorte, sem dia, sem regra — a audiência pública precisa de proposta, não de elogio.",
+          "“Ônibus é bom” é elogio, não tese: sem recorte, sem dia, sem regra; a audiência pública precisa de proposta, não de elogio.",
       },
     ],
     proofs: [
@@ -306,7 +306,7 @@ export const THEMES: DebateTheme[] = [
         hook: "Faltas por transporte em dia de prova",
         strong: true,
         evidence:
-          "Levantamento da secretaria: nas últimas três avaliações, 11% das faltas tiveram transporte como causa declarada — o dobro das faltas em dia comum. Dado oficial, datado, assinado.",
+          "Levantamento da secretaria: nas últimas três avaliações, 11% das faltas tiveram transporte como causa declarada: o dobro das faltas em dia comum. Dado oficial, datado, assinado.",
       },
       {
         id: "boato",
@@ -341,7 +341,7 @@ export const THEMES: DebateTheme[] = [
         subtitle: "Desqualificar quem discorda",
         correct: false,
         feedback:
-          "Acusar má fé sem prova transformou você no problema da sala. A pergunta é de recorte e custo — responda com o dado.",
+          "Acusar má fé sem prova transformou você no problema da sala. A pergunta é de recorte e custo: responda com o dado.",
       },
     ],
     syntheses: [

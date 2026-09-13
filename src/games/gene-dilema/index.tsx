@@ -1,14 +1,15 @@
 "use client";
 
 /**
- * Dilema do Gene — palco do jogo.
+ * Dilema do Gene: palco do jogo.
  *
- * Fase 1 · Explorar: montar o cenário — ambiente (sol/neve) + pressão
- *   (predador/comida).
- * Fase 2 · Testar: avançar gerações com a população visível de coelhos
- *   (grade de avatares) e barra de frequência dos pelos.
- * Fase 3 · Decidir: explicar o mecanismo (herança + seleção, sem
- *   teleologia) → veredito com Punnett no bastidor.
+ * Fase 1 (Explorar): montar o cenário com ambiente (sol ou neve) e
+ *   pressão (predador visual ou comida escassa).
+ * Fase 2 (Testar): avançar gerações com a população visível de coelhos
+ *   e barra de frequência dos pelos.
+ * Fase 3 (Decidir): explicar o mecanismo observado. Com predador, a
+ *   seleção muda as frequências; com comida escassa, a pressão é neutra
+ *   à cor e o equilíbrio se mantém.
  */
 
 import { useState } from "react";
@@ -23,6 +24,7 @@ import {
   survivalAdvantage,
   PUNNETT,
   VERDICT,
+  VERDICT_NEUTRAL,
   type GeneOption,
 } from "./content";
 import { clamp, formatPercent } from "@/lib/format";
@@ -49,15 +51,15 @@ export function GeneDilemaGame({ onExit }: { onExit: () => void }) {
             ? "Avance as gerações e observe a frequência das cores mudar."
             : "Explique o que aconteceu com o quintal."
       }
-      narration="Herança dominante e seleção natural, passo a passo. Sem cronômetro, sem sorte — só estatística."
+      narration="Herança dominante e seleção natural, passo a passo. Sem cronômetro, sem sorte: só estatística."
       nextVariant={null}
       onExit={onExit}
     >
       <Stage
         key={session.generation}
         session={session}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
       />
     </GameShell>
   );
@@ -83,7 +85,7 @@ function Stage({
 
   const envReady = environment !== null && pressure !== null;
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     return (
       <div className="flex flex-col gap-5">
@@ -93,9 +95,8 @@ function Stage({
             Laboratório de biologia · quintal observacional
           </div>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Doze coelhos, metade marrom (Aa) e metade branca (aa), começam no
-            quintal. O que acontece com as cores depende de DUAS escolhas: o
-            palco e a pressão.
+            Doze coelhos, metade marrom (Aa) e metade branca (aa), começam no quintal. O que
+            acontece com as cores depende de DUAS escolhas: o palco e a pressão.
           </p>
         </div>
 
@@ -111,9 +112,7 @@ function Stage({
               correct={environment === env.id}
               onPick={() => {
                 setEnvironment(env.id);
-                session.showSuccess(
-                  `Ambiente: ${env.title}. Agora escolha a pressão.`,
-                );
+                session.showSuccess(`Ambiente: ${env.title}. Agora escolha a pressão.`);
                 return true;
               }}
             />
@@ -132,9 +131,7 @@ function Stage({
               correct={pressure === p.id}
               onPick={() => {
                 setPressure(p.id);
-                session.showSuccess(
-                  `Pressão: ${p.title}. O cenário está pronto.`,
-                );
+                session.showSuccess(`Pressão: ${p.title}. O cenário está pronto.`);
                 return true;
               }}
             />
@@ -156,7 +153,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     const adv = survivalAdvantage(environment ?? "sol", pressure ?? "lobo");
     const browns = population.filter((g) => g === "A").length;
@@ -166,7 +163,7 @@ function Stage({
     const advance = () => {
       const nextGen: ("A" | "a")[] = [];
       for (let i = 0; i < MAX_POP; i++) {
-        // Nascimento: 50% Aa (marrom), 50% aa (branco) — cruzamento Aa × aa
+        // Nascimento: 50% Aa (marrom), 50% aa (branco): cruzamento Aa × aa
         const born: "A" | "a" = Math.random() < 0.5 ? "A" : "a";
         // Sobrevivência: vantagem do fenótipo no cenário escolhido
         const chance = born === "A" ? adv.brown : adv.white;
@@ -194,32 +191,20 @@ function Stage({
       <div className="flex flex-col gap-5">
         {/* O quintal */}
         <div
-          className="rounded-2xl border-2 p-4"
-          style={{
-            background:
-              environment === "neve"
-                ? "linear-gradient(180deg, #f0f6ff 0%, #dbe9fa 100%)"
-                : "linear-gradient(180deg, #f7ecd9 0%, #e8d5b5 100%)",
-            borderColor: environment === "neve" ? "#b8cbe8" : "#d9bf95",
-          }}
+          className={`rounded-2xl border-2 p-4 ${environment === "neve" ? "scene-neve" : "scene-sol"}`}
         >
           <p className="mb-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink-soft">
-            Geração {generation} ·{" "}
-            {pressure === "lobo" ? "predador à solta" : "comida escassa"}
+            Geração {generation} · {pressure === "lobo" ? "predador à solta" : "comida escassa"}
           </p>
           <div className="flex flex-wrap justify-center gap-2.5">
             {population.map((gene, i) => (
-              <RabbitAvatar
-                key={`${generation}-${i}`}
-                gene={gene}
-                delay={i * 40}
-              />
+              <RabbitAvatar key={`${generation}-${i}`} gene={gene} delay={i * 40} />
             ))}
           </div>
         </div>
 
         {/* Frequência */}
-        <div className="rounded-2xl border-2 border-border bg-white p-4">
+        <div className="rounded-2xl border-2 border-border bg-surface p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <p className="font-display text-sm font-bold text-ink">
               Frequência do pelo marrom (Aa)
@@ -238,8 +223,8 @@ function Stage({
             />
           </div>
           <p className="mt-2 text-xs font-semibold text-ink-faint">
-            Marrom: {formatPercent(freq)} da população · Branco:{" "}
-            {formatPercent(1 - freq)} · nascimento sempre 50/50 (Aa × aa)
+            Marrom: {formatPercent(freq)} da população · Branco: {formatPercent(1 - freq)} ·
+            nascimento sempre 50/50 (Aa × aa)
           </p>
         </div>
 
@@ -251,9 +236,7 @@ function Stage({
             className="ludus-btn ludus-btn-natureza flex-1"
           >
             <FastForward className="size-5" aria-hidden />
-            {done
-              ? "3 gerações vividas"
-              : `Avançar para a geração ${generation + 1}`}
+            {done ? "3 gerações vividas" : `Avançar para a geração ${generation + 1}`}
           </button>
           {done && (
             <button
@@ -271,29 +254,38 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
+  const predador = pressure === "lobo";
+  const verdict = predador ? VERDICT : VERDICT_NEUTRAL;
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-2xl border-2 border-natureza bg-natureza-soft p-4 text-sm font-semibold leading-relaxed text-ink">
-        Três gerações se passaram no seu quintal (
-        {environment === "neve" ? "neve" : "sol e terra seca"} ·{" "}
-        {pressure === "lobo" ? "predador de vista" : "comida dura"}). O que
-        explica a mudança das cores?
+        {predador
+          ? `Três gerações se passaram no seu quintal (${environment === "neve" ? "neve" : "sol e terra seca"}, com predador de vista). O que explica a mudança das cores?`
+          : `Três gerações se passaram no seu quintal (${environment === "neve" ? "neve" : "sol e terra seca"}, com comida escassa). As cores seguiram por perto do 50/50. Por quê?`}
       </div>
       <div className="flex flex-col gap-3">
         <OptionTile
           icon="certo"
-          title="Seleção do ambiente sobre a variação existente"
-          subtitle="Quem já combinava escapou mais e deixou mais filhotes"
+          title={
+            predador
+              ? "Seleção do ambiente sobre a variação existente"
+              : "Pressão neutra à cor mantém o equilíbrio"
+          }
+          subtitle={
+            predador
+              ? "Quem já combinava escapou mais e deixou mais filhotes"
+              : "A comida dura cobra dos dois igualmente: o 50/50 de nascimento manda"
+          }
           color={areaColor}
           colorDark={areaColorDark}
           onPick={() => {
             session.finish({
-              title: VERDICT.title,
-              text: VERDICT.text,
+              title: verdict.title,
+              text: verdict.text,
               detail: {
-                ...VERDICT.detail,
-                text: `${VERDICT.detail.text}\n\nCruzamento: ${PUNNETT.cross}.`,
+                ...verdict.detail,
+                text: `${verdict.detail.text}\n\nCruzamento: ${PUNNETT.cross}.`,
               },
               caseId: `${environment}-${pressure}`,
             });
@@ -309,21 +301,23 @@ function Stage({
           colorDark={areaColorDark}
           onPick={() => {
             session.showError(
-              "Nenhum coelho mudou de cor: nascidos Aa ficam marrons, nascidos aa ficam brancos — a cor é sorteio de nascimento, não escolha. O que muda é quem sobrevive.",
+              "Nenhum coelho mudou de cor: nascidos Aa ficam marrons, nascidos aa ficam brancos. A cor é sorteio de nascimento, não escolha. O que muda é quem sobrevive, e isso depende da pressão.",
             );
             return false;
           }}
         />
         <OptionTile
           icon="conversa"
-          title="As cores mudaram por coincidência"
-          subtitle="Sem relação com o ambiente"
+          title="Foi tudo de uma vez, por uma mudança súbita"
+          subtitle="Uma virada única decidiu as cores"
           correct={false}
           color={areaColor}
           colorDark={areaColorDark}
           onPick={() => {
             session.showError(
-              "Três gerações seguidas na mesma direção não é coincidência: é pressão constante agindo sobre a variação. Compare seu quintal com outro cenário para ver a diferença.",
+              predador
+                ? "Não foi de uma vez: geração após geração, a pressão constante foi peneirando quem já existia. Veja a frequência mudar pouco a pouco."
+                : "Não houve virada: sem pressão que distinga as cores, o 50/50 do nascimento se impõe geração após geração.",
             );
             return false;
           }}
@@ -335,13 +329,7 @@ function Stage({
 
 /* ------------------------------------------------------------ Componentes */
 
-function Group({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Group({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-3">
       <p className="font-display text-base font-bold text-ink">{label}</p>
@@ -383,31 +371,10 @@ function RabbitAvatar({ gene, delay }: { gene: "A" | "a"; delay: number }) {
           strokeWidth="2"
           transform="rotate(12 30 14)"
         />
-        <ellipse
-          cx="18"
-          cy="15"
-          rx="2"
-          ry="6.5"
-          fill="#e8b4c8"
-          transform="rotate(-12 18 15)"
-        />
-        <ellipse
-          cx="30"
-          cy="15"
-          rx="2"
-          ry="6.5"
-          fill="#e8b4c8"
-          transform="rotate(12 30 15)"
-        />
+        <ellipse cx="18" cy="15" rx="2" ry="6.5" fill="#e8b4c8" transform="rotate(-12 18 15)" />
+        <ellipse cx="30" cy="15" rx="2" ry="6.5" fill="#e8b4c8" transform="rotate(12 30 15)" />
         {/* cabeça */}
-        <circle
-          cx="24"
-          cy="28"
-          r="11"
-          fill={body}
-          stroke={outline}
-          strokeWidth="2"
-        />
+        <circle cx="24" cy="28" r="11" fill={body} stroke={outline} strokeWidth="2" />
         {/* olhos */}
         <circle cx="20" cy="26" r="1.8" fill="#3c3a4e" />
         <circle cx="28" cy="26" r="1.8" fill="#3c3a4e" />

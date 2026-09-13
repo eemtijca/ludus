@@ -1,9 +1,9 @@
-# 🎲 Ludus · Jogos do Ensino Médio
+# 🎲 Ludus
 
-**Doze jogos de investigação das quatro áreas do ensino médio** — reconstruídos
-com engenharia e carinho para a Sala de Recursos da **EEMTI José Cláudio de
-Araújo**. Cada jogo é uma investigação curta, resolvida por toque, teclado ou
-voz, no tempo que o estudante precisar.
+**Ludus** é uma coleção de jogos de investigação do ensino médio, construída
+para a Sala de Recursos da **EEMTI José Cláudio de Araújo**. Cada jogo é uma
+investigação curta, resolvida por toque, teclado ou voz, no tempo que o
+estudante precisar.
 
 > Recurso de apoio ao **Atendimento Educacional Especializado (AEE)**, construído
 > segundo o **Desenho Universal para a Aprendizagem (DUA)**: sem cronômetro, com
@@ -13,23 +13,23 @@ voz, no tempo que o estudante precisar.
 
 ## ✨ O que tem dentro
 
-| Área           | Nível | Jogo                  | BNCC       | O desafio                                                                 |
-| -------------- | ----- | --------------------- | ---------- | ------------------------------------------------------------------------- |
-| **Linguagens** | 1     | Fonte Suspeita        | EM13LGG102 | Virar 3 evidências, cruzar pistas e decidir o que sobe no canal do grêmio |
-|                | 2     | Revisor Crítico       | EM13LGG104 | Encontrar o reparo de coesão/registro e publicar a versão final           |
-|                | 3     | Tese e Antítese       | EM13LGG303 | Montar tese forte + prova, responder à objeção e fechar a síntese         |
-| **Matemática** | 1     | Orçamento no Limite   | EM13MAT303 | Simular juros compostos ao vivo e decidir entre parcelar e guardar        |
-|                | 2     | Função Viva           | EM13MAT302 | Explorar reta e parábola com gráfico vivo; caçar interseção e vértice     |
-|                | 3     | Risco Provável        | EM13MAT312 | Montar a urna, simular 100+ sorteios e comparar teoria × frequência       |
-| **Natureza**   | 1     | O Circuito Falhou     | EM13CNT306 | Bancada elétrica viva: chave, associação, curto e Lei de Ohm              |
-|                | 2     | Reação Equilibrada    | EM13CNT104 | Balancear equações com balança de átomos em tempo real                    |
-|                | 3     | Dilema do Gene        | EM13CNT205 | Escolher ambiente e pressão; ver a seleção agir nas gerações              |
-| **Humanas**    | 1     | Fonte Histórica       | EM13CHS101 | Criticar fontes (data, autor, intenção) antes de publicar no mural        |
-|                | 2     | Território em Disputa | EM13CHS206 | Alocar projetos no mapa e enfrentar a chuva de março                      |
-|                | 3     | Dilema Ético          | EM13CHS502 | Viver 3 turnos de escolhas e ver o preço em dinheiro, tempo e saúde       |
+| Área | Nível | Jogo | BNCC | O desafio |
+|---|---|---|---|---|
+| **Linguagens** | 1 | Fonte Suspeita | EM13LP39 | Virar 3 evidências, cruzar pistas e decidir o que sobe no canal do grêmio |
+| | 2 | Revisor Crítico | EM13LP15 | Encontrar o reparo de coesão/registro e publicar a versão final |
+| | 3 | Tese e Antítese | EM13LGG303 | Montar tese forte + prova, responder à objeção e fechar a síntese |
+| **Matemática** | 1 | Orçamento no Limite | EM13MAT303 | Simular juros compostos ao vivo e decidir entre parcelar e guardar |
+| | 2 | Função Viva | EM13MAT302 | Explorar reta e parábola com gráfico vivo; achar interseção e vértice |
+| | 3 | Risco Provável | EM13MAT312 | Montar a urna, simular 100+ sorteios e comparar teoria × frequência |
+| **Natureza** | 1 | O Circuito Falhou | EM13CNT107 | Bancada elétrica viva: chave, associação, curto e Lei de Ohm |
+| | 2 | Reação Equilibrada | EM13CNT101 | Balancear equações com balança de átomos em tempo real |
+| | 3 | Dilema do Gene | EM13CNT205 | Escolher ambiente e pressão; ver a seleção agir nas gerações |
+| **Humanas** | 1 | Fonte Histórica | EM13CHS101 | Criticar fontes (data, autor, intenção) antes de publicar no mural |
+| | 2 | Território em Disputa | EM13CHS206 | Alocar projetos no mapa e enfrentar a chuva de março |
+| | 3 | Dilema Ético | EM13CHS502 | Viver 3 turnos de escolhas e ver o preço em dinheiro, tempo e saúde |
 
-Cada jogo tem **3 casos completos** com linguagem reescrita em profundidade —
-contexto, dramaturgia leve e feedback pedagógico que explica o _porquê_.
+Cada jogo tem **3 casos completos**, com contexto, dramaturgia leve e feedback
+pedagógico que explica o *porquê*.
 
 ### Estrutura de uma partida
 
@@ -41,25 +41,36 @@ Explorar  →  Testar  →  Decidir
 (Lente)      (Chave)    (Selo Final)
 ```
 
-- **Fases e selos** — selos nunca expiram, nunca diminuem: progresso só soma.
-- **Veredito** — tela de conclusão com confete, bastidor pedagógico e ações
-  ("jogar de novo" / "outro caso" / "outros jogos").
-- **Painel de progresso** — coleção de selos, % por área, próximas recomendações.
-- **Modo professor** — fichas BNCC, roteiro de uso em sala e links diretos por jogo.
+- **Fases e selos**: selos nunca expiram, nunca diminuem; progresso só soma.
+- **Veredito**: tela de conclusão com confete, bastidor pedagógico e ações
+  (jogar de novo, outro caso, outros jogos).
+- **Painel de progresso**: coleção de selos, % por área, próximas recomendações.
+- **Modo professor**: fichas BNCC, roteiro de uso em sala e links diretos por jogo.
+- **Fórmulas com MathJax**: expressões matemáticas e químicas renderizadas
+  profissionalmente, servidas localmente (`public/mathjax`), sem CDN externo.
 
-### Acessibilidade (DUA/AEE) — não é extra, é fundação
+### Acessibilidade (DUA/AEE): não é extra, é fundação
 
-- 🔊 **Voz em toda parte** — Web Speech API em pt-BR: instruções, evidências e
+- 🔊 **Voz em toda parte**: Web Speech API em pt-BR: instruções, evidências e
   vereditos podem ser ouvidos, com realce amarelo acompanhando a leitura.
-- 🖤 **Alto contraste** — tema preto/amarelo de alta visibilidade.
-- 🔤 **Texto amplo** — base tipográfica +18% com entrelinha maior.
-- 🌀 **Menos movimento** — desliga animações (além do `prefers-reduced-motion`).
-- ⌨️ **Teclado completo** — toda a jornada por Tab/Enter com foco visível.
-- 👆 **Alvos ≥ 48px** — botões grandes e generosos (verificado via DOM).
-- 🎨 **Dupla codificação** — nunca só cor: sempre ícone + texto + cor.
-- ⏱️ **Sem cronômetro, sem punição** — o erro ensina; tentar de novo é grátis.
-- 🔒 **Privacidade por desenho** — progresso no `localStorage` do dispositivo;
+  Um único botão de voz por tela, alternando entre "Ouvir" e "Parar".
+- 🖤 **Alto contraste**: tema preto/amarelo que transforma toda a interface:
+  fundos, cartões, botões, gráficos e foco.
+- 🔤 **Texto amplo**: base tipográfica +18% com entrelinha maior.
+- 🌀 **Menos movimento**: desliga animações (além do `prefers-reduced-motion`).
+- ⌨️ **Teclado completo**: toda a jornada por Tab/Enter com foco visível.
+- 👆 **Alvos ≥ 44px**: botões grandes (verificado via DOM).
+- 🎨 **Dupla codificação**: nunca só cor, sempre ícone + texto + cor.
+- ⏱️ **Sem cronômetro, sem punição**: o erro ensina, e tentar de novo é grátis.
+- 🔒 **Privacidade por desenho**: progresso no `localStorage` do dispositivo;
   sem contas, sem servidores, sem dado pessoal.
+
+### Mobile-first
+
+A navegação principal vive na **barra inferior** (ícone + rótulo por item) em
+telas pequenas, com atalhos de acessibilidade fixos na topbar. Dentro dos jogos
+a barra se recolhe para o palco ter a tela inteira. Filtros, cartões e controles
+reorganizam-se para toque em 320px+.
 
 ---
 
@@ -86,16 +97,17 @@ npm run start      # ou: bun run start
 
 ## 🧱 Stack e arquitetura
 
-| Camada      | Escolha                                                                             |
-| ----------- | ----------------------------------------------------------------------------------- |
-| Framework   | **Next.js 16** (App Router, React 19)                                               |
-| Linguagem   | **TypeScript 5** (strict)                                                           |
-| Estilo      | **Tailwind CSS 4** + design system próprio (`ludus-*`)                              |
-| Componentes | shadcn/ui (base) + componentes de jogo autorais                                     |
-| Animação    | CSS keyframes + `cubic-bezier(0.34, 1.56, 0.64, 1)` (juice com mola)                |
-| Estado      | **Zustand** (progresso) + external store (`useSyncExternalStore`) para preferências |
-| Ícones      | Lucide (registro central por nome)                                                  |
-| Fontes      | **Baloo 2** (display) + **Nunito** (corpo), self-hosted via `next/font`             |
+| Camada | Escolha |
+|---|---|
+| Framework | **Next.js 16** (App Router, React 19) |
+| Linguagem | **TypeScript 5** (strict) |
+| Estilo | **Tailwind CSS 4** + design system próprio (`ludus-*`) |
+| Componentes | shadcn/ui (base) + componentes de jogo autorais |
+| Matemática | **MathJax 3** + mhchem, servido localmente (`public/mathjax`) |
+| Animação | CSS keyframes com curva de mola; desligáveis por preferência |
+| Estado | **Zustand** (progresso) + external store (`useSyncExternalStore`) para preferências |
+| Ícones | Lucide (registro central por nome) |
+| Fontes | **Baloo 2** (display) + **Nunito** (corpo), self-hosted via `next/font` |
 
 ### Mapa do código
 
@@ -103,7 +115,9 @@ npm run start      # ou: bun run start
 src/
 ├── app/                        # layout (fontes/metadata) + page (casca + hash router)
 ├── lib/
-│   ├── catalog.ts              # 12 jogos: área, nível, BNCC, habilidades, objetivos
+│   ├── catalog.ts              # jogos: área, nível, BNCC, habilidades, objetivos
+│   ├── area-styles.ts          # classes utilitárias por área (tema-aware)
+│   ├── tex.ts                  # conversão de TeX para texto falado
 │   ├── speech.ts               # motor TTS pt-BR (voz preferida + realce)
 │   ├── sound.ts                # efeitos sonoros sintetizados (Web Audio, sem arquivos)
 │   ├── progress.ts             # store de progresso (zustand + localStorage)
@@ -111,10 +125,11 @@ src/
 │   └── format.ts               # formatadores pt-BR (moeda, número, data)
 ├── components/
 │   ├── a11y/                   # provider de preferências DUA (external store)
-│   ├── app-shell/              # header, footer
+│   ├── app-shell/              # header, bottom nav, footer
 │   ├── hub/                    # hero, cards, busca + filtros
 │   ├── game-shell/             # moldura de partida: HUD, fases, selos, feedback,
 │   │                           #   veredito com confete, cartas de evidência, opções
+│   ├── mathjax/                # provedor MathJax + MathText (texto misto com TeX)
 │   ├── progress/               # painel de progresso
 │   └── teacher/                # modo professor
 └── games/
@@ -124,7 +139,7 @@ src/
 
 ### O padrão de jogo
 
-Cada jogo é apenas **conteúdo + palco** — toda a mecânica compartilhada
+Cada jogo é apenas **conteúdo + palco**; toda a mecânica compartilhada
 (fases, selos, feedback, veredito, progresso) vem do hook `useGameSession` e do
 componente `GameShell`:
 
@@ -148,22 +163,23 @@ const session = useGameSession("fonte-suspeita");
 
 ## 📐 Decisões de design
 
-- **Lúdico premium** (referências Duolingo/Kahoot/Khan): botões 3D com sombra
-  "chunky" que afundam ao pressionar, cantos 16–20px, cores vivas por área,
-  tipografia arredondada.
-- **Juice com parcimônia** — pulso no acerto, shake no erro, confete só no
+- **Cor principal verde #008241**, com áreas BNCC em roxo (Linguagens), azul
+  (Matemática), verde-esmeralda (Natureza) e laranja (Humanas), todos calibrados
+  para contraste AA.
+- **Botões 3D com sombra inferior** que afunda ao pressionar, cantos 16-20px e
+  tipografia arredondada (Baloo 2 + Nunito 600).
+- **Feedback com parcimônia**: pulso no acerto, shake no erro, confete só no
   veredito; tudo desligável (reduced motion).
-- **Sons sintetizados** — arpejos curtos via Web Audio API: zero assets, zero
-  rede, zero dependência de arquivo externo.
-- **Rota única com hash** — deep links `#/jogo/<id>` funcionam em qualquer
+- **Sons sintetizados** via Web Audio API: zero assets, zero rede.
+- **Rota única com hash**: deep links `#/jogo/<id>` funcionam em qualquer
   hospedagem sem configuração de servidor.
 
 ---
 
 ## 📄 Licença e créditos
 
-- **Licença MIT** — veja [LICENSE](./LICENSE).
+- **Licença MIT**: veja [LICENSE](./LICENSE).
 - **Créditos**: Sala de Recursos · EEMTI José Cláudio de Araújo · 2026.
 - Reconstrução completa (arquitetura, design e conteúdo) do projeto
-  _Jogos Interdisciplinares_, preservando seus princípios pedagógicos DUA/AEE
+  *Jogos Interdisciplinares*, preservando seus princípios pedagógicos DUA/AEE
   e sua coleção de mecânicas.

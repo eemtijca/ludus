@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * Dilema Ético — palco do jogo.
+ * Dilema Ético: palco do jogo.
  *
- * Fase 1 · Explorar: as 3 peças da semana (contrato, casa, lei).
- * Fase 2 · Testar: viver 3 turnos — cada escolha move as barras de
+ * Fase 1 (Explorar): as 3 peças da semana (contrato, casa, lei).
+ * Fase 2 (Testar): viver 3 turnos; cada escolha move as barras de
  *   dinheiro, tempo e saúde com consequência narrada.
- * Fase 3 · Decidir: reflexão final sobre trabalho na adolescência.
+ * Fase 3 (Decidir): reflexão final sobre trabalho na adolescência.
  */
 
 import { useState } from "react";
@@ -38,7 +38,7 @@ export function DilemaEticoGame({ onExit }: { onExit: () => void }) {
         session.phase === 1
           ? "Abra as três peças da semana antes de jogar os turnos."
           : session.phase === 2
-            ? "Escolha o que fazer neste turno — as barras respondem na hora."
+            ? "Escolha o que fazer neste turno: as barras respondem na hora."
             : REFLECTION.prompt
       }
       narration="Simulação de decisão: trabalho, dinheiro e limites na adolescência."
@@ -48,8 +48,8 @@ export function DilemaEticoGame({ onExit }: { onExit: () => void }) {
       <Stage
         key={session.generation}
         session={session}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
       />
     </GameShell>
   );
@@ -76,9 +76,7 @@ function Stage({
     const next = [...opened, index];
     setOpened(next);
     if (next.length === 3) {
-      session.showSuccess(
-        "Peças abertas: contrato, casa e lei. Os turnos começam.",
-      );
+      session.showSuccess("Peças abertas: contrato, casa e lei. Os turnos começam.");
     }
   };
 
@@ -99,7 +97,7 @@ function Stage({
     }
   };
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const allOpened = opened.length === 3;
     return (
@@ -115,7 +113,7 @@ function Stage({
             icon={<Clock className="size-4" aria-hidden />}
             label="Tempo/Estudo"
             value={stats.time}
-            color="#14b8a6"
+            color="var(--matematica)"
           />
           <LifeBar
             icon={<HeartPulse className="size-4" aria-hidden />}
@@ -156,7 +154,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-5">
@@ -171,7 +169,7 @@ function Stage({
             icon={<Clock className="size-4" aria-hidden />}
             label="Tempo/Estudo"
             value={stats.time}
-            color="#14b8a6"
+            color="var(--matematica)"
           />
           <LifeBar
             icon={<HeartPulse className="size-4" aria-hidden />}
@@ -186,12 +184,10 @@ function Stage({
             Turno {turn} de 3
           </p>
           <p className="mt-1 font-display text-lg font-bold text-ink">
-            {turn === 1 &&
-              "Segunda-feira, 6h: o app notifica — janela de corridas aberta."}
-            {turn === 2 &&
-              "Quarta à noite: a prova de recuperação é sexta de manhã."}
+            {turn === 1 && "Segunda-feira, 6h: o app notifica: janela de corridas aberta."}
+            {turn === 2 && "Quarta à noite: a prova de recuperação é sexta de manhã."}
             {turn === 3 &&
-              "Sexta: última corrida antes do fim de semana — e a conta da casa vence hoje."}
+              "Sexta: última corrida antes do fim de semana, e a conta da casa vence hoje."}
           </p>
         </div>
 
@@ -214,8 +210,8 @@ function Stage({
 
         {history.length > 0 && (
           <p className="text-center text-xs font-semibold text-ink-faint">
-            Histórico da semana: {history.length} escolha
-            {history.length === 1 ? "" : "s"} registrada
+            Histórico da semana: {history.length} escolha{history.length === 1 ? "" : "s"}{" "}
+            registrada
             {history.length === 1 ? "" : "s"}.
           </p>
         )}
@@ -223,7 +219,7 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   return (
     <div className="flex flex-col gap-5">
       <div className="grid gap-3 sm:grid-cols-3">
@@ -237,7 +233,7 @@ function Stage({
           icon={<Clock className="size-4" aria-hidden />}
           label="Tempo/Estudo"
           value={stats.time}
-          color="#14b8a6"
+          color="var(--matematica)"
         />
         <LifeBar
           icon={<HeartPulse className="size-4" aria-hidden />}
@@ -293,10 +289,9 @@ function LifeBar({
   value: number;
   color: string;
 }) {
-  const status =
-    value >= 60 ? "tranquilo" : value >= 30 ? "apertado" : "crítico";
+  const status = value >= 60 ? "tranquilo" : value >= 30 ? "apertado" : "crítico";
   return (
-    <div className="rounded-2xl border-2 border-border bg-white p-4">
+    <div className="rounded-2xl border-2 border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <p className="flex items-center gap-1.5 font-display text-[0.72rem] font-bold uppercase tracking-[0.1em] text-ink-soft">
           {icon}

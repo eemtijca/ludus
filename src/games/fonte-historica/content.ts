@@ -1,9 +1,9 @@
 /**
- * Fonte Histórica — conteúdo dos 3 casos (reescrita profunda).
+ * Fonte Histórica: conteúdo dos casos.
  *
- * Cada caso: um post que quer subir no mural, 3 peças documentais
- * (com autoria/data/intenção explícitas), pergunta de cruzamento
- * e decisão editorial com lastro.
+ * Cada caso traz um post candidato ao mural, 3 peças documentais
+ * (com autoria, data e intenção explícitas), pergunta de cruzamento
+ * e decisão editorial.
  */
 
 export interface HistoricCase {
@@ -48,8 +48,7 @@ export const CASES: HistoricCase[] = [
     context: {
       channel: "Mural da escola · história do Brasil",
       meta: "agendado para publicar às 17h",
-      message:
-        "“A seca que castiga o Ceará hoje: veja a foto da tragédia acontecendo agora.”",
+      message: "“A seca que castiga o Ceará hoje: veja a foto da tragédia acontecendo agora.”",
       annotation: "O post vem com uma foto em preto e branco anexada.",
     },
     cards: [
@@ -65,37 +64,28 @@ export const CASES: HistoricCase[] = [
         category: "Peça 2 · A legenda de acervo",
         hook: "Museu, 1911",
         evidence:
-          "A mesma imagem aparece no acervo digital de um museu cearense, catalogada como “retirantes na seca — 1911”. Autor identificado, datação segura: 114 anos antes do post.",
+          "A mesma imagem aparece no acervo digital de um museu cearense, catalogada como “retirantes na seca, 1911”. Autor identificado, datação segura: 115 anos antes do post.",
       },
       {
         icon: "elo",
         category: "Peça 3 · O boletim",
         hook: "Órgão oficial, hoje",
         evidence:
-          "Boletim hidrológico da fundação estadual, publicado nesta manhã: reservatórios da região em 62% da capacidade — situação de atenção, seca em queda, com dados e assinatura técnica.",
+          "Boletim hidrológico da fundação estadual, publicado nesta manhã: reservatórios da região em 62% da capacidade, situação de atenção com seca em queda, dados e assinatura técnica.",
       },
     ],
-    crossQuestion:
-      "Qual peça permite datar e verificar o fato por conta própria?",
+    crossQuestion: "Qual peça permite datar e verificar o fato por conta própria?",
     crossOptions: [
       { icon: "busca", title: "A foto solta", subtitle: "Sem data nem autor" },
-      {
-        icon: "historia",
-        title: "A legenda de 1911",
-        subtitle: "Acervo com autoria e datação",
-      },
-      {
-        icon: "elo",
-        title: "O boletim de hoje",
-        subtitle: "Dado oficial atual e assinado",
-      },
+      { icon: "historia", title: "A legenda de 1911", subtitle: "Acervo com autoria e datação" },
+      { icon: "elo", title: "O boletim de hoje", subtitle: "Dado oficial atual e assinado" },
     ],
     crossCorrect: 1,
     crossHint:
-      "Para DATAR a foto, o que importa é a informação sobre a própria foto — não sobre o clima de hoje.",
+      "Para DATAR a foto, o que importa é a informação sobre a própria foto, e não sobre o clima de hoje.",
     crossWrong: [
       "A foto solta é justamente o problema: sem data e sem autor, ela não prova nem desmente nada sozinha.",
-      "O boletim de hoje mede o presente — ele ajuda o texto, mas não diz NADA sobre quando a foto foi tirada.",
+      "O boletim de hoje mede o presente: ele ajuda o texto, mas não diz nada sobre quando a foto foi tirada.",
     ],
     decisionPrompt: "O que o mural publica?",
     decisions: [
@@ -121,10 +111,10 @@ export const CASES: HistoricCase[] = [
     expected: "checar",
     verdict: {
       title: "Mural protegido do falso presente",
-      text: "Segurar foi a decisão certa: uma foto de 1911 vestida de “acontecendo agora” é desinformação histórica. O post voltou para a bancada para trocar a imagem por uma atual — ou declarar a de 1911 como registro de arquivo, com data e autor no crédito.",
+      text: "Segurar foi a decisão certa: uma foto de 1911 vestida de “acontecendo agora” é desinformação histórica. O post voltou para a bancada para trocar a imagem por uma atual: ou declarar a de 1911 como registro de arquivo, com data e autor no crédito.",
       detail: {
         label: "Ver o bastidor do historiador",
-        text: "Toda fonte responde três perguntas: QUEM produziu, QUANDO e PARA QUÊ. A foto solta responde zero das três. A legenda do acervo responde as três — e revela que o post queria emprestar a dramaticidade de 1911 à seca de hoje. Dramatizar com fonte mal datada é a receita clássica do falso histórico.",
+        text: "Toda fonte responde três perguntas: QUEM produziu, QUANDO e PARA QUÊ. A foto solta responde zero das três. A legenda do acervo responde as três e revela que o post queria emprestar a dramaticidade de 1911 à seca de hoje. Dramatizar com fonte mal datada é a receita clássica do falso histórico.",
       },
     },
   },
@@ -144,7 +134,7 @@ export const CASES: HistoricCase[] = [
         category: "Peça 1 · O print",
         hook: "Sem autor, sem número",
         evidence:
-          "Print de uma suposta notícia: sem veículo, sem data, sem URL, sem número de portaria. Texto em caixa alta com três pontos de exclamação — o uniforme típico do pânico.",
+          "Print de uma suposta notícia: sem veículo, sem data, sem URL, sem número de portaria. Texto em caixa alta com três pontos de exclamação: o uniforme típico do pânico.",
       },
       {
         icon: "documento",
@@ -158,16 +148,12 @@ export const CASES: HistoricCase[] = [
         category: "Peça 3 · O áudio",
         hook: "“Me disseram que…”",
         evidence:
-          "Áudio de 40 segundos encaminhado no grupo: uma voz diz que “me disseram que ia cancelar”. Sem fonte, sem nome, sem responsável — cadeia de rumor clássica.",
+          "Áudio de 40 segundos encaminhado no grupo: uma voz diz que “me disseram que ia cancelar”. Sem fonte, sem nome, sem responsável: cadeia de rumor clássica.",
       },
     ],
     crossQuestion: "Qual peça tem lastro documental rastreável?",
     crossOptions: [
-      {
-        icon: "busca",
-        title: "O print",
-        subtitle: "Notícia sem veículo nem data",
-      },
+      { icon: "busca", title: "O print", subtitle: "Notícia sem veículo nem data" },
       {
         icon: "documento",
         title: "A portaria nº 47",
@@ -206,10 +192,10 @@ export const CASES: HistoricCase[] = [
     expected: "checar",
     verdict: {
       title: "Rumor cortado no talo",
-      text: "Você segurou o post, abriu a portaria nº 47 no Diário Oficial e corrigiu o grupo: o auxílio não só continua — foi reajustado em 6%. Um número rastreável vale mais que mil “me disseram”.",
+      text: "Você segurou o post, abriu a portaria nº 47 no Diário Oficial e corrigiu o grupo: o auxílio não só continua: foi reajustado em 6%. Um número rastreável vale mais que mil “me disseram”.",
       detail: {
         label: "Ver o bastidor do historiador",
-        text: "Documento oficial público é o padrão-ouro do lastro: qualquer um pode conferir, a qualquer momento, sem depender de intermediário. Quando um boato e uma portaria brigam, a portaria ganha — e o trabalho da fonte é justamente encontrar essa briga antes de publicar.",
+        text: "Documento oficial público é o padrão-ouro do lastro: qualquer um pode conferir, a qualquer momento, sem depender de intermediário. Quando um boato e uma portaria brigam, a portaria ganha; e o trabalho da fonte é justamente encontrar essa briga antes de publicar.",
       },
     },
   },
@@ -219,10 +205,8 @@ export const CASES: HistoricCase[] = [
     context: {
       channel: "Mural da escola · meio ambiente",
       meta: "peça de debate sobre energia",
-      message:
-        "“A usina do Xingu não afetou ninguém: veja o vídeo oficial da empresa.”",
-      annotation:
-        "O vídeo tem produção impecável — dronês, trilha, narração calma.",
+      message: "“A usina do Xingu não afetou ninguém: veja o vídeo oficial da empresa.”",
+      annotation: "O vídeo tem produção impecável, com drones, trilha e narração calma.",
     },
     cards: [
       {
@@ -259,17 +243,12 @@ export const CASES: HistoricCase[] = [
         title: "O depoimento ribeirinho",
         subtitle: "Fonte primária com local e data",
       },
-      {
-        icon: "mapa",
-        title: "O relatório com mapa",
-        subtitle: "Dado técnico independente",
-      },
+      { icon: "mapa", title: "O relatório com mapa", subtitle: "Dado técnico independente" },
     ],
     crossCorrect: 1,
-    crossHint:
-      "“Outro lado” é a voz diretamente atingida — quem mora onde a água mudou de lugar.",
+    crossHint: "“Outro lado” é a voz diretamente atingida: quem mora onde a água mudou de lugar.",
     crossWrong: [
-      "O vídeo da empresa é exatamente o lado ÚNICO que já está no post — falta quem vive o outro lado da barragem.",
+      "O vídeo da empresa é exatamente o lado ÚNICO que já está no post: falta quem vive o outro lado da barragem.",
       "O relatório técnico é peça valiosa, mas voz afetada é diferente de laudo: o depoimento é quem sente o impacto na pele.",
     ],
     decisionPrompt: "O mural quer uma peça honesta sobre a usina. Você decide:",
@@ -299,7 +278,7 @@ export const CASES: HistoricCase[] = [
       text: "Publicar vídeo + depoimento + relatório transformou propaganda em debate honesto: a escola viu a versão da empresa E a voz de quem vive o rio. Um lado só é cartão de visita; dois lados é jornalismo.",
       detail: {
         label: "Ver o bastidor do historiador",
-        text: "Toda fonte tem intenção — a empresa quer vender, o ribeirinho quer ser ouvido, o órgão quer regular. O método histórico não pergunta “quem está certo?”, pergunta “quem fala, de onde e por quê?”. Quando as versões não fecham, o mural ganha debate em vez de cartão de visita.",
+        text: "Toda fonte tem intenção: a empresa quer vender, o ribeirinho quer ser ouvido, o órgão quer regular. O método histórico não pergunta “quem está certo?”, pergunta “quem fala, de onde e por quê?”. Quando as versões não fecham, o mural ganha debate em vez de cartão de visita.",
       },
     },
   },

@@ -1,14 +1,16 @@
 "use client";
 
 /**
- * Ludus — casca da aplicação.
- * Roteamento client-side por hash:
+ * Casca da aplicação: uma única rota com navegação por hash.
  *   #/ (hub) · #/jogo/<id> · #/progresso · #/professores
+ * Em telas pequenas, a navegação principal vive na barra inferior;
+ * dentro dos jogos ela fica oculta para não competir com o palco.
  */
 
 import { useEffect } from "react";
 import { A11yProvider } from "@/components/a11y/a11y-provider";
 import { AppHeader } from "@/components/app-shell/app-header";
+import { AppBottomNav } from "@/components/app-shell/app-bottom-nav";
 import { AppFooter } from "@/components/app-shell/app-footer";
 import { HubView } from "@/components/hub/hub-view";
 import { ProgressDashboard } from "@/components/progress/progress-dashboard";
@@ -35,7 +37,7 @@ function App() {
     loadProgress();
   }, [loadProgress]);
 
-  // Interrompe leitura órfã ao trocar de visão via hash.
+  // Interrompe leitura órfã ao trocar de visão.
   useEffect(() => {
     const handler = () => stopSpeech();
     window.addEventListener("hashchange", handler);
@@ -43,6 +45,7 @@ function App() {
   }, []);
 
   const exitGame = () => navigate({ view: "hub" });
+  const inGame = route.view === "game";
 
   let content: React.ReactNode;
 
@@ -55,16 +58,9 @@ function App() {
       } else {
         content = (
           <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-20 text-center">
-            <h1 className="font-display text-2xl font-bold text-ink">
-              Jogo não encontrado
-            </h1>
-            <p className="text-sm text-ink-soft">
-              O endereço aponta para um jogo que não existe (ainda).
-            </p>
-            <a
-              href={hrefFor({ view: "hub" })}
-              className="ludus-btn ludus-btn-ink"
-            >
+            <h1 className="font-display text-2xl font-bold text-ink">Jogo não encontrado</h1>
+            <p className="text-sm text-ink-soft">O endereço aponta para um jogo que não existe.</p>
+            <a href={hrefFor({ view: "hub" })} className="ludus-btn ludus-btn-ink">
               Voltar aos jogos
             </a>
           </div>
@@ -86,12 +82,13 @@ function App() {
     <div className="flex min-h-screen flex-col bg-background">
       <AppHeader current={route.view} />
       <main
-        key={route.view === "game" ? route.gameId : route.view}
-        className="anim-fade-up flex-1"
+        key={inGame ? route.gameId : route.view}
+        className={`anim-fade-up flex-1 ${inGame ? "" : "pb-nav sm:pb-0"}`}
       >
         {content}
       </main>
-      <AppFooter />
+      {!inGame && <AppFooter />}
+      <AppBottomNav current={route.view} hidden={inGame} />
     </div>
   );
 }

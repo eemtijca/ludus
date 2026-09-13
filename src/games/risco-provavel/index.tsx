@@ -1,13 +1,13 @@
 "use client";
 
 /**
- * Risco Provável — palco do jogo.
+ * Risco Provável: palco do jogo.
  *
- * Fase 1 · Explorar: montar a urna (bolas verdes/azuis/vermelhas) e
+ * Fase 1 (Explorar): montar a urna (bolas verdes, azuis e vermelhas) e
  *   escolher o regime: com ou sem reposição.
- * Fase 2 · Testar: puxar a alavanca — sorteios animados de 1 em 1 ou em
- *   lote de 100; barra compara frequência observada × chance teórica.
- * Fase 3 · Decidir: a rifa da turma é justa (chance aberta) ou armada?
+ * Fase 2 (Testar): sorteios de 1 em 1 ou em lote de 100, com barra que
+ *   compara frequência observada e chance teórica.
+ * Fase 3 (Decidir): a rifa da turma é justa (chance divulgada) ou armada?
  */
 
 import { useMemo, useState } from "react";
@@ -23,33 +23,10 @@ const GAME_ID = "risco-provavel";
 type BallColor = "verde" | "azul" | "vermelha";
 
 const BALL_HEX: Record<BallColor, string> = {
-  verde: "#58cc02",
-  azul: "#1cb0f6",
+  verde: "#008241",
+  azul: "#1899d6",
   vermelha: "#ff4b4b",
 };
-
-/** Sorteia duas bolas na ordem verde → azul. */
-function drawOnce(
-  counts: Record<BallColor, number>,
-  withReplacement: boolean,
-): boolean {
-  const bag: BallColor[] = [
-    ...Array(counts.verde).fill("verde"),
-    ...Array(counts.azul).fill("azul"),
-    ...Array(counts.vermelha).fill("vermelha"),
-  ];
-  if (bag.length === 0) return false;
-  const first = bag[Math.floor(Math.random() * bag.length)];
-  if (withReplacement) {
-    const second = bag[Math.floor(Math.random() * bag.length)];
-    return first === "verde" && second === "azul";
-  }
-  const rest = [...bag];
-  rest.splice(rest.indexOf(first), 1);
-  if (rest.length === 0) return false;
-  const second = rest[Math.floor(Math.random() * rest.length)];
-  return first === "verde" && second === "azul";
-}
 
 export function RiscoProvavelGame({ onExit }: { onExit: () => void }) {
   const game = GAME_BY_ID[GAME_ID];
@@ -69,15 +46,15 @@ export function RiscoProvavelGame({ onExit }: { onExit: () => void }) {
             ? "Puxe a alavanca e compare a frequência observada com a chance teórica."
             : "Decida o destino da rifa: chance aberta ou chance escondida?"
       }
-      narration="Simulador de probabilidade com e sem reposição. A urna não engana — quem calcula, sabe."
+      narration="Simulador de probabilidade com e sem reposição. A urna não engana: quem calcula, sabe."
       nextVariant={null}
       onExit={onExit}
     >
       <Stage
         key={session.generation}
         session={session}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
       />
     </GameShell>
   );
@@ -102,25 +79,17 @@ function Stage({
   const [hits, setHits] = useState(0);
   const [lastPair, setLastPair] = useState<[BallColor, BallColor] | null>(null);
 
-  const counts: Record<BallColor, number> = {
-    verde: verdes,
-    azul: azuis,
-    vermelha: vermelhas,
-  };
+  const counts: Record<BallColor, number> = { verde: verdes, azul: azuis, vermelha: vermelhas };
   const total = verdes + azuis + vermelhas;
 
   const theoretical = useMemo(() => {
     if (total === 0) return 0;
     const pV = verdes / total;
-    const pA = replacement
-      ? azuis / total
-      : total > 1
-        ? azuis / (total - 1)
-        : 0;
+    const pA = replacement ? azuis / total : total > 1 ? azuis / (total - 1) : 0;
     return pV * pA;
   }, [verdes, azuis, total, replacement]);
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const ready = replacement !== null;
     return (
@@ -153,13 +122,10 @@ function Stage({
               onChange={setVermelhas}
             />
             <div className="rounded-2xl border-2 border-dashed border-border bg-cloud/50 p-3 text-xs font-semibold leading-relaxed text-ink-soft">
-              O sorteio premiado é{" "}
-              <strong className="text-ink">verde e depois azul</strong>. Verde:{" "}
+              O sorteio premiado é <strong className="text-ink">verde e depois azul</strong>. Verde:{" "}
               {verdes}/{total} · Azul em seguida:{" "}
-              {replacement
-                ? `${azuis}/${total}`
-                : `${azuis}/${Math.max(total - 1, 1)}`}{" "}
-              — a conta muda se a primeira bola volta.
+              {replacement ? `${azuis}/${total}` : `${azuis}/${Math.max(total - 1, 1)}`}. A conta
+              muda se a primeira bola volta.
             </div>
           </div>
         </div>
@@ -174,9 +140,7 @@ function Stage({
             correct={replacement === false}
             onPick={() => {
               setReplacement(false);
-              session.showSuccess(
-                "Sem reposição: a segunda saída sai de uma bola a menos.",
-              );
+              session.showSuccess("Sem reposição: a segunda saída sai de uma bola a menos.");
               return true;
             }}
           />
@@ -189,9 +153,7 @@ function Stage({
             correct={replacement === true}
             onPick={() => {
               setReplacement(true);
-              session.showSuccess(
-                "Com reposição: as duas saídas usam a urna cheia.",
-              );
+              session.showSuccess("Com reposição: as duas saídas usam a urna cheia.");
               return true;
             }}
           />
@@ -212,7 +174,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     const withReplacement = replacement ?? false;
     const observed = draws > 0 ? hits / draws : 0;
@@ -229,9 +191,7 @@ function Stage({
         const first = bag[Math.floor(Math.random() * bag.length)];
         const rest = [...bag];
         if (!withReplacement) rest.splice(rest.indexOf(first), 1);
-        const second = rest.length
-          ? rest[Math.floor(Math.random() * rest.length)]
-          : first;
+        const second = rest.length ? rest[Math.floor(Math.random() * rest.length)] : first;
         pairs.push([first, second]);
         if (first === "verde" && second === "azul") newHits += 1;
       }
@@ -244,9 +204,7 @@ function Stage({
           : `+${times} sorteios de uma vez. A frequência vai se aproximando da chance teórica.`,
       );
       if (draws + times >= 100) {
-        session.showSuccess(
-          "Cem sorteios no histórico: a lei dos grandes números dá as caras.",
-        );
+        session.showSuccess("Cem sorteios no histórico: a lei dos grandes números dá as caras.");
       }
     };
 
@@ -259,15 +217,13 @@ function Stage({
               <Stat label="Chance teórica" value={formatPercent(theoretical)} />
               <Stat
                 label={`Frequência (${draws} sorteios)`}
-                value={draws ? formatPercent(observed) : "—"}
+                value={draws ? formatPercent(observed) : "ainda não"}
               />
             </div>
 
             {/* barra comparativa */}
-            <div className="rounded-2xl border-2 border-border bg-white p-4">
-              <p className="font-display text-sm font-bold text-ink">
-                Observado × teórico
-              </p>
+            <div className="rounded-2xl border-2 border-border bg-surface p-4">
+              <p className="font-display text-sm font-bold text-ink">Observado × teórico</p>
               <div className="relative mt-3 h-6 overflow-hidden rounded-full bg-cloud">
                 <div
                   className="h-full rounded-full bg-matematica transition-[width] duration-500"
@@ -281,15 +237,9 @@ function Stage({
                 />
               </div>
               <p className="mt-2 flex items-center gap-2 text-xs font-bold text-ink-soft">
-                <span
-                  className="inline-block size-3 rounded-full bg-matematica"
-                  aria-hidden
-                />
+                <span className="inline-block size-3 rounded-full bg-matematica" aria-hidden />
                 frequência observada
-                <span
-                  className="ml-2 inline-block h-3 w-1 rounded-full bg-ink"
-                  aria-hidden
-                />
+                <span className="ml-2 inline-block h-3 w-1 rounded-full bg-ink" aria-hidden />
                 chance teórica
               </p>
             </div>
@@ -313,10 +263,9 @@ function Stage({
               </button>
             </div>
             <p className="text-xs font-semibold leading-relaxed text-ink-faint">
-              Histórico: {hits} sucesso{hits === 1 ? "" : "s"} em {draws}{" "}
-              sorteio
+              Histórico: {hits} sucesso{hits === 1 ? "" : "s"} em {draws} sorteio
               {draws === 1 ? "" : "s"} · último par:{" "}
-              {lastPair ? `${lastPair[0]} → ${lastPair[1]}` : "—"}.
+              {lastPair ? `${lastPair[0]} → ${lastPair[1]}` : "nenhum"}.
             </p>
           </div>
         </div>
@@ -328,24 +277,21 @@ function Stage({
           className="ludus-btn ludus-btn-xl text-white"
           style={{ background: areaColor, borderColor: areaColorDark }}
         >
-          {draws < 100
-            ? `Faltam ${100 - draws} sorteios para decidir`
-            : "Decidir a rifa"}
+          {draws < 100 ? `Faltam ${100 - draws} sorteios para decidir` : "Decidir a rifa"}
           <ArrowRight className="size-5" aria-hidden />
         </button>
       </div>
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-2xl border-2 border-border bg-cloud/60 p-4 text-sm leading-relaxed text-ink-soft">
-        A rifa da turma sorteia com a sua urna ({verdes}V · {azuis}A ·{" "}
-        {vermelhas}M, {(replacement ?? false) ? "com" : "sem"} reposição).
-        Chance real de ganhar:{" "}
-        <strong className="text-ink">{formatPercent(theoretical)}</strong>. Você
-        é quem comunica as regras no mural.
+        A rifa da turma sorteia com a sua urna ({verdes}V · {azuis}A · {vermelhas}M,{" "}
+        {(replacement ?? false) ? "com" : "sem"} reposição). Chance real de ganhar:{" "}
+        <strong className="text-ink">{formatPercent(theoretical)}</strong>. Você é quem comunica as
+        regras no mural.
       </div>
       <div className="flex flex-col gap-3">
         <OptionTile
@@ -357,10 +303,11 @@ function Stage({
           onPick={() => {
             session.finish({
               title: "Rifa honesta, chance na lata",
-              text: `Você publicou a chance real de ${formatPercent(theoretical)} na cartela — e ainda explicou como calculou. Rifa transparente é jogo: rifa sem número é pegadinha.`,
+              text: `Você publicou a chance real de ${formatPercent(theoretical)} na cartela e ainda explicou como calculou. Rifa transparente é jogo: rifa sem número é pegadinha.`,
               detail: {
                 label: "Ver a conta completa",
-                text: `Sem reposição: (${verdes}/${total}) × (${azuis}/${Math.max(total - 1, 1)}) = ${formatPercent(theoretical, 2)}. Com reposição seria (${verdes}/${total}) × (${azuis}/${total}). A frequência dos ${draws} sorteios convergiu para esse valor — a matemática sempre aparece no longo prazo.`,
+                text: `Sem reposição: \\(\\frac{${verdes}}{${total}} \\times \\frac{${azuis}}{${Math.max(total - 1, 1)}} = ${formatPercent(theoretical, 2)}\\). Com reposição seria \\(\\frac{${verdes}}{${total}} \\times \\frac{${azuis}}{${total}}\\). A frequência dos ${draws} sorteios convergiu para esse valor: a matemática sempre aparece no longo prazo.`,
+                speech: `Sem reposição: ${verdes} sobre ${total}, vezes ${azuis} sobre ${Math.max(total - 1, 1)}, que dá ${formatPercent(theoretical, 2)}. Com reposição seria ${verdes} sobre ${total}, vezes ${azuis} sobre ${total}. A frequência dos ${draws} sorteios convergiu para esse valor: a matemática sempre aparece no longo prazo.`,
               },
               caseId: "justa",
             });
@@ -375,7 +322,7 @@ function Stage({
           colorDark={areaColorDark}
           onPick={() => {
             session.showError(
-              "Esconder a chance transforma o jogo em armadilha: quem compra tem direito de saber o que compra. A urna deu o número — use-o.",
+              "Esconder a chance transforma o jogo em armadilha: quem compra tem direito de saber o que compra. A urna deu o número: use-o.",
             );
             return false;
           }}
@@ -400,7 +347,7 @@ function BallSlider({
 }) {
   const id = `ball-${label.replace(/\s/g, "-")}`;
   return (
-    <div className="rounded-2xl border-2 border-border bg-white p-3">
+    <div className="rounded-2xl border-2 border-border bg-surface p-3">
       <div className="flex items-center justify-between">
         <label
           htmlFor={id}
@@ -413,10 +360,7 @@ function BallSlider({
           />
           {label}
         </label>
-        <output
-          htmlFor={id}
-          className="font-display text-lg font-bold text-matematica-dark"
-        >
+        <output htmlFor={id} className="font-display text-lg font-bold text-matematica-dark">
           {value}
         </output>
       </div>
@@ -460,10 +404,8 @@ function UrnView({
   });
 
   return (
-    <figure className="flex flex-col items-center rounded-2xl border-2 border-border bg-white p-4">
-      <figcaption className="mb-1 font-display text-sm font-bold text-ink">
-        Urna da rifa
-      </figcaption>
+    <figure className="flex flex-col items-center rounded-2xl border-2 border-border bg-surface p-4">
+      <figcaption className="mb-1 font-display text-sm font-bold text-ink">Urna da rifa</figcaption>
       <svg
         viewBox="0 0 180 170"
         className="w-full max-w-[240px]"
@@ -473,12 +415,12 @@ function UrnView({
         {/* corpo da urna */}
         <path
           d="M32 30 L148 30 L136 155 Q90 168 44 155 Z"
-          fill="#e0f7f4"
-          stroke="#14b8a6"
+          fill="#e3f2fd"
+          stroke="#1899d6"
           strokeWidth="4"
           strokeLinejoin="round"
         />
-        <rect x="26" y="18" width="128" height="14" rx="7" fill="#14b8a6" />
+        <rect x="26" y="18" width="128" height="14" rx="7" fill="#1899d6" />
         {/* bolas */}
         {balls.map((ball, i) => (
           <circle
@@ -525,7 +467,7 @@ function UrnView({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border-2 border-border bg-white p-4">
+    <div className="rounded-2xl border-2 border-border bg-surface p-4">
       <p className="font-display text-[0.68rem] font-bold uppercase tracking-[0.1em] text-ink-soft">
         {label}
       </p>

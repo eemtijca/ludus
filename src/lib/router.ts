@@ -1,26 +1,22 @@
 "use client";
 
 /**
- * Hash router minimalista — navegação client-side em uma única rota.
- * Rotas: #/ (hub) · #/jogo/<id> · #/progresso · #/professores
- * Funciona no sandbox, em qualquer hospedagem estática ou Node.
+ * Hash router minimalista: navegação client-side em uma única rota.
+ * Rotas: #/ (hub), #/jogo/<id>, #/progresso, #/professores.
+ * Funciona em hospedagem estática ou servidor Node.
  */
 
 import { useCallback, useEffect, useState } from "react";
 
 export type Route =
-  | { view: "hub" }
-  | { view: "game"; gameId: string }
-  | { view: "progress" }
-  | { view: "teacher" };
+  { view: "hub" } | { view: "game"; gameId: string } | { view: "progress" } | { view: "teacher" };
 
 export function parseHash(hash: string): Route {
   const clean = hash.replace(/^#/, "").replace(/^\/+/, "").replace(/\/+$/, "");
   if (!clean) return { view: "hub" };
 
   const parts = clean.split("/");
-  if (parts[0] === "jogo" && parts[1])
-    return { view: "game", gameId: parts[1] };
+  if (parts[0] === "jogo" && parts[1]) return { view: "game", gameId: parts[1] };
   if (parts[0] === "progresso") return { view: "progress" };
   if (parts[0] === "professores") return { view: "teacher" };
   return { view: "hub" };
@@ -50,7 +46,7 @@ export function useHashRoute(): {
     const sync = () => {
       setRoute(parseHash(window.location.hash));
       // Troca de visão via hash (inclui botões voltar/avançar do navegador)
-      // recomeça do topo — nada de título cortado pelo scroll antigo.
+      // recomeça do topo: nada de título cortado pelo scroll antigo.
       if (window.location.hash !== lastHash) {
         lastHash = window.location.hash;
         window.scrollTo({ top: 0, behavior: "auto" });

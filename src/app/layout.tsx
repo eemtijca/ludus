@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { MathJaxProvider } from "@/components/mathjax/mathjax-provider";
 
 const baloo = Baloo_2({
   variable: "--font-baloo",
@@ -17,11 +18,12 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: {
-    default: "Ludus · Jogos do Ensino Médio",
+    default: "Ludus",
     template: "%s · Ludus",
   },
   description:
-    "Doze jogos de investigação das quatro áreas do ensino médio, com voz, sem cronômetro e no seu ritmo. Recurso DUA/AEE da Sala de Recursos da EEMTI José Cláudio de Araújo.",
+    "Jogos de investigação do ensino médio com DUA/AEE: leitura em voz alta, sem cronômetro e no ritmo do estudante. Sala de Recursos da EEMTI José Cláudio de Araújo.",
+  applicationName: "Ludus",
   keywords: [
     "jogos educacionais",
     "ensino médio",
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#a560e8",
+  themeColor: "#008241",
   width: "device-width",
   initialScale: 1,
 };
@@ -50,7 +52,7 @@ export default function RootLayout({
       <body
         className={`${baloo.variable} ${nunito.variable} antialiased bg-background text-foreground`}
       >
-        {children}
+        <MathJaxProvider>{children}</MathJaxProvider>
         <Toaster />
       </body>
     </html>

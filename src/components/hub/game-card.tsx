@@ -1,25 +1,20 @@
 "use client";
 
 /**
- * GameCard — cartão de jogo do hub.
- * Área (cor + ícone), nível, título, gancho, tags, selos e status.
- * Status "concluído" vira check sobreposto ao ícone (padrão Duolingo),
- * mantendo o topo dos cartões alinhados na grade.
+ * GameCard: cartão de jogo do hub.
+ * Mostra área (ícone + cor), nível, título, gancho, tags, selos e status.
+ * O check de concluído sobrepõe o ícone mantendo os topos alinhados.
  */
 
 import { Check, Play, Medal, ScanSearch, KeyRound } from "lucide-react";
 import { AREAS, LEVEL_LABEL, type GameMeta } from "@/lib/catalog";
+import { AREA_BG, AREA_CHIP } from "@/lib/area-styles";
 import { isGameCompleted, type GameProgress } from "@/lib/progress";
 import { GameIcon } from "@/components/game-shell/game-icon";
 import { hrefFor } from "@/lib/router";
+import { cn } from "@/lib/utils";
 
-export function GameCard({
-  game,
-  progress,
-}: {
-  game: GameMeta;
-  progress?: GameProgress;
-}) {
+export function GameCard({ game, progress }: { game: GameMeta; progress?: GameProgress }) {
   const area = AREAS[game.area];
   const done = isGameCompleted(progress);
   const badges = progress?.badges.length ?? 0;
@@ -32,43 +27,32 @@ export function GameCard({
         done ? " Jogo já concluído." : ""
       }`}
     >
-      {/* topo: ícone (com check de concluído) + nível */}
+      {/* Topo: ícone (com check de concluído) + nível */}
       <div className="flex items-start justify-between gap-3">
         <span className="relative" aria-hidden>
           <span
-            className="flex size-14 items-center justify-center rounded-2xl text-white transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:size-16"
-            style={{ background: area.color }}
+            className={cn(
+              "flex size-14 shrink-0 items-center justify-center rounded-2xl text-white transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:size-16",
+              AREA_BG[game.area],
+            )}
           >
-            <GameIcon
-              name={game.icon}
-              className="size-7 sm:size-8"
-              strokeWidth={2.2}
-            />
+            <GameIcon name={game.icon} className="size-7 sm:size-8" strokeWidth={2.2} />
           </span>
           {done && (
-            <span className="absolute -bottom-1.5 -right-1.5 flex size-7 items-center justify-center rounded-full border-[3px] border-white bg-success text-white anim-pop">
+            <span className="anim-pop absolute -right-1.5 -bottom-1.5 flex size-7 items-center justify-center rounded-full border-[3px] border-white bg-success text-white">
               <Check className="size-3.5" strokeWidth={4} />
             </span>
           )}
         </span>
 
-        <span
-          className="ludus-chip mt-1"
-          style={{ color: area.colorDark, background: area.colorSoft }}
-        >
-          Nível {game.level}
-        </span>
+        <span className={cn("ludus-chip mt-1", AREA_CHIP[game.area])}>Nível {game.level}</span>
       </div>
 
-      {/* corpo */}
-      <h3 className="mt-4 font-display text-xl font-bold leading-tight text-ink">
-        {game.title}
-      </h3>
-      <p className="mt-1.5 flex-1 text-sm leading-relaxed text-ink-soft">
-        {game.tagline}
-      </p>
+      {/* Corpo */}
+      <h3 className="mt-4 font-display text-xl font-bold leading-tight text-ink">{game.title}</h3>
+      <p className="mt-1.5 flex-1 text-sm leading-relaxed text-ink-soft">{game.tagline}</p>
 
-      {/* tags + BNCC */}
+      {/* Tags + BNCC */}
       <div className="mt-3 flex flex-wrap gap-1.5">
         {game.tags.slice(0, 2).map((tag) => (
           <span
@@ -83,12 +67,9 @@ export function GameCard({
         </span>
       </div>
 
-      {/* rodapé: selos + CTA */}
+      {/* Rodapé: selos + CTA */}
       <div className="mt-4 flex items-center justify-between border-t-2 border-dashed border-border pt-3">
-        <div
-          className="flex items-center gap-1"
-          aria-label={`${badges} de 3 selos conquistados`}
-        >
+        <div className="flex items-center gap-1" aria-label={`${badges} de 3 selos conquistados`}>
           {[ScanSearch, KeyRound, Medal].map((Icon, i) => (
             <span
               key={i}
@@ -96,7 +77,7 @@ export function GameCard({
                 "flex size-7 items-center justify-center rounded-full border-2",
                 i < badges
                   ? "border-success bg-success-soft text-success-dark"
-                  : "border-dashed border-border bg-white text-ink-faint",
+                  : "border-dashed border-border bg-surface text-ink-faint",
               ].join(" ")}
               aria-hidden
             >
@@ -106,8 +87,10 @@ export function GameCard({
         </div>
 
         <span
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border-2 px-3.5 font-display text-[0.8rem] font-bold text-white transition-transform group-hover:translate-x-0.5"
-          style={{ background: area.color, borderColor: area.colorDark }}
+          className={cn(
+            "inline-flex min-h-11 items-center gap-1.5 rounded-xl border-2 border-transparent px-3.5 font-display text-[0.8rem] font-bold text-white transition-transform group-hover:translate-x-0.5",
+            AREA_BG[game.area],
+          )}
         >
           <Play className="size-4" strokeWidth={2.6} aria-hidden />
           {done ? "Revisar" : "Jogar"}

@@ -1,9 +1,8 @@
 /**
- * Efeitos sonoros sintetizados (Web Audio API) — sem arquivos externos.
- * Sons curtos e "cheios" para acerto, erro, selo e confete.
+ * Efeitos sonoros sintetizados (Web Audio API), sem arquivos externos.
  * - Disparados apenas por gesto do usuário (política de autoplay).
- * - Respeitam a preferência de som desligado e reduced-motion (erro tem
- *   alternativa visual; som nunca é o único canal de informação — DUA).
+ * - Respeitam a preferência de som desligado; o som nunca é o único
+ *   canal de informação (princípio DUA).
  */
 
 "use client";
@@ -17,8 +16,7 @@ function audioCtx(): AudioContext | null {
     if (!ctx) {
       const Ctor =
         window.AudioContext ??
-        (window as unknown as { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext;
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!Ctor) return null;
       ctx = new Ctor();
     }
@@ -74,7 +72,7 @@ function playTones(tones: ToneSpec[]): void {
   }
 }
 
-/** Acerto: arpejo ascendente curto e caloroso. */
+/** Acerto: arpejo ascendente curto. */
 export function playCorrect(): void {
   playTones([
     { freq: 523.25, start: 0, duration: 0.12, gain: 0.1 },
@@ -83,7 +81,7 @@ export function playCorrect(): void {
   ]);
 }
 
-/** Erro: dois tons descendentes curtos, sem drama. */
+/** Erro: dois tons descendentes curtos. */
 export function playError(): void {
   playTones([
     { freq: 311.13, start: 0, duration: 0.12, gain: 0.08, type: "sine" },
@@ -91,7 +89,7 @@ export function playError(): void {
   ]);
 }
 
-/** Selo/badge: brilho de moeda. */
+/** Selo: brilho de moeda. */
 export function playBadge(): void {
   playTones([
     { freq: 987.77, start: 0, duration: 0.09, gain: 0.09, type: "sine" },
@@ -99,7 +97,7 @@ export function playBadge(): void {
   ]);
 }
 
-/** Conclusão da partida: fanfarra pequena e alegre. */
+/** Conclusão da partida: fanfarra curta. */
 export function playVictory(): void {
   playTones([
     { freq: 523.25, start: 0, duration: 0.12, gain: 0.1 },
@@ -109,9 +107,7 @@ export function playVictory(): void {
   ]);
 }
 
-/** Clique sutil de peça selecionada. */
+/** Clique curto de peça selecionada. */
 export function playTick(): void {
-  playTones([
-    { freq: 660, start: 0, duration: 0.05, gain: 0.05, type: "sine" },
-  ]);
+  playTones([{ freq: 660, start: 0, duration: 0.05, gain: 0.05, type: "sine" }]);
 }

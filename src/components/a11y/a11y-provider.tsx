@@ -1,22 +1,16 @@
 "use client";
 
 /**
- * A11yProvider — preferências de acessibilidade (DUA) da aplicação.
+ * A11yProvider: preferências de acessibilidade (DUA) da aplicação.
  *
- * Implementado como external store + useSyncExternalStore:
+ * Implementado como external store com useSyncExternalStore:
  * - Lê localStorage uma única vez no client (sem setState em efeito);
- * - Mantém SSR/hydration consistentes (snapshot do servidor é o padrão);
+ * - Mantém SSR e hydration consistentes (o snapshot do servidor é o padrão);
  * - Aplica classes em <html> (alto contraste, texto amplo, menos movimento)
  *   e controla os efeitos sonoros.
  */
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useSyncExternalStore,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
 import { setSoundEnabled } from "@/lib/sound";
 
 export interface A11yPreferences {
@@ -130,10 +124,7 @@ export function A11yProvider({ children }: { children: React.ReactNode }) {
     update(key, !snapshot[key]);
   }, []);
 
-  const value = useMemo(
-    () => ({ ...prefs, toggle, set }),
-    [prefs, toggle, set],
-  );
+  const value = useMemo(() => ({ ...prefs, toggle, set }), [prefs, toggle, set]);
 
   return <A11yContext.Provider value={value}>{children}</A11yContext.Provider>;
 }

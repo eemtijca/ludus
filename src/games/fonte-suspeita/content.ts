@@ -1,9 +1,9 @@
 /**
- * Fonte Suspeita — conteúdo dos 3 casos (reescrita profunda).
+ * Fonte Suspeita: conteúdo dos casos.
  *
- * Cada caso traz: o boato como ele chega (contexto), 3 cartas de evidência
- * (autoria, tempo, prova), uma pergunta de cruzamento com dica pedagógica,
- * e uma decisão editorial com consequências reais.
+ * Cada caso traz o boato como ele chega (contexto), 3 cartas de evidência
+ * (autoria, tempo, prova), uma pergunta de cruzamento com dica pedagógica
+ * e uma decisão editorial.
  */
 
 export interface FonteSuspeitaCase {
@@ -50,8 +50,7 @@ export const CASES: FonteSuspeitaCase[] = [
       meta: "encaminhada 14 vezes",
       message:
         "🚨 URGENTE: TODAS as bolsas do programa foram CORTADAS. Repasse para todo mundo ANTES QUE APAGUEM!!",
-      annotation:
-        "A mensagem chegou sem autor, sem link e com uma foto anexada.",
+      annotation: "A mensagem chegou sem autor, sem link e com uma foto anexada.",
     },
     cards: [
       {
@@ -59,7 +58,7 @@ export const CASES: FonteSuspeitaCase[] = [
         category: "Autoria",
         hook: "Conta nova, sem rosto",
         evidence:
-          "A conta que lançou o pânico tem seis dias de vida. Sem nome real, sem foto, sem histórico — publicou só essa notícia e nunca mais postou nada.",
+          "A conta que lançou o pânico tem seis dias de vida. Sem nome real, sem foto, sem histórico: publicou só essa notícia e nunca mais postou nada.",
       },
       {
         icon: "calendario",
@@ -76,31 +75,18 @@ export const CASES: FonteSuspeitaCase[] = [
           "Nenhum decreto, nenhum link oficial, nenhum número de portaria. A única fonte citada é a expressão “fontes confiáveis”.",
       },
     ],
-    crossQuestion:
-      "As três cartas estão viradas. Qual evidência derruba a notícia de vez?",
+    crossQuestion: "As três cartas estão viradas. Qual evidência derruba a notícia de vez?",
     crossOptions: [
-      {
-        icon: "busca",
-        title: "Autoria anônima",
-        subtitle: "Conta sem nome e sem histórico",
-      },
-      {
-        icon: "calendario",
-        title: "Foto de 2019",
-        subtitle: "Imagem velha reaproveitada",
-      },
-      {
-        icon: "elo",
-        title: "Falta de decreto",
-        subtitle: "Nenhum documento oficial existe",
-      },
+      { icon: "busca", title: "Autoria anônima", subtitle: "Conta sem nome e sem histórico" },
+      { icon: "calendario", title: "Foto de 2019", subtitle: "Imagem velha reaproveitada" },
+      { icon: "elo", title: "Falta de decreto", subtitle: "Nenhum documento oficial existe" },
     ],
     crossCorrect: 2,
     crossHint:
-      "Todas as pistas são ruins — mas qual delas, sozinha, já derruba a matéria? Sem documento público, não existe notícia de corte.",
+      "Todas as pistas são ruins, mas qual delas, sozinha, já derruba a matéria? Sem documento público, não existe notícia de corte.",
     crossWrong: [
       "A autoria anônima é suspeita, mas uma fonte nova pode, um dia, confirmar o que diz. O que falta aqui é documento.",
-      "A foto de 2019 é grave — mas notícia pode trocar de foto e continuar. O corte em si é o que não tem sustentação.",
+      "A foto de 2019 é grave, mas a notícia pode trocar de foto e continuar. O corte em si é o que não tem sustentação.",
     ],
     decisionPrompt: "Agora a decisão é sua, editoria do canal:",
     decisions: [
@@ -125,8 +111,8 @@ export const CASES: FonteSuspeitaCase[] = [
     ],
     expected: "segurar",
     verdict: {
-      title: "Notícia retida — e o canal agradece",
-      text: "Sem autoria confiável e sem nenhum documento, a notícia não tinha onde ficar de pé. Ao segurar o post, o canal protegeu a escola de um susto coletivo — e manteve a própria credibilidade para quando a notícia for de verdade.",
+      title: "Notícia retida, e o canal agradece",
+      text: "Sem autoria confiável e sem nenhum documento, a notícia não tinha onde ficar de pé. Ao segurar o post, o canal protegeu a escola de um susto coletivo e manteve a própria credibilidade para quando a notícia for de verdade.",
       detail: {
         label: "Ver o bastidor da checagem",
         text: "Conta com seis dias de vida, foto de 2019 de outra escola e zero documentos oficiais: esse é o manual completo da desinformação. Uma hora depois, o grêmio confirmou com a secretaria: as bolsas continuavam normais.",
@@ -139,8 +125,7 @@ export const CASES: FonteSuspeitaCase[] = [
     context: {
       channel: "Grupo da turma · 7h12 da manhã",
       meta: "“encaminha pra todos os grupos!!”",
-      message:
-        "NÃO BEBAM A ÁGUA DA ESCOLA HOJE. A caixa d’água está CONTAMINADA. Vídeo dentro. 😱",
+      message: "NÃO BEBAM A ÁGUA DA ESCOLA HOJE. A caixa d’água está CONTAMINADA. Vídeo dentro. 😱",
       annotation: "O vídeo mostra uma água escura saindo de uma torneira.",
     },
     cards: [
@@ -149,7 +134,7 @@ export const CASES: FonteSuspeitaCase[] = [
         category: "Autoria",
         hook: "Perfil de humor",
         evidence:
-          "Quem postou primeiro foi um perfil de piadas com 12 mil seguidores. Em três anos, nunca publicou uma única notícia — só memes.",
+          "Quem postou primeiro foi um perfil de piadas com 12 mil seguidores. Em três anos, nunca publicou uma única notícia, só memes.",
       },
       {
         icon: "calendario",
@@ -168,27 +153,15 @@ export const CASES: FonteSuspeitaCase[] = [
     ],
     crossQuestion: "Qual evidência deve pesar mais na decisão?",
     crossOptions: [
-      {
-        icon: "busca",
-        title: "Perfil de piadas",
-        subtitle: "Grande alcance, zero jornalismo",
-      },
-      {
-        icon: "calendario",
-        title: "Vídeo de 2021",
-        subtitle: "Outra cidade, outra escola",
-      },
-      {
-        icon: "elo",
-        title: "Laudo de hoje",
-        subtitle: "PDF oficial, assinado, desta escola",
-      },
+      { icon: "busca", title: "Perfil de piadas", subtitle: "Grande alcance, zero jornalismo" },
+      { icon: "calendario", title: "Vídeo de 2021", subtitle: "Outra cidade, outra escola" },
+      { icon: "elo", title: "Laudo de hoje", subtitle: "PDF oficial, assinado, desta escola" },
     ],
     crossCorrect: 2,
     crossHint:
       "Qual das três fontes qualquer pessoa pode verificar sozinha, com data, assinatura e número de protocolo?",
     crossWrong: [
-      "O perfil de piadas alcança muita gente — mas alcance não é credibilidade. Procure o documento que pode ser verificado.",
+      "O perfil de piadas alcança muita gente, mas alcance não é credibilidade. Procure o documento que pode ser verificado.",
       "O vídeo antigo desmente o susto, mas sozinho não garante que a água de hoje está boa. Falta a prova positiva.",
     ],
     decisionPrompt: "O boato já está correndo. O que o canal faz?",
@@ -238,7 +211,7 @@ export const CASES: FonteSuspeitaCase[] = [
         category: "Autoria",
         hook: "Site sem CNPJ",
         evidence:
-          "O domínio “vagas-ja-99.com” foi criado há duas semanas. Sem CNPJ, sem endereço, sem telefone — só um formulário pedindo dados e Pix.",
+          "O domínio “vagas-ja-99.com” foi criado há duas semanas. Sem CNPJ, sem endereço, sem telefone, só um formulário pedindo dados e Pix.",
       },
       {
         icon: "calendario",
@@ -252,36 +225,23 @@ export const CASES: FonteSuspeitaCase[] = [
         category: "Prova",
         hook: "Taxa sem edital",
         evidence:
-          "Não existe edital, número de processo ou empresa nomeada. Vaga séria nunca cobra nada para inscrever — cobrar taxa já é golpe.",
+          "Não existe edital, número de processo ou empresa nomeada. Vaga séria nunca cobra nada para inscrever; cobrar taxa já é golpe.",
       },
     ],
     crossQuestion: "O que denuncia o golpe com mais força?",
     crossOptions: [
-      {
-        icon: "busca",
-        title: "Site estranho",
-        subtitle: "Domínio novo, sem CNPJ",
-      },
-      {
-        icon: "calendario",
-        title: "Pressão de prazo",
-        subtitle: "Timer falso na tela",
-      },
-      {
-        icon: "elo",
-        title: "Cobrança de taxa",
-        subtitle: "R$ 19,90 antes da entrevista",
-      },
+      { icon: "busca", title: "Site estranho", subtitle: "Domínio novo, sem CNPJ" },
+      { icon: "calendario", title: "Pressão de prazo", subtitle: "Timer falso na tela" },
+      { icon: "elo", title: "Cobrança de taxa", subtitle: "R$ 19,90 antes da entrevista" },
     ],
     crossCorrect: 2,
     crossHint:
-      "Site novo e urgência falsa são suspeitos — mas qual desses, sozinho, já configura golpe?",
+      "Site novo e urgência falsa são suspeitos, mas qual desses, sozinho, já configura golpe?",
     crossWrong: [
       "O site sem CNPJ é um alerta sério, mas empresas novas existem. O que nenhum processo seletivo legítimo faz é cobrar antes.",
-      "A pressão do timer é manipulation pura — mas é só isca. O golpe se consuma na cobrança.",
+      "A pressão do timer é manipulação pura, mas é só isca: o golpe se consuma na cobrança.",
     ],
-    decisionPrompt:
-      "Vários colegas já estão preenchendo o formulário. E agora?",
+    decisionPrompt: "Vários colegas já estão preenchendo o formulário. E agora?",
     decisions: [
       {
         id: "publicar",
@@ -305,7 +265,7 @@ export const CASES: FonteSuspeitaCase[] = [
     expected: "segurar",
     verdict: {
       title: "Golpe interrompido antes do prejuízo",
-      text: "Você segurou o post, avisou a turma no grupo e denunciou o site. Ninguém pagou os R$ 19,90 — e ninguém entregou CPF e dados bancários a criminosos. Vaga de verdade aparece com edital, CNPJ e processo seletivo.",
+      text: "Você segurou o post, avisou a turma no grupo e denunciou o site. Ninguém pagou os R$ 19,90 e ninguém entregou CPF e dados bancários a criminosos. Vaga de verdade aparece com edital, CNPJ e processo seletivo.",
       detail: {
         label: "Ver o bastidor da checagem",
         text: "Domínio de duas semanas, contador que reinicia e taxa por Pix sem edital: o trio clássico do golpe de vaga. Denunciar no próprio canal evita que a próxima turma caia na mesma isca.",

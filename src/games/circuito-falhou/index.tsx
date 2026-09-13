@@ -1,22 +1,19 @@
 "use client";
 
 /**
- * O Circuito Falhou — palco do jogo.
+ * O Circuito Falhou: palco do jogo.
  *
- * Fase 1 · Explorar: escolher o caso da bancada (sintoma + brief).
- * Fase 2 · Testar: bancada viva — chave, associação e lâmpada em toggles;
- *   diagrama SVG com fluxo de corrente animado e medidor de amperes.
- * Fase 3 · Decidir: diagnóstico — escolher a explicação correta do defeito.
+ * Fase 1 (Explorar): escolher o caso da bancada (sintoma e breve).
+ * Fase 2 (Testar): bancada com chave, associação e lâmpada em toggles,
+ *   diagrama SVG com fluxo de corrente e medidor de amperes.
+ * Fase 3 (Decidir): diagnóstico, escolhendo a explicação correta.
  */
 
 import { useState } from "react";
 import { ArrowRight, Zap } from "lucide-react";
 import { GameShell } from "@/components/game-shell/game-shell";
 import { OptionTile } from "@/components/game-shell/option-tile";
-import {
-  EvidenceCard,
-  type EvidenceCardData,
-} from "@/components/game-shell/evidence-card";
+import { EvidenceCard, type EvidenceCardData } from "@/components/game-shell/evidence-card";
 import { useGameSession } from "@/games/_shared/use-game-session";
 import { GAME_BY_ID, AREAS } from "@/lib/catalog";
 import { CASES, type CircuitCase } from "./content";
@@ -51,7 +48,7 @@ export function CircuitoFalhouGame({ onExit }: { onExit: () => void }) {
         session.phase === 1
           ? "Escolha o defeito que chegou à bancada hoje."
           : session.phase === 2
-            ? "Acione chave, associação e lâmpada até o circuito funcionar — depois meça."
+            ? "Acione chave, associação e lâmpada até o circuito funcionar, depois meça."
             : "Diagnóstico final: explique o defeito desta bancada."
       }
       narration={CASES[caseIndex].brief}
@@ -62,8 +59,8 @@ export function CircuitoFalhouGame({ onExit }: { onExit: () => void }) {
         key={`${caseIndex}-${session.generation}`}
         session={session}
         caso={CASES[caseIndex]}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
         onPhase2={() => session.setPhase(2)}
         onPhase3={() => session.setPhase(3)}
       />
@@ -94,18 +91,22 @@ function Stage({
     lampIn: caso.id === "curto-perigoso" ? false : true,
   });
 
-  /* Corrente pela Lei de Ohm com o estado da bancada. */
+  /* Corrente pela Lei de Ohm conforme o estado da bancada. */
   const current = (() => {
     if (!bench.switchClosed) return 0;
-    if (!bench.lampIn) return caso.voltage / caso.wireResistance; // curto
+    if (!bench.lampIn) return caso.voltage / caso.wireResistance; // fio direto (curto)
     const r = bench.parallel ? caso.lampResistance / 2 : caso.lampResistance;
     return caso.voltage / r;
   })();
 
-  const currentState: "off" | "ok" | "danger" =
-    current === 0 ? "off" : current >= 2 ? "danger" : "ok";
+  /* Estado exibido: aberto (sem caminho), curto (fio direto) ou ok. */
+  const currentState: "off" | "ok" | "danger" = !bench.switchClosed
+    ? "off"
+    : !bench.lampIn
+      ? "danger"
+      : "ok";
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const cards: EvidenceCardData[] = CASES.map((c) => ({
       icon: c.icon,
@@ -122,8 +123,8 @@ function Stage({
             Laboratório de física · bancadas de manutenção
           </div>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Três avarias chegaram hoje: um celular mudo, um quarto no escuro e
-            um fio esquentando. Escolha por onde começar.
+            Três avarias chegaram hoje: um celular mudo, um quarto no escuro e um fio esquentando.
+            Escolha por onde começar.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -134,13 +135,9 @@ function Stage({
               color={c.id === caso.id ? areaColorDark : areaColor}
               onReveal={() => {
                 if (c.id === caso.id) {
-                  session.showSuccess(
-                    `Bancada aberta: ${c.title}. ${c.symptom}`,
-                  );
+                  session.showSuccess(`Bancada aberta: ${c.title}. ${c.symptom}`);
                 } else {
-                  session.showInfo(
-                    `Prontuário lido: ${c.title}. Chega na próxima rodada.`,
-                  );
+                  session.showInfo(`Prontuário lido: ${c.title}. Chega na próxima rodada.`);
                 }
               }}
             />
@@ -159,24 +156,22 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     const toggle = (key: keyof BenchState) => {
       const next = { ...bench, [key]: !bench[key] };
       setBench(next);
       if (key === "switchClosed" && next.switchClosed && !next.lampIn) {
         session.showError(
-          "Cuidado: chave fechada sem lâmpada no caminho é fio direto nos polos — corrente de curto!",
+          "Cuidado: chave fechada sem lâmpada no caminho é fio direto nos polos, corrente de curto.",
         );
       } else if (key === "lampIn" && !next.lampIn && next.switchClosed) {
-        session.showError(
-          "A lâmpada saiu do caminho: a corrente passou a circular só pelo fio.",
-        );
+        session.showError("A lâmpada saiu do caminho: a corrente passou a circular só pelo fio.");
       } else {
         session.showInfo(
           next.switchClosed
-            ? "Chave fechada — o caminho está completo."
-            : "Chave aberta — o caminho está interrompido.",
+            ? "Chave fechada: o caminho está completo."
+            : "Chave aberta: o caminho está interrompido.",
         );
       }
     };
@@ -215,16 +210,19 @@ function Stage({
             {formatNumber(current, 2)} A
           </p>
           <p className="mt-1 text-sm font-semibold leading-snug text-ink-soft">
-            {currentState === "off" &&
-              "Circuito aberto: sem caminho completo, a corrente é zero."}
+            {currentState === "off" && "Circuito aberto: sem caminho completo, a corrente é zero."}
             {currentState === "danger" &&
-              "Corrente altíssima: sem resistência relevante no caminho, o fio esquenta — risco real."}
+              "Corrente altíssima: sem resistência relevante no caminho, o fio esquenta. Risco real."}
             {currentState === "ok" &&
               `Funcionando: ${caso.voltage} V sobre ${
                 bench.parallel
-                  ? `${caso.lampResistance / 2} Ω (associação em paralelo)`
+                  ? `${caso.lampResistance / 2} Ω no conjunto (paralelo)`
                   : `${caso.lampResistance} Ω`
-              } = ${formatNumber(current, 2)} A.`}
+              } = ${formatNumber(current, 2)} A${
+                bench.parallel
+                  ? `, e cada lâmpada recebe ${formatNumber(caso.voltage / caso.lampResistance, 2)} A no seu ramo.`
+                  : "."
+              }`}
           </p>
         </div>
 
@@ -281,12 +279,12 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-2xl border-2 border-natureza bg-natureza-soft p-4 text-sm font-semibold leading-relaxed text-ink">
-        Bancada consertada com {formatNumber(current, 2)} A circulando. Agora o
-        laudo técnico: <strong>por que o defeito acontecia?</strong>
+        Bancada consertada com {formatNumber(current, 2)} A circulando. Agora o laudo técnico:{" "}
+        <strong>por que o defeito acontecia?</strong>
       </div>
       <div className="flex flex-col gap-3">
         {caso.diagnoses.map((d) => (
@@ -332,18 +330,14 @@ function CircuitDiagram({
 }) {
   const flowing = bench.switchClosed;
   const stroke =
-    currentState === "danger"
-      ? "#ff4b4b"
-      : currentState === "ok"
-        ? "#10b981"
-        : "#b9b2a0";
+    currentState === "danger" ? "#ff4b4b" : currentState === "ok" ? "#10b981" : "#b9b2a0";
   const wireStyle = flowing
     ? { stroke: stroke, strokeWidth: 5 }
     : { stroke: "#c8c2b2", strokeWidth: 4 };
   const glow = currentState === "ok";
 
   return (
-    <figure className="rounded-2xl border-2 border-border bg-white p-4">
+    <figure className="rounded-2xl border-2 border-border bg-surface p-4">
       <figcaption className="mb-1 font-display text-sm font-bold text-ink">
         Diagrama da bancada · fonte {voltage} V
       </figcaption>
@@ -351,15 +345,10 @@ function CircuitDiagram({
         viewBox="0 0 360 200"
         className="w-full"
         role="img"
-        aria-label={`Diagrama do circuito: fonte de ${voltage} volts, ${bench.switchClosed ? "chave fechada" : "chave aberta"}, ${bench.parallel ? "associação em paralelo" : "caminho único"}, ${bench.lampIn ? "lâmpada inserida" : "sem lâmpada — fio direto"}.`}
+        aria-label={`Diagrama do circuito: fonte de ${voltage} volts, ${bench.switchClosed ? "chave fechada" : "chave aberta"}, ${bench.parallel ? "associação em paralelo" : "caminho único"}, ${bench.lampIn ? "lâmpada inserida" : "sem lâmpada, fio direto"}.`}
       >
         {/* fios (base) */}
-        <path
-          d="M60 60 H300 V140 H60 Z"
-          fill="none"
-          {...wireStyle}
-          strokeLinecap="round"
-        />
+        <path d="M60 60 H300 V140 H60 Z" fill="none" {...wireStyle} strokeLinecap="round" />
 
         {/* fluxo animado */}
         {flowing && (
@@ -377,48 +366,17 @@ function CircuitDiagram({
         {/* bateria */}
         <g>
           <rect x="48" y="76" width="24" height="48" rx="6" fill="#3c3a4e" />
-          <text
-            x="60"
-            y="145"
-            fontSize="10"
-            fontWeight="800"
-            fill="#3c3a4e"
-            textAnchor="middle"
-          >
+          <text x="60" y="145" fontSize="10" fontWeight="800" fill="#3c3a4e" textAnchor="middle">
             {voltage}V
           </text>
-          <line
-            x1="72"
-            y1="88"
-            x2="82"
-            y2="88"
-            stroke="#3c3a4e"
-            strokeWidth="4"
-          />
-          <line
-            x1="72"
-            y1="112"
-            x2="82"
-            y2="112"
-            stroke="#3c3a4e"
-            strokeWidth="2"
-          />
+          <line x1="72" y1="88" x2="82" y2="88" stroke="#3c3a4e" strokeWidth="4" />
+          <line x1="72" y1="112" x2="82" y2="112" stroke="#3c3a4e" strokeWidth="2" />
         </g>
 
         {/* chave (interruptor) */}
         <g>
-          <circle
-            cx="140"
-            cy="60"
-            r="6"
-            fill={bench.switchClosed ? "#10b981" : "#b9b2a0"}
-          />
-          <circle
-            cx="190"
-            cy="60"
-            r="6"
-            fill={bench.switchClosed ? "#10b981" : "#b9b2a0"}
-          />
+          <circle cx="140" cy="60" r="6" fill={bench.switchClosed ? "#10b981" : "#b9b2a0"} />
+          <circle cx="190" cy="60" r="6" fill={bench.switchClosed ? "#10b981" : "#b9b2a0"} />
           <line
             x1="140"
             y1="60"
@@ -429,14 +387,7 @@ function CircuitDiagram({
             strokeLinecap="round"
             style={{ transition: "all 200ms ease" }}
           />
-          <text
-            x="165"
-            y="24"
-            fontSize="10"
-            fontWeight="800"
-            fill="#635f7c"
-            textAnchor="middle"
-          >
+          <text x="165" y="24" fontSize="10" fontWeight="800" fill="#635f7c" textAnchor="middle">
             {bench.switchClosed ? "chave fechada" : "chave aberta"}
           </text>
         </g>
@@ -448,7 +399,8 @@ function CircuitDiagram({
               cx="240"
               cy="100"
               r="26"
-              fill={glow ? "#ffc800" : "#ece7db"}
+              fill={glow ? "#ffc800" : "var(--cloud)"}
+              style={{ fill: glow ? "#ffc800" : "var(--cloud)" }}
               stroke={glow ? "#dda500" : "#b9b2a0"}
               strokeWidth="4"
               className={glow ? "anim-pulse-soft" : undefined}
@@ -459,33 +411,14 @@ function CircuitDiagram({
               strokeWidth="2.5"
               strokeLinecap="round"
             />
-            <text
-              x="240"
-              y="145"
-              fontSize="10"
-              fontWeight="800"
-              fill="#635f7c"
-              textAnchor="middle"
-            >
+            <text x="240" y="145" fontSize="10" fontWeight="800" fill="#635f7c" textAnchor="middle">
               {glow ? "acesa" : "apagada"}
             </text>
           </g>
         ) : (
           <g>
-            <path
-              d="M240 60 V140"
-              stroke="#ff4b4b"
-              strokeWidth="6"
-              strokeLinecap="round"
-            />
-            <text
-              x="240"
-              y="155"
-              fontSize="10"
-              fontWeight="800"
-              fill="#ff4b4b"
-              textAnchor="middle"
-            >
+            <path d="M240 60 V140" stroke="#ff4b4b" strokeWidth="6" strokeLinecap="round" />
+            <text x="240" y="155" fontSize="10" fontWeight="800" fill="#ff4b4b" textAnchor="middle">
               fio direto (curto)
             </text>
           </g>
@@ -505,7 +438,8 @@ function CircuitDiagram({
               cx="220"
               cy="180"
               r="16"
-              fill={glow && bench.switchClosed ? "#ffc800" : "#ece7db"}
+              fill={glow && bench.switchClosed ? "#ffc800" : "var(--cloud)"}
+              style={{ fill: glow && bench.switchClosed ? "#ffc800" : "var(--cloud)" }}
               stroke={glow && bench.switchClosed ? "#dda500" : "#b9b2a0"}
               strokeWidth="3.5"
             />
@@ -549,10 +483,7 @@ function BenchToggle({
     >
       <span
         className="flex size-12 items-center justify-center rounded-2xl text-white"
-        style={{
-          background: active ? "#58cc02" : color,
-          opacity: active ? 1 : 0.75,
-        }}
+        style={{ background: active ? "var(--success)" : color, opacity: active ? 1 : 0.75 }}
         aria-hidden
       >
         <svg
@@ -590,12 +521,10 @@ function BenchToggle({
         </svg>
       </span>
       <span className="font-display text-sm font-bold text-ink">{label}</span>
-      <span className="text-[0.7rem] font-semibold leading-snug text-ink-soft">
-        {hint}
-      </span>
+      <span className="text-[0.7rem] font-semibold leading-snug text-ink-soft">{hint}</span>
       <span
         className={`ludus-chip ${active ? "border-success text-success-dark" : "text-ink-faint"}`}
-        style={active ? { background: "#eaffd6" } : { background: "#f4f1ea" }}
+        style={active ? { background: "var(--success-soft)" } : { background: "#f4f1ea" }}
       >
         {active ? "Ativo" : "Inativo"}
       </span>

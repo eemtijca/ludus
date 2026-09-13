@@ -1,6 +1,6 @@
 /**
- * Formatadores pt-BR compartilhados (moeda, números, porcentagem).
- * Centralizados para consistência entre jogos de matemática e HUDs.
+ * Formatadores pt-BR compartilhados (moeda, número, porcentagem, data).
+ * Centralizados para manter consistência entre os jogos e os HUDs.
  */
 
 export function formatCurrency(value: number): string {
@@ -23,7 +23,7 @@ export function formatPercent(value: number, digits = 0): string {
   return `${formatNumber(value * 100, digits)}%`;
 }
 
-/** "12 de mar. de 2026" — para datas de conclusão no painel. */
+/** Formato curto de data (ex.: 12 de mar. de 2026) para o painel. */
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return "";
   try {
@@ -37,7 +37,7 @@ export function formatDate(iso: string | null | undefined): string {
   }
 }
 
-/** Interpolação suave para animações numéricas (ex.: contadores de gráfico). */
+/** Interpolação linear entre dois valores. */
 export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }

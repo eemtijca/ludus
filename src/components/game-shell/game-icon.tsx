@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * GameIcon — registro central de ícones (Lucide) usados pelos jogos,
- * cartas de evidência, opções e HUD. Nome → componente, com fallback.
+ * GameIcon: registro central de ícones (Lucide) usados pelos jogos,
+ * cartas de evidência, opções e HUD. Mapeia nome a componente, com fallback.
  * Mantém conteúdo desacoplado de imports diretos.
  */
 

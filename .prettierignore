@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+build
+download
+qa
+skills
+bun.lock
+public/mathjax
+src/components/ui

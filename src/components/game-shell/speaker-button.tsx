@@ -1,24 +1,29 @@
 "use client";
 
 /**
- * SpeakerButton — botão "Ouvir" contextual: lê o texto indicado em voz
- * alta e realça o elemento de origem durante a leitura (DUA: texto + voz).
- * O realce é resolvido via ref dentro do handler (nunca durante render).
+ * SpeakerButton: botão de leitura em voz alta.
+ * Lê o texto indicado, realça o elemento de origem durante a leitura e
+ * alterna o próprio rótulo entre "Ouvir" e "Parar".
+ * A aparência vem do className recebido (padrão: botão claro pequeno).
  */
 
 import { Volume2, Square } from "lucide-react";
 import { isSpeaking, speak, stopSpeech } from "@/lib/speech";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function SpeakerButton({
   text,
   highlight,
+  /** Alternativa ao ref: id do elemento a realçar. */
+  highlightId,
   label = "Ouvir",
-  className = "",
+  className = "ludus-btn ludus-btn-paper ludus-btn-sm",
 }: {
   text: string;
   /** Ref do elemento a realçar durante a leitura. */
   highlight?: React.RefObject<HTMLElement | null>;
+  highlightId?: string;
   label?: string;
   className?: string;
 }) {
@@ -31,9 +36,10 @@ export function SpeakerButton({
       setActive(false);
       return;
     }
+    const el = highlight?.current ?? (highlightId ? document.getElementById(highlightId) : null);
     setActive(true);
     speak(text, {
-      highlight: highlight?.current ?? null,
+      highlight: el,
       onEnd: () => setActive(false),
     });
   };
@@ -42,7 +48,7 @@ export function SpeakerButton({
     <button
       type="button"
       onClick={handleClick}
-      className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl border-2 border-border bg-white px-3 py-1.5 font-display text-[0.78rem] font-bold text-ink-soft transition-colors hover:border-ink-faint hover:text-ink ${className}`}
+      className={cn("shrink-0", className)}
       aria-label={`${label} este texto em voz alta`}
     >
       {active ? (

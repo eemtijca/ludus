@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * OptionTile — peça grande de resposta/decisão.
- * Estados: normal · correta (após validação) · tremando (erro).
- * Ícone sempre presente (dupla codificação: forma + cor + texto).
+ * OptionTile: peça grande de resposta/decisão.
+ * Estados: normal, correta (após validação) e tremendo (erro).
+ * O ícone acompanha sempre (dupla codificação: forma, cor e texto).
  */
 
 import { useState } from "react";
@@ -15,7 +15,7 @@ export interface OptionTileProps {
   icon?: string;
   title: string;
   subtitle?: string;
-  /** Chamado ao escolher. Devolva `false` para disparar o shake visual. */
+  /** Chamado ao escolher. Devolva false para disparar o tremor visual. */
   onPick: () => boolean | void;
   color: string;
   colorDark: string;
@@ -59,35 +59,25 @@ export function OptionTile({
       className={cn(
         "ludus-card flex w-full items-center gap-3 p-4 text-left sm:gap-4 sm:p-5",
         shake && "anim-shake",
-        correct && "border-success",
+        correct && "ludus-card-correct",
         chosen && !shake && !correct && "border-danger",
         className,
       )}
-      style={correct ? { boxShadow: "0 5px 0 #46a302" } : undefined}
     >
       {icon && (
         <span
           className="flex size-14 shrink-0 items-center justify-center rounded-2xl text-white sm:size-16"
-          style={{
-            background: correct ? "#58cc02" : color,
-            borderColor: colorDark,
-          }}
+          style={{ background: correct ? "var(--success)" : color }}
           aria-hidden
         >
-          <GameIcon
-            name={icon}
-            className="size-7 sm:size-8"
-            strokeWidth={2.2}
-          />
+          <GameIcon name={icon} className="size-7 sm:size-8" strokeWidth={2.2} />
         </span>
       )}
       <span className="flex min-w-0 flex-col gap-0.5">
         <span className="font-display text-base font-bold leading-tight text-ink sm:text-lg">
           {title}
         </span>
-        {subtitle && (
-          <span className="text-sm leading-snug text-ink-soft">{subtitle}</span>
-        )}
+        {subtitle && <span className="text-sm leading-snug text-ink-soft">{subtitle}</span>}
       </span>
     </button>
   );

@@ -1,23 +1,20 @@
 "use client";
 
 /**
- * Tese e Antítese — palco do jogo.
+ * Tese e Antítese: palco do jogo.
  *
- * Fase 1 · Explorar: montar o caso — escolher 1 tese forte + 1 prova forte
- *   (peças fracas devolvem feedback pedagógico sem punição).
- * Fase 2 · Testar: a banca apresenta a objeção; responder com a prova
- *   (vs. ataque pessoal).
- * Fase 3 · Decidir: escolher a síntese que costura tese + prova + objeção.
+ * Fase 1 (Explorar): montar o caso escolhendo 1 tese forte e 1 prova forte;
+ *   peças fracas devolvem feedback pedagógico sem punição.
+ * Fase 2 (Testar): a banca apresenta a objeção; responder com a prova
+ *   em vez de ataque pessoal.
+ * Fase 3 (Decidir): escolher a síntese que costura tese, prova e objeção.
  */
 
 import { useState } from "react";
 import { ArrowRight, Gavel, ShieldCheck } from "lucide-react";
 import { GameShell } from "@/components/game-shell/game-shell";
 import { OptionTile } from "@/components/game-shell/option-tile";
-import {
-  EvidenceCard,
-  type EvidenceCardData,
-} from "@/components/game-shell/evidence-card";
+import { EvidenceCard, type EvidenceCardData } from "@/components/game-shell/evidence-card";
 import { useGameSession } from "@/games/_shared/use-game-session";
 import { GAME_BY_ID, AREAS } from "@/lib/catalog";
 import { THEMES, type DebateTheme } from "./content";
@@ -43,7 +40,7 @@ export function TeseAntiteseGame({ onExit }: { onExit: () => void }) {
       mission={THEMES[themeIndex].mission}
       instruction={
         session.phase === 1
-          ? "Monte sua defesa: escolha 1 tese e 1 prova — as fortes seguram o debate."
+          ? "Monte sua defesa: escolha 1 tese e 1 prova, porque as fortes seguram o debate."
           : session.phase === 2
             ? "A banca apresentou a objeção. Como você responde?"
             : "Feche o debate: escolha a síntese que costura tudo."
@@ -56,8 +53,8 @@ export function TeseAntiteseGame({ onExit }: { onExit: () => void }) {
         key={`${themeIndex}-${session.generation}`}
         session={session}
         tema={THEMES[themeIndex]}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
         onPhase2={() => session.setPhase(2)}
         onPhase3={() => session.setPhase(3)}
       />
@@ -87,7 +84,7 @@ function Stage({
   const [responded, setResponded] = useState(false);
   const [synthesis, setSynthesis] = useState<string | null>(null);
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     const complete =
       pickedThesis !== null &&
@@ -117,14 +114,10 @@ function Stage({
         if (kind === "tese") setPickedThesis(piece.id);
         else setPickedProof(piece.id);
         session.showSuccess(
-          kind === "tese"
-            ? "Tese forte na mesa. Falta a prova."
-            : "Prova forte anexada à tese.",
+          kind === "tese" ? "Tese forte na mesa. Falta a prova." : "Prova forte anexada à tese.",
         );
       } else {
-        session.showError(
-          piece.weakReason ?? "Peça fraca — troque pela forte.",
-        );
+        session.showError(piece.weakReason ?? "Peça fraca: troque pela forte.");
       }
     };
 
@@ -138,23 +131,17 @@ function Stage({
           <h2 className="mt-2 font-display text-lg font-bold leading-snug text-ink sm:text-xl">
             {tema.theme}
           </h2>
-          <p className="mt-1 text-sm leading-relaxed text-ink-soft">
-            {tema.scenario}
-          </p>
+          <p className="mt-1 text-sm leading-relaxed text-ink-soft">{tema.scenario}</p>
         </div>
 
         <div>
-          <p className="mb-2 font-display text-sm font-bold text-ink-soft">
-            Escolha sua tese
-          </p>
+          <p className="mb-2 font-display text-sm font-bold text-ink-soft">Escolha sua tese</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {tema.theses.map((t, i) => (
               <EvidenceCard
                 key={t.id}
                 data={thesisCards[i]}
-                color={
-                  pickedThesis === t.id && t.strong ? "#58cc02" : areaColor
-                }
+                color={pickedThesis === t.id && t.strong ? "var(--success)" : areaColor}
                 onReveal={() => handlePiece(t, "tese")}
               />
             ))}
@@ -162,15 +149,13 @@ function Stage({
         </div>
 
         <div>
-          <p className="mb-2 font-display text-sm font-bold text-ink-soft">
-            Anexe a prova
-          </p>
+          <p className="mb-2 font-display text-sm font-bold text-ink-soft">Anexe a prova</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {tema.proofs.map((p, i) => (
               <EvidenceCard
                 key={p.id}
                 data={proofCards[i]}
-                color={pickedProof === p.id && p.strong ? "#58cc02" : areaColor}
+                color={pickedProof === p.id && p.strong ? "var(--success)" : areaColor}
                 onReveal={() => handlePiece(p, "prova")}
               />
             ))}
@@ -192,7 +177,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-4">
@@ -203,9 +188,7 @@ function Stage({
           <h2 className="mt-1 font-display text-lg font-bold leading-snug text-ink sm:text-xl">
             “{tema.objection.title}”
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            {tema.objection.detail}
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{tema.objection.detail}</p>
         </div>
 
         <p className="font-display text-lg font-bold text-ink sm:text-xl">
@@ -225,9 +208,7 @@ function Stage({
               onPick={() => {
                 if (r.correct) {
                   setResponded(true);
-                  session.showSuccess(
-                    "Resposta honesta: a prova fala, você segura a banca.",
-                  );
+                  session.showSuccess("Resposta honesta: a prova fala, você segura a banca.");
                   return true;
                 }
                 session.showError(r.feedback);
@@ -252,18 +233,15 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   const done = synthesis !== null;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 rounded-2xl border-2 border-border bg-cloud/60 p-4 text-sm leading-relaxed text-ink-soft">
-        <ShieldCheck
-          className="size-5 shrink-0 text-success-dark"
-          aria-hidden
-        />
+        <ShieldCheck className="size-5 shrink-0 text-success-dark" aria-hidden />
         <p>
-          <strong className="text-ink">Sua mesa:</strong> tese forte + prova
-          forte + objeção respondida. Agora escolha o fecho que costura tudo:
+          <strong className="text-ink">Sua mesa:</strong> tese forte + prova forte + objeção
+          respondida. Agora escolha o fecho que costura tudo:
         </p>
       </div>
       <div className="flex flex-col gap-3">

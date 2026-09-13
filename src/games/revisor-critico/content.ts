@@ -1,9 +1,9 @@
 /**
- * Revisor Crítico — conteúdo dos 3 textos (reescrita profunda).
+ * Revisor Crítico: conteúdo dos textos.
  *
- * Cada pauta traz trechos de um rascunho real (com os problemas no texto),
+ * Cada pauta traz trechos de um rascunho (com os problemas no texto),
  * a pergunta de reparo com alternativas, o feedback por alternativa errada
- * e a versão final publicável (antes/depois).
+ * e a versão final publicável.
  */
 
 export interface RevisorText {
@@ -55,7 +55,7 @@ export const TEXTS: RevisorText[] = [
           text: "…as queimadas aumentam na região. Mas é preciso fiscalizar as áreas de risco…",
           note: "Trecho 2 · conector em conflito",
           problem:
-            "O “Mas” anuncia contraste, mas a frase CONCLUI o raciocínio — o leitor engasga na virada.",
+            "O “Mas” anuncia contraste, mas a frase conclui o raciocínio: o leitor engasga na virada.",
         },
         {
           text: "…Ele disse que o relatório aponta o período seco. Ele, quem?",
@@ -78,7 +78,7 @@ export const TEXTS: RevisorText[] = [
         category: "Trecho 2",
         hook: "Conector em conflito",
         evidence:
-          "“…as queimadas aumentam na região. Mas é preciso fiscalizar as áreas de risco.” O “Mas” promete oposição onde há conclusão — o certo seria um conector conclusivo.",
+          "“…as queimadas aumentam na região. Mas é preciso fiscalizar as áreas de risco.” O “Mas” promete oposição onde há conclusão; o certo seria um conector conclusivo.",
       },
       {
         icon: "usuario",
@@ -95,26 +95,18 @@ export const TEXTS: RevisorText[] = [
         title: "Trocar “Mas” por “Portanto”",
         subtitle: "Conector conclusivo no lugar certo",
       },
-      {
-        icon: "busca",
-        title: "Manter o “Mas”",
-        subtitle: "Contraste onde não há oposição",
-      },
-      {
-        icon: "lista",
-        title: "Apagar a frase",
-        subtitle: "Sobra o dado sem conclusão",
-      },
+      { icon: "busca", title: "Manter o “Mas”", subtitle: "Contraste onde não há oposição" },
+      { icon: "lista", title: "Apagar a frase", subtitle: "Sobra o dado sem conclusão" },
     ],
     repairCorrect: 0,
     repairHint:
       "A frase FINALIZA o raciocínio. Que conectivo sinaliza conclusão em vez de oposição?",
     repairWrong: [
       "Manter o “Mas” deixa o contraste onde existe conclusão: o leitor freia sem motivo.",
-      "Apagar a frase joga fora a conclusão inteira da matéria — o problema não é o conteúdo, é o conector.",
+      "Apagar a frase joga fora a conclusão inteira da matéria: o problema não é o conteúdo, é o conector.",
     ],
     published:
-      "“As queimadas aumentam na região. Portanto, é preciso fiscalizar as áreas de risco.” — o relatório do instituto, citado na matéria, sustenta a conclusão.",
+      "“As queimadas aumentam na região. Portanto, é preciso fiscalizar as áreas de risco.”: o relatório do instituto, citado na matéria, sustenta a conclusão.",
     verdict: {
       title: "Matéria publicada com coesão",
       text: "“Portanto” costurou o raciocínio sem emendas tortas: dado → conclusão. E o sujeito sumido ganhou nome na versão final. O mural recebeu um texto que flui do começo ao fim.",
@@ -130,8 +122,7 @@ export const TEXTS: RevisorText[] = [
     context: {
       journal: "Jornal Mural · Boca do Sertão",
       deadline: "Edição fecha hoje ao meio-dia",
-      brief:
-        "Comunicado sobre o intercâmbio aprovado pela diretoria: anúncio, inscrições e vagas.",
+      brief: "Comunicado sobre o intercâmbio aprovado pela diretoria: anúncio, inscrições e vagas.",
     },
     draft: {
       lead: "A diretora anunciou ontem, em comunicado oficial, o intercâmbio aprovado para o próximo semestre.",
@@ -163,7 +154,7 @@ export const TEXTS: RevisorText[] = [
         category: "Trecho 2",
         hook: "Conector de briga à toa",
         evidence:
-          "“Entretanto as inscrições abrem segunda.” As frases somam informações — “Entretanto” inventa uma oposição que não existe.",
+          "“Entretanto as inscrições abrem segunda.” As frases somam informações; “Entretanto” inventa uma oposição que não existe.",
       },
       {
         icon: "usuario",
@@ -180,23 +171,15 @@ export const TEXTS: RevisorText[] = [
         title: "Trocar por “Além disso”",
         subtitle: "Conector aditivo para informações que somam",
       },
-      {
-        icon: "busca",
-        title: "Manter o “Entretanto”",
-        subtitle: "Oposição onde há acréscimo",
-      },
-      {
-        icon: "lista",
-        title: "Apagar a data",
-        subtitle: "Informação útil jogada fora",
-      },
+      { icon: "busca", title: "Manter o “Entretanto”", subtitle: "Oposição onde há acréscimo" },
+      { icon: "lista", title: "Apagar a data", subtitle: "Informação útil jogada fora" },
     ],
     repairCorrect: 0,
     repairHint:
       "Anúncio e inscrições são boas notícias na mesma direção. Qual conectivo ACRESSENTA em vez de contrariar?",
     repairWrong: [
       "Manter “Entretanto” transforma um bom comunicado em uma discussão de família.",
-      "Apagar a data das inscrições destrói a função prática do texto — o problema é o conector, não a informação.",
+      "Apagar a data das inscrições destrói a função prática do texto: o problema é o conector, não a informação.",
     ],
     published:
       "“A diretora anunciou o intercâmbio. Além disso, as inscrições abrem segunda-feira, com 18 vagas para o semestre.”",
@@ -225,13 +208,13 @@ export const TEXTS: RevisorText[] = [
           text: "…Tipo assim, o grupo fez o trabalho…",
           note: "Trecho 1 · registro oral",
           problem:
-            "“Tipo assim” é conversa de corredor. Relatório pede registro formal — a situação muda a linguagem.",
+            "“Tipo assim” é conversa de corredor. Relatório pede registro formal: a situação muda a linguagem.",
         },
         {
           text: "…A entrega atrasou porque o prazo era curto. O objetivo era cumprir a tarefa…",
           note: "Trecho 2 · causa no lugar do fim",
           problem:
-            "“Porque” explica a causa do atraso, mas o texto queria a FINALIDADE do trabalho. Causa ≠ propósito.",
+            "“Porque” explica a causa do atraso, mas o texto queria a FINALIDADE do trabalho. Causa não é propósito.",
         },
         {
           text: "…Concluímos. Pronto.",
@@ -271,29 +254,21 @@ export const TEXTS: RevisorText[] = [
         title: "Ajustar registro e fecho",
         subtitle: "Formaliza o tom e retoma a tese",
       },
-      {
-        icon: "busca",
-        title: "Manter o “tipo assim”",
-        subtitle: " oral no texto formal",
-      },
-      {
-        icon: "lista",
-        title: "Apagar a conclusão",
-        subtitle: "Relatório sem resposta final",
-      },
+      { icon: "busca", title: "Manter o “tipo assim”", subtitle: "Registro oral no texto formal" },
+      { icon: "lista", title: "Apagar a conclusão", subtitle: "Relatório sem resposta final" },
     ],
     repairCorrect: 0,
     repairHint:
       "Relatório é gênero FORMAL: registro adequado + conclusão que responde à pergunta inicial.",
     repairWrong: [
       "Manter “tipo assim” num relatório formal é ir de chinelo para a feira de ciências.",
-      "Apagar a conclusão transforma meses de trabalho em suspense — o leitor merece a resposta.",
+      "Apagar a conclusão transforma meses de trabalho em suspense: o leitor merece a resposta.",
     ],
     published:
       "“O grupo realizou o experimento para cumprir o cronograma da feira. Concluímos, como previsto na hipótese, que o período seco concentrou os resultados.”",
     verdict: {
       title: "Relatório aprovado para a feira",
-      text: "Registro formal, finalidade declarada com “para” e conclusão que retoma a hipótese: o relatório agora responde à pergunta com que começou — e impressiona na feira.",
+      text: "Registro formal, finalidade declarada com “para” e conclusão que retoma a hipótese: o relatório agora responde à pergunta com que começou e impressiona na feira.",
       detail: {
         label: "Ver o antes e o depois",
         text: "ANTES: “Tipo assim, o grupo fez o trabalho. A entrega atrasou porque o prazo era curto. Concluímos.” DEPOIS: “O grupo realizou o experimento para cumprir o cronograma da feira. Concluímos, como previsto na hipótese, que o período seco concentrou os resultados.”",

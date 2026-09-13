@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * Território em Disputa — palco do jogo.
+ * Território em Disputa: palco do jogo.
  *
- * Fase 1 · Explorar: a comissão apresenta 3 projetos; escolha 1 para alocar.
- * Fase 2 · Testar: o mapa de 6 lotes — toque para posicionar o projeto
+ * Fase 1 (Explorar): a comissão apresenta 3 projetos; escolher 1 para alocar.
+ * Fase 2 (Testar): o mapa de 6 lotes; tocar para posicionar o projeto
  *   (lotes de risco recusam galpão com feedback pedagógico).
- * Fase 3 · Decidir: a chuva de março anima o mapa e testa as escolhas.
+ * Fase 3 (Decidir): a chuva de março testa as escolhas no mapa.
  */
 
 import { useState } from "react";
@@ -15,13 +15,7 @@ import { GameShell } from "@/components/game-shell/game-shell";
 import { OptionTile } from "@/components/game-shell/option-tile";
 import { useGameSession } from "@/games/_shared/use-game-session";
 import { GAME_BY_ID, AREAS } from "@/lib/catalog";
-import {
-  LOTS,
-  PROJECTS,
-  RAIN_NARRATIVE,
-  VERDICT,
-  type Project,
-} from "./content";
+import { LOTS, PROJECTS, RAIN_NARRATIVE, VERDICT, type Project } from "./content";
 
 const GAME_ID = "territorio-disputa";
 
@@ -50,8 +44,8 @@ export function TerritorioDisputaGame({ onExit }: { onExit: () => void }) {
       <Stage
         key={session.generation}
         session={session}
-        areaColor={area.color}
-        areaColorDark={area.colorDark}
+        areaColor={`var(--${game.area})`}
+        areaColorDark={`var(--${game.area}-dark)`}
       />
     </GameShell>
   );
@@ -74,7 +68,7 @@ function Stage({
 
   const project = PROJECTS.find((p) => p.id === projectId) ?? null;
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     return (
       <div className="flex flex-col gap-5">
@@ -84,14 +78,13 @@ function Stage({
             Comissão de planejamento do bairro
           </div>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Três projetos disputam o território. Escolha um para alocar — os
-            outros dois esperam a próxima rodada. A chuva de março testa tudo no
-            fim.
+            Três projetos disputam o território. Escolha um para alocar: os outros dois esperam a
+            próxima rodada. A chuva de março testa tudo no fim.
           </p>
         </div>
 
         {/* Prévia do mapa (informativa) */}
-        <div className="rounded-2xl border-2 border-dashed border-border bg-white p-4">
+        <div className="rounded-2xl border-2 border-dashed border-border bg-surface p-4">
           <p className="mb-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink-faint">
             O bairro em disputa · 6 lotes
           </p>
@@ -140,8 +133,7 @@ function Stage({
 
         {project && (
           <div className="anim-fade-up rounded-2xl border-2 border-humanas/40 bg-humanas-soft p-4 text-sm leading-relaxed text-ink">
-            <strong className="font-display">{project.title}:</strong>{" "}
-            {project.brief}
+            <strong className="font-display">{project.title}:</strong> {project.brief}
           </div>
         )}
 
@@ -160,7 +152,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     const place = (lot: (typeof LOTS)[number]) => {
       if (project?.id === "galpao" && lot.floodRisk) {
@@ -170,9 +162,7 @@ function Stage({
         return;
       }
       setLotId(lot.id);
-      session.showSuccess(
-        `${project?.title} alocado em “${lot.name}”. ${lot.terrain}`,
-      );
+      session.showSuccess(`${project?.title} alocado em “${lot.name}”. ${lot.terrain}`);
     };
 
     return (
@@ -194,29 +184,28 @@ function Stage({
                 ].join(" ")}
                 style={
                   chosen
-                    ? { boxShadow: "0 5px 0 #46a302", background: "#eaffd6" }
+                    ? {
+                        boxShadow: "0 5px 0 var(--success-dark)",
+                        background: "var(--success-soft)",
+                      }
                     : lot.floodRisk
-                      ? { background: "#e0f7f4" }
+                      ? { background: "var(--matematica-soft)" }
                       : undefined
                 }
               >
                 <span className="flex items-center justify-between gap-2">
-                  <span className="font-display text-sm font-bold text-ink">
-                    {lot.name}
-                  </span>
+                  <span className="font-display text-sm font-bold text-ink">{lot.name}</span>
                   {lot.floodRisk && (
                     <span
                       className="ludus-chip border-matematica text-matematica-dark"
-                      style={{ background: "#e0f7f4" }}
+                      style={{ background: "var(--matematica-soft)" }}
                     >
                       <CloudRain className="size-3" aria-hidden />
                       alaga
                     </span>
                   )}
                 </span>
-                <span className="text-xs leading-snug text-ink-soft">
-                  {lot.terrain}
-                </span>
+                <span className="text-xs leading-snug text-ink-soft">{lot.terrain}</span>
                 {chosen && (
                   <span className="mt-auto font-display text-[0.72rem] font-bold uppercase tracking-wider text-success-dark">
                     ✓ {project?.title} aqui
@@ -231,9 +220,7 @@ function Stage({
           type="button"
           onClick={() => {
             if (lotId === null) {
-              session.showError(
-                "Escolha um lote no mapa antes de chamar a chuva.",
-              );
+              session.showError("Escolha um lote no mapa antes de chamar a chuva.");
               return;
             }
             session.setPhase(3);
@@ -248,7 +235,7 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
   const chosenLot = LOTS.find((l) => l.id === lotId) ?? null;
   const riskyChoice = project?.id === "galpao" && chosenLot?.floodRisk;
 
@@ -256,15 +243,10 @@ function Stage({
     <div className="flex flex-col gap-5">
       <div className="anim-fade-up rounded-2xl border-2 border-matematica bg-matematica-soft p-4">
         <p className="flex items-center gap-2 font-display text-sm font-bold text-ink">
-          <CloudRain
-            className="size-4 text-matematica-dark anim-pulse-soft"
-            aria-hidden
-          />
+          <CloudRain className="size-4 text-matematica-dark anim-pulse-soft" aria-hidden />
           {RAIN_NARRATIVE.title}
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-          {RAIN_NARRATIVE.text}
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-ink-soft">{RAIN_NARRATIVE.text}</p>
       </div>
 
       {/* Mapa molhado */}
@@ -285,21 +267,19 @@ function Stage({
                     : "border-matematica bg-matematica-soft"
                   : chosen
                     ? "border-success bg-success-soft"
-                    : "border-border bg-white",
+                    : "border-border bg-surface",
               ].join(" ")}
               style={{ animationDelay: `${lot.id * 120}ms` }}
             >
               <span className="flex items-center justify-between gap-2">
-                <span className="font-display text-sm font-bold text-ink">
-                  {lot.name}
-                </span>
+                <span className="font-display text-sm font-bold text-ink">{lot.name}</span>
                 {wet && (
                   <span aria-hidden>
                     <svg
                       viewBox="0 0 24 24"
                       className="size-5"
                       fill="none"
-                      stroke="#0d9488"
+                      stroke="#116fa0"
                       strokeWidth="2.4"
                       strokeLinecap="round"
                     >
@@ -312,15 +292,11 @@ function Stage({
                 )}
               </span>
               <span className="text-xs leading-snug text-ink-soft">
-                {wet
-                  ? "Debaixo d’água com a chuva forte."
-                  : "Sequinho com a chuva forte."}
+                {wet ? "Debaixo d’água com a chuva forte." : "Sequinho com a chuva forte."}
               </span>
               {chosen && (
                 <span className="mt-auto font-display text-[0.72rem] font-bold uppercase tracking-wider text-ink">
-                  {riskyChoice
-                    ? "✗ estoque molhado"
-                    : `✓ ${project?.title} intacto`}
+                  {riskyChoice ? "✗ estoque molhado" : `✓ ${project?.title} intacto`}
                 </span>
               )}
             </div>
@@ -341,7 +317,7 @@ function Stage({
           setRained(true);
           session.finish({
             title: VERDICT.title,
-            text: `${VERDICT.text} Seu ${project?.title} ficou em “${chosenLot?.name}” — ${
+            text: `${VERDICT.text} Seu ${project?.title} ficou em “${chosenLot?.name}”: ${
               chosenLot?.floodRisk
                 ? "segurando a água exatamente onde ela costuma parar."
                 : "em terreno seco e tranquilo."

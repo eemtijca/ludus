@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 64">
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="#a560e8"/>
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="none" stroke="#8941d4" stroke-width="4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 64">
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="#008241"/>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="none" stroke="#005c2e" stroke-width="4"/>
   <circle cx="21" cy="21" r="6" fill="#ffffff"/>
   <circle cx="43" cy="43" r="6" fill="#ffffff"/>
   <circle cx="32" cy="32" r="6" fill="#ffc800"/>
   <text x="72" y="34" font-family="'Baloo 2','Nunito',sans-serif" font-size="26" font-weight="800" fill="#3c3a4e">Ludus</text>
-  <text x="73" y="50" font-family="'Nunito',sans-serif" font-size="10" font-weight="700" fill="#6f6a85" letter-spacing="1.5">JOGOS DO ENSINO MÉDIO</text>
+  <text x="73" y="50" font-family="'Nunito',sans-serif" font-size="10" font-weight="700" fill="#55516b" letter-spacing="1.5">JOGOS DO ENSINO MÉDIO</text>
 </svg>

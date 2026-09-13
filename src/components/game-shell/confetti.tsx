@@ -3,20 +3,13 @@
 /**
  * Confete leve (CSS puro + cores da identidade).
  * Respeita prefers-reduced-motion e a preferência manual de movimento
- * reduzido — sem animação, o confete simplesmente não dispara.
+ * reduzido: sem animação, o confete simplesmente não dispara.
  */
 
 import { useMemo } from "react";
 import { useA11y } from "@/components/a11y/a11y-provider";
 
-const COLORS = [
-  "#58cc02",
-  "#a560e8",
-  "#14b8a6",
-  "#ff9600",
-  "#ffc800",
-  "#ff4b4b",
-];
+const COLORS = ["var(--success)", "#a560e8", "var(--matematica)", "#ff9600", "#ffc800", "#ff4b4b"];
 
 interface Piece {
   left: number;
@@ -49,10 +42,7 @@ export function Confetti({ pieces = 90 }: { pieces?: number }) {
   if (items.length === 0) return null;
 
   return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden z-20"
-    >
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden z-20">
       {items.map((p, i) => (
         <span
           key={i}

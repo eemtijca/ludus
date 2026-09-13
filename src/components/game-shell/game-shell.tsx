@@ -1,30 +1,23 @@
 "use client";
 
 /**
- * GameShell — moldura completa de uma partida.
+ * GameShell: moldura comum de uma partida.
  *
  * Composição:
- *  1. Cabeçalho fixo: voltar, identidade do jogo (ícone, título, área, nível)
- *  2. Barra de missão com leitura em voz alta (Ouvir / Parar)
+ *  1. Cabeçalho: voltar, identidade do jogo (ícone, título, área, nível)
+ *  2. Barra de missão (texto da missão atual)
  *  3. HUD: trilha de fases + selos da partida
- *  4. Palco (children) — trocado pelo Veredito quando a partida termina
- *  5. Banner de feedback imediato (acerto/erro/info)
+ *  4. Palco (children), trocado pelo veredito quando a partida termina
+ *  5. Banner de feedback imediato (acerto, erro ou informação)
  *  6. Linha de acessibilidade: contraste, texto amplo, som, movimento, recomeçar
  *
- * Toda a parte "de jogo" (fases, selos, feedback) vem da useGameSession,
- * então cada jogo implementa apenas o seu palco e a sua lógica de conteúdo.
+ * O botão de voz fica na caixa de instrução: lê missão, instrução e
+ * narração, alternando entre "Ouvir" e "Parar".
  */
 
-import {
-  ArrowLeft,
-  Contrast,
-  Type,
-  Volume2,
-  Wind,
-  RotateCcw,
-  Compass,
-} from "lucide-react";
+import { ArrowLeft, Contrast, Type, Volume2, Wind, RotateCcw, Compass } from "lucide-react";
 import { AREAS, LEVEL_LABEL, type GameMeta } from "@/lib/catalog";
+import { AREA_BG, AREA_BG_DARK, AREA_BG_SOFT, AREA_BTN, AREA_CHIP } from "@/lib/area-styles";
 import type { GameSession } from "@/games/_shared/use-game-session";
 import { PhaseStepper } from "./phase-stepper";
 import { BadgeTray } from "./badge-tray";
@@ -33,16 +26,17 @@ import { VerdictCard } from "./verdict-card";
 import { GameIcon, areaIconName } from "./game-icon";
 import { SpeakerButton } from "./speaker-button";
 import { useA11y } from "@/components/a11y/a11y-provider";
-import { stopSpeech, speak } from "@/lib/speech";
+import { stopSpeech } from "@/lib/speech";
+import { cn } from "@/lib/utils";
 
 export interface GameShellProps {
   game: GameMeta;
   session: GameSession;
-  /** Frase curta da missão atual (atualiza por caso/fase). */
+  /** Frase curta da missão atual (muda por caso e fase). */
   mission: string;
-  /** Instrução visível da fase atual — grande, clara, com botão Ouvir. */
+  /** Instrução visível da fase atual, com botão Ouvir. */
   instruction: string;
-  /** Transcrição extra lida junto com a instrução (contexto da missão). */
+  /** Transcrição extra lida junto com a instrução. */
   narration?: string;
   /** Próximo caso/variante (opcional). */
   nextVariant?: { label: string; onPick: () => void } | null;
@@ -63,20 +57,14 @@ export function GameShell({
   const area = AREAS[game.area];
   const a11y = useA11y();
 
-  const readInstruction = () => {
-    const el = document.getElementById("game-instruction");
-    const parts = [mission, instruction, narration].filter(Boolean) as string[];
-    speak(parts.join(". "), { highlight: el });
-  };
-
   const handleExit = () => {
     stopSpeech();
     onExit();
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 pb-10 pt-4 sm:px-6 sm:pt-6">
-      {/* ---------------------------------------------------------- Cabeçalho */}
+    <div className="mx-auto w-full max-w-4xl px-4 pt-4 pb-10 sm:px-6 sm:pt-6">
+      {/* Cabeçalho */}
       <header className="flex flex-wrap items-center gap-3">
         <button
           type="button"
@@ -90,15 +78,13 @@ export function GameShell({
 
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <span
-            className="flex size-12 shrink-0 items-center justify-center rounded-2xl text-white sm:size-14"
-            style={{ background: area.color, borderColor: area.colorDark }}
+            className={cn(
+              "flex size-12 shrink-0 items-center justify-center rounded-2xl text-white sm:size-14",
+              AREA_BG[game.area],
+            )}
             aria-hidden
           >
-            <GameIcon
-              name={game.icon}
-              className="size-6 sm:size-7"
-              strokeWidth={2.2}
-            />
+            <GameIcon name={game.icon} className="size-6 sm:size-7" strokeWidth={2.2} />
           </span>
           <div className="min-w-0">
             <h1 className="truncate font-display text-xl font-bold leading-tight text-ink sm:text-2xl">
@@ -110,117 +96,83 @@ export function GameShell({
           </div>
         </div>
 
-        <span
-          className="ludus-chip hidden sm:inline-flex"
-          style={{ color: area.colorDark, background: area.colorSoft }}
-        >
+        <span className={cn("ludus-chip hidden sm:inline-flex", AREA_CHIP[game.area])}>
           <GameIcon name={areaIconName(area.id)} className="size-3.5" />
           {area.shortName}
         </span>
       </header>
 
-      {/* ------------------------------------------------------- Missão + voz */}
+      {/* Missão */}
       <section
-        className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-border bg-white p-4"
+        className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border-2 border-border bg-surface p-4"
         aria-label="Missão da partida"
       >
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl text-white"
-            style={{ background: area.colorDark }}
-            aria-hidden
-          >
-            <Compass className="size-5" strokeWidth={2.4} />
-          </span>
-          <div className="min-w-0">
-            <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink-faint">
-              Missão
-            </p>
-            <p className="truncate font-display text-base font-bold text-ink sm:text-lg">
-              {mission}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <SpeakerButton
-            text={[mission, instruction, narration].filter(Boolean).join(". ")}
-            label="Ouvir"
-          />
-          <button
-            type="button"
-            onClick={() => stopSpeech()}
-            className="ludus-btn ludus-btn-paper ludus-btn-sm"
-            aria-label="Parar leitura em voz alta"
-          >
-            <Volume2 className="size-4" aria-hidden />
-            <span className="hidden sm:inline">Parar voz</span>
-          </button>
+        <span
+          className={cn(
+            "flex size-10 shrink-0 items-center justify-center rounded-xl text-white",
+            AREA_BG_DARK[game.area],
+          )}
+          aria-hidden
+        >
+          <Compass className="size-5" strokeWidth={2.4} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink-faint">
+            Missão
+          </p>
+          <p className="truncate font-display text-base font-bold text-ink sm:text-lg">{mission}</p>
         </div>
       </section>
 
-      {/* ---------------------------------------------------------------- HUD */}
-      <section
-        className="mt-3 flex flex-col gap-3"
-        aria-label="Progresso da partida"
-      >
-        <PhaseStepper
-          phase={session.phase}
-          color={area.color}
-          colorDark={area.colorDark}
-        />
+      {/* HUD */}
+      <section className="mt-3 flex flex-col gap-3" aria-label="Progresso da partida">
+        <PhaseStepper phase={session.phase} area={game.area} />
         <div className="flex items-center justify-between gap-3">
           <div className="ludus-track flex-1" aria-hidden>
-            <i
-              style={{
-                width: `${(session.phase / 3) * 100}%`,
-                background: area.color,
-              }}
-            />
+            <i style={{ width: `${(session.phase / 3) * 100}%` }} />
           </div>
           <BadgeTray badges={session.badges} />
         </div>
         <p className="sr-only" role="status">
-          Fase {session.phase} de 3:{" "}
-          {["Explorar", "Testar", "Decidir"][session.phase - 1]}. Selos
+          Fase {session.phase} de 3: {["Explorar", "Testar", "Decidir"][session.phase - 1]}. Selos
           conquistados: {session.badges.length} de 3.
         </p>
       </section>
 
-      {/* ----------------------------------------------------------- Palco */}
+      {/* Palco */}
       <main className="mt-4" aria-live="polite">
         {session.verdict ? (
           <VerdictCard
             verdict={session.verdict}
             badges={session.badges}
-            color={area.color}
-            colorDark={area.colorDark}
-            colorSoft={area.colorSoft}
+            area={game.area}
             gameTitle={game.title}
             onReplay={session.restart}
             onNextVariant={nextVariant}
             onExit={handleExit}
           />
         ) : (
-          <div className="rounded-3xl border-2 border-border bg-white p-4 shadow-[0_5px_0_#e9e2d2] sm:p-6">
-            {/* Instrução da fase */}
+          <div className="ludus-panel p-4 sm:p-6">
+            {/* Instrução da fase + único botão de voz da tela */}
             <div
               id="game-instruction"
-              className="mb-4 flex items-start gap-3 rounded-2xl p-4 sm:items-center"
-              style={{ background: area.colorSoft }}
+              className={cn(
+                "instruction-box mb-4 flex flex-col gap-3 rounded-2xl border-2 border-transparent p-4 sm:flex-row sm:items-center",
+                AREA_BG_SOFT[game.area],
+              )}
             >
               <p className="flex-1 font-display text-base font-bold leading-snug text-ink sm:text-lg">
                 {instruction}
               </p>
-              <button
-                type="button"
-                onClick={readInstruction}
-                className="ludus-btn ludus-btn-sm shrink-0 text-white"
-                style={{ background: area.color, borderColor: area.colorDark }}
-                aria-label="Ouvir a instrução da fase em voz alta"
-              >
-                <Volume2 className="size-4" aria-hidden />
-                <span className="hidden md:inline">Ouvir</span>
-              </button>
+              <SpeakerButton
+                className={cn(
+                  "ludus-btn ludus-btn-sm shrink-0 border-transparent text-white",
+                  AREA_BTN[game.area],
+                )}
+                text={[mission, instruction, narration].filter(Boolean).join(". ")}
+                label="Ouvir"
+                highlightId="game-instruction"
+              />
             </div>
 
             {children}
@@ -228,12 +180,12 @@ export function GameShell({
         )}
       </main>
 
-      {/* -------------------------------------------------------- Feedback */}
+      {/* Feedback */}
       <div className="mt-3">
         <FeedbackBanner feedback={session.feedback} />
       </div>
 
-      {/* ----------------------------------------------- Acessibilidade DUA */}
+      {/* Acessibilidade */}
       <section
         className="mt-5 flex flex-wrap items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-cloud/60 p-3"
         aria-label="Recursos de acessibilidade"
@@ -275,10 +227,6 @@ export function GameShell({
           Recomeçar
         </button>
       </section>
-
-      <footer className="mt-6 text-center text-xs font-semibold text-ink-faint">
-        Sala de Recursos · EEMTI José Cláudio de Araújo · Recurso DUA/AEE
-      </footer>
     </div>
   );
 }
@@ -302,8 +250,8 @@ function A11yToggle({
       className={[
         "inline-flex min-h-11 items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 font-display text-[0.78rem] font-bold transition-colors",
         active
-          ? "border-linguagens bg-linguagens-soft text-linguagens-dark"
-          : "border-border bg-white text-ink-soft hover:border-ink-faint",
+          ? "border-success bg-success-soft text-success-dark"
+          : "border-border bg-surface text-ink-soft hover:border-ink-faint",
       ].join(" ")}
     >
       {icon}

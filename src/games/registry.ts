@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * Registro de componentes de jogo — mapeia id do catálogo → componente.
- * Cada jogo recebe `onExit` para voltar ao hub.
+ * Registro de componentes de jogo: mapeia o id do catálogo ao componente.
+ * Cada jogo recebe onExit para voltar ao hub.
  */
 
 import type { ComponentType } from "react";

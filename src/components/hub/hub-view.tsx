@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * HubView — página inicial: hero + navegador de jogos.
+ * HubView: página inicial, com hero e navegador de jogos.
  */
 
 import { HubHero } from "./hub-hero";

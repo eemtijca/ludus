@@ -1,19 +1,20 @@
 "use client";
 
 /**
- * Função Viva — palco do jogo.
+ * Função Viva: palco do jogo.
  *
- * Fase 1 · Explorar: escolher a pista — entrega (reta) ou cantina (parábola).
- * Fase 2 · Testar: simulador vivo com controles e gráfico SVG (curva +
- *   marcador + linha-alvo), tabela de valores.
- * Fase 3 · Decidir: desafio de leitura gráfica — acertar o ponto-alvo
- *   (interseção com reta-alvo no modo linear; vértice no modo quadrático).
+ * Fase 1 (Explorar): escolher a pista, entrega (reta) ou cantina (parábola).
+ * Fase 2 (Testar): simulador com controles, gráfico SVG (curva, marcador e
+ *   linha-alvo) e tabela de valores.
+ * Fase 3 (Decidir): desafio de leitura gráfica, marcando a interseção com a
+ *   linha-alvo no modo linear e o vértice no modo quadrático.
  */
 
 import { useMemo, useState } from "react";
 import { ArrowRight, LineChart } from "lucide-react";
 import { GameShell } from "@/components/game-shell/game-shell";
 import { OptionTile } from "@/components/game-shell/option-tile";
+import { MathText } from "@/components/mathjax/math-text";
 import { useGameSession } from "@/games/_shared/use-game-session";
 import { GAME_BY_ID, AREAS } from "@/lib/catalog";
 import { formatCurrency, clamp } from "@/lib/format";
@@ -22,25 +23,30 @@ const GAME_ID = "funcao-viva";
 
 type Mode = "entrega" | "lanche";
 
-/* ------------------------------------------------------------- Parâmetros */
+/* Parâmetros dos modelos. */
 
 const LINEAR = {
   /** Taxa base da corrida (R$). */
   base: 4,
-  /** Preço por km default (R$). */
+  /** Preço por km padrão (R$). */
   slope: 3.5,
-  /** Alvo do desafio: custo exato da corrida (R$). */
+  /** Alvo do desafio: custo da corrida (R$). */
   target: 40,
 };
 
 const QUAD = { a: -2, b: 40, c: -72 };
 
 function linearFare(slope: number, distance: number): number {
-  return LINEAR.slope === 0 ? 0 : slope * distance + LINEAR.base;
+  return slope * distance + LINEAR.base;
 }
 
 function quadProfit(q: number): number {
   return QUAD.a * q * q + QUAD.b * q + QUAD.c;
+}
+
+/** Formata número para exibição em TeX com vírgula decimal. */
+function texNumber(value: number): string {
+  return String(value).replace(".", "{,}");
 }
 
 export function FuncaoVivaGame({ onExit }: { onExit: () => void }) {
@@ -75,7 +81,7 @@ export function FuncaoVivaGame({ onExit }: { onExit: () => void }) {
   );
 }
 
-/* ------------------------------------------------------------------ Palco */
+/* Palco */
 
 function Stage({
   session,
@@ -92,17 +98,12 @@ function Stage({
   const [quantity, setQuantity] = useState(10);
 
   const targetDistance = useMemo(
-    () =>
-      clamp(
-        Math.round((LINEAR.target - LINEAR.base) / Math.max(slope, 0.5)),
-        1,
-        15,
-      ),
+    () => clamp(Math.round((LINEAR.target - LINEAR.base) / Math.max(slope, 0.5)), 1, 15),
     [slope],
   );
   const vertexQ = -QUAD.b / (2 * QUAD.a);
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* Fase 1 (Explorar) */
   if (session.phase === 1) {
     return (
       <div className="flex flex-col gap-5">
@@ -110,9 +111,9 @@ function Stage({
           <OptionTile
             icon="maleta"
             title="Entrega reta"
-            subtitle="Preço por km + taxa base — função do 1º grau"
-            color={areaColor}
-            colorDark={areaColorDark}
+            subtitle="Preço por km + taxa base: função do 1º grau"
+            color="var(--matematica)"
+            colorDark="var(--matematica-dark)"
             onPick={() => {
               setMode("entrega");
               session.showSuccess("Pista da reta escolhida. Ajuste e observe.");
@@ -122,14 +123,12 @@ function Stage({
           <OptionTile
             icon="grafico"
             title="Lanche parábola"
-            subtitle="Lucro que sobe, topo e cai — função do 2º grau"
-            color={areaColor}
-            colorDark={areaColorDark}
+            subtitle="Lucro que sobe, chega ao topo e cai: função do 2º grau"
+            color="var(--matematica)"
+            colorDark="var(--matematica-dark)"
             onPick={() => {
               setMode("lanche");
-              session.showSuccess(
-                "Pista da parábola escolhida. Ajuste e observe.",
-              );
+              session.showSuccess("Pista da parábola escolhida. Ajuste e observe.");
               return true;
             }}
           />
@@ -139,7 +138,7 @@ function Stage({
             type="button"
             onClick={() => session.setPhase(2)}
             className="ludus-btn ludus-btn-xl anim-bounce-in text-white"
-            style={{ background: areaColor, borderColor: areaColorDark }}
+            style={{ background: "var(--matematica)", borderColor: "var(--matematica-dark)" }}
           >
             Testar valores na pista
             <ArrowRight className="size-5" aria-hidden />
@@ -149,7 +148,7 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-5">
@@ -159,21 +158,17 @@ function Stage({
             distance={distance}
             onSlope={setSlope}
             onDistance={setDistance}
-            color={areaColor}
+            color="var(--matematica)"
           />
         ) : (
-          <QuadraticSim
-            quantity={quantity}
-            onQuantity={setQuantity}
-            color={areaColor}
-          />
+          <QuadraticSim quantity={quantity} onQuantity={setQuantity} color="var(--matematica)" />
         )}
 
         <button
           type="button"
           onClick={() => session.setPhase(3)}
           className="ludus-btn ludus-btn-xl text-white"
-          style={{ background: areaColor, borderColor: areaColorDark }}
+          style={{ background: "var(--matematica)", borderColor: "var(--matematica-dark)" }}
         >
           Marcar ponto e avançar
           <ArrowRight className="size-5" aria-hidden />
@@ -182,41 +177,43 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* Fase 3 (Decidir) */
   const confirmChallenge = () => {
     if (mode === "entrega") {
       const fare = linearFare(slope, distance);
       if (Math.abs(distance - targetDistance) <= 1) {
         session.finish({
           title: "Reta lida como um mapa",
-          text: `Você posicionou o marcador em ${distance} km — exatamente onde a reta cruza a linha dos ${formatCurrency(LINEAR.target)} (${slope.toFixed(1).replace(".", ",")}·d + 4). Ler interseção no gráfico é resolver a equação sem papel.`,
+          text: `Você posicionou o marcador em ${distance} km, onde a reta cruza a linha dos ${formatCurrency(LINEAR.target)}. Ler interseção no gráfico é resolver a equação sem papel.`,
           detail: {
             label: "Ver a álgebra escondida no gráfico",
-            text: `Equação da reta: f(d) = ${String(slope).replace(".", ",")}d + 4. Procurar f(d) = 40 é resolver 40 = ${String(slope).replace(".", ",")}d + 4 → d = 36 ÷ ${String(slope).replace(".", ",")} ≈ ${targetDistance} km. O gráfico mostra a mesma conta — só que desenhada.`,
+            text: `Equação da reta: \\(f(d) = ${texNumber(slope)}d + 4\\). Procurar \\(f(d) = 40\\) é resolver \\(40 = ${texNumber(slope)}d + 4\\), ou seja, \\(d = \\frac{36}{${texNumber(slope)}} \\approx ${targetDistance}\\) km. O gráfico mostra a mesma conta, só que desenhada.`,
+            speech: `Equação da reta: f de d é igual a ${String(slope).replace(".", ",")} vezes d mais 4. Procurar f de d igual a 40 é resolver 40 igual a ${String(slope).replace(".", ",")} d mais 4. Ou seja, d igual a 36 dividido por ${String(slope).replace(".", ",")}, aproximadamente ${targetDistance} quilômetros. O gráfico mostra a mesma conta, só que desenhada.`,
           },
           caseId: "entrega",
         });
         return true;
       }
       session.showError(
-        `A ${distance} km a corrida custa ${formatCurrency(fare)} — ainda fora da linha-alvo de ${formatCurrency(LINEAR.target)}. Siga a curva até o cruzamento.`,
+        `A ${distance} km a corrida custa ${formatCurrency(fare)}, ainda fora da linha-alvo de ${formatCurrency(LINEAR.target)}. Siga a curva até o cruzamento.`,
       );
       return false;
     }
     if (Math.abs(quantity - vertexQ) <= 1) {
       session.finish({
         title: "Topo do lucro alcançado",
-        text: `Com ${quantity} lanches o lucro chega ao máximo de ${formatCurrency(quadProfit(quantity))} — o vértice da parábola. Passou disso, o lucro cai: preço baixo demais paga a conta do pão.`,
+        text: `Com ${quantity} lanches o lucro chega perto do máximo, ${formatCurrency(quadProfit(quantity))}: o vértice da parábola. Passou disso, o lucro cai, porque preço baixo demais não paga a conta do pão.`,
         detail: {
           label: "Ver a álgebra escondida no gráfico",
-          text: `Função do lucro: L(q) = -2q² + 40q - 72. O vértice fica em q = -b/2a = -40 ÷ (2·-2) = 10. A tabela mostra: em 9 dá R$ 189, em 10 dá R$ 192 (máximo), em 11 dá R$ 189 — simetria perfeita ao redor do topo.`,
+          text: `Função do lucro: \\(L(q) = -2q^2 + 40q - 72\\). O vértice fica em \\(q = -\\frac{b}{2a} = -\\frac{40}{2 \\cdot (-2)} = 10\\). A tabela mostra a simetria: \\(L(9) = 126\\), \\(L(10) = 128\\) (máximo) e \\(L(11) = 126\\), espelhada ao redor do topo.`,
+          speech: `Função do lucro: L de q é igual a menos 2 q ao quadrado mais 40 q menos 72. O vértice fica em q igual a menos b sobre 2 a, que dá 10. A tabela mostra a simetria: em 9 lanches o lucro é 126 reais, em 10 chega ao máximo de 128 reais e em 11 volta a 126 reais, espelhada ao redor do topo.`,
         },
         caseId: "lanche",
       });
       return true;
     }
     session.showError(
-      `Com ${quantity} lanches o lucro é ${formatCurrency(quadProfit(quantity))} — ainda fora do topo. Procure o ponto mais alto da curva.`,
+      `Com ${quantity} lanches o lucro é ${formatCurrency(quadProfit(quantity))}, ainda fora do topo. Procure o ponto mais alto da curva.`,
     );
     return false;
   };
@@ -227,36 +224,30 @@ function Stage({
         <>
           <div className="rounded-2xl border-2 border-matematica bg-matematica-soft p-4 text-sm font-semibold leading-relaxed text-ink">
             Desafio: a partir de quantos km a corrida custa exatamente{" "}
-            {formatCurrency(LINEAR.target)}? Mova a distância até o marcador
-            tocar a linha-alvo.
+            {formatCurrency(LINEAR.target)}? Mova a distância até o marcador tocar a linha-alvo.
           </div>
           <LinearSim
             slope={slope}
             distance={distance}
             onSlope={setSlope}
             onDistance={setDistance}
-            color={areaColor}
+            color="var(--matematica)"
             showTarget
           />
         </>
       ) : (
         <>
           <div className="rounded-2xl border-2 border-matematica bg-matematica-soft p-4 text-sm font-semibold leading-relaxed text-ink">
-            Desafio: qual quantidade de lanches maximiza o lucro? Mova até o
-            topo da curva.
+            Desafio: qual quantidade de lanches maximiza o lucro? Mova até o topo da curva.
           </div>
-          <QuadraticSim
-            quantity={quantity}
-            onQuantity={setQuantity}
-            color={areaColor}
-          />
+          <QuadraticSim quantity={quantity} onQuantity={setQuantity} color="var(--matematica)" />
         </>
       )}
       <button
         type="button"
         onClick={confirmChallenge}
         className="ludus-btn ludus-btn-xl text-white"
-        style={{ background: areaColor, borderColor: areaColorDark }}
+        style={{ background: "var(--matematica)", borderColor: "var(--matematica-dark)" }}
       >
         Confirmar o ponto
         <ArrowRight className="size-5" aria-hidden />
@@ -265,7 +256,7 @@ function Stage({
   );
 }
 
-/* ------------------------------------------------------------ Simuladores */
+/* Simuladores */
 
 function LinearSim({
   slope,
@@ -314,7 +305,7 @@ function LinearSim({
         <Slider
           label="Preço por km"
           value={slope}
-          min={2}
+          min={2.5}
           max={8}
           step={0.5}
           suffix="R$/km"
@@ -344,10 +335,7 @@ function LinearSim({
           </thead>
           <tbody className="font-semibold text-ink">
             {[2, 6, 10, distance].map((d, i) => (
-              <tr
-                key={i}
-                className={d === distance ? "text-matematica-dark" : ""}
-              >
+              <tr key={i} className={d === distance ? "text-matematica-dark" : ""}>
                 <td className="py-1 pr-4">{d} km</td>
                 <td className="py-1">{formatCurrency(linearFare(slope, d))}</td>
               </tr>
@@ -355,8 +343,8 @@ function LinearSim({
           </tbody>
         </table>
         <p className="mt-2 text-xs font-semibold text-ink-faint">
-          Taxa base fixa de {formatCurrency(LINEAR.base)} somada ao preço por
-          km: f(d) = {String(slope).replace(".", ",")}d + 4.
+          Taxa base fixa de {formatCurrency(LINEAR.base)} somada ao preço por km:{" "}
+          <MathText text={`\\(f(d) = ${texNumber(slope)}d + 4\\)`} />.
         </p>
       </details>
     </div>
@@ -380,7 +368,14 @@ function QuadraticSim({
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat label="Lanches vendidos" value={`${quantity}`} />
         <Stat label="Lucro do dia" value={formatCurrency(profit)} />
-        <Stat label="Expressão" value="L(q) = -2q² + 40q - 72" small />
+        <div className="rounded-2xl border-2 border-border bg-surface p-4">
+          <p className="font-display text-[0.68rem] font-bold uppercase tracking-[0.1em] text-ink-soft">
+            Expressão
+          </p>
+          <p className="mt-1 font-display text-base font-bold text-ink">
+            <MathText text="\\(L(q) = -2q^2 + 40q - 72\\)" />
+          </p>
+        </div>
       </div>
 
       <FunctionGraph
@@ -419,10 +414,7 @@ function QuadraticSim({
           </thead>
           <tbody className="font-semibold text-ink">
             {[2, 9, 10, 11, 18, quantity].map((q, i) => (
-              <tr
-                key={i}
-                className={q === quantity ? "text-matematica-dark" : ""}
-              >
+              <tr key={i} className={q === quantity ? "text-matematica-dark" : ""}>
                 <td className="py-1 pr-4">{q}</td>
                 <td className="py-1">{formatCurrency(L(q))}</td>
               </tr>
@@ -430,15 +422,15 @@ function QuadraticSim({
           </tbody>
         </table>
         <p className="mt-2 text-xs font-semibold text-ink-faint">
-          O lucro sobe até perto de 10 lanches e depois cai: o vértice da
-          parábola divide a subida da descida.
+          O lucro sobe até perto de 10 lanches e depois cai: o vértice da parábola divide a subida
+          da descida.
         </p>
       </details>
     </div>
   );
 }
 
-/* ------------------------------------------------------------ Componentes */
+/* Componentes */
 
 function Stat({
   label,
@@ -454,7 +446,7 @@ function Stat({
   return (
     <div
       className={`rounded-2xl border-2 p-4 ${
-        highlight ? "border-success bg-success-soft" : "border-border bg-white"
+        highlight ? "border-success bg-success-soft" : "border-border bg-surface"
       }`}
     >
       <p className="font-display text-[0.68rem] font-bold uppercase tracking-[0.1em] text-ink-soft">
@@ -490,15 +482,12 @@ function Slider({
 }) {
   const id = `fn-slider-${label.replace(/\s/g, "-")}`;
   return (
-    <div className="rounded-2xl border-2 border-border bg-white p-4">
+    <div className="rounded-2xl border-2 border-border bg-surface p-4">
       <div className="flex items-baseline justify-between">
         <label htmlFor={id} className="font-display text-sm font-bold text-ink">
           {label}
         </label>
-        <output
-          htmlFor={id}
-          className="font-display text-lg font-bold text-matematica-dark"
-        >
+        <output htmlFor={id} className="font-display text-lg font-bold text-matematica-dark">
           {String(value).replace(".", ",")}
           {suffix}
         </output>
@@ -548,8 +537,7 @@ function FunctionGraph({
   const PAD = 40;
 
   const px = (x: number) => PAD + ((x - xMin) / (xMax - xMin)) * (W - PAD - 12);
-  const py = (v: number) =>
-    H - PAD - ((v - yMin) / (yMax - yMin)) * (H - PAD - 12);
+  const py = (v: number) => H - PAD - ((v - yMin) / (yMax - yMin)) * (H - PAD - 12);
 
   const N = 60;
   const pts: string[] = [];
@@ -562,11 +550,10 @@ function FunctionGraph({
   }
 
   const markerY = fn(markerX);
-  const markerOnTarget =
-    targetY !== undefined && Math.abs(markerY - targetY) < 0.75;
+  const markerOnTarget = targetY !== undefined && Math.abs(markerY - targetY) < 0.75;
 
   return (
-    <figure className="rounded-2xl border-2 border-border bg-white p-4">
+    <figure className="rounded-2xl border-2 border-border bg-surface p-4">
       <figcaption className="mb-1 flex items-center gap-2 font-display text-sm font-bold text-ink">
         <LineChart className="size-4 text-matematica-dark" aria-hidden />
         Gráfico da função
@@ -577,7 +564,7 @@ function FunctionGraph({
         role="img"
         aria-label={`Gráfico de ${yLabel} por ${xLabel} com marcador em ${markerX}.`}
       >
-        {/* grade */}
+        {/* Grade */}
         {[0.25, 0.5, 0.75].map((t) => (
           <line
             key={t}
@@ -589,26 +576,12 @@ function FunctionGraph({
             strokeWidth="1.5"
           />
         ))}
-        {/* eixo x */}
-        <line
-          x1={PAD}
-          y1={py(0)}
-          x2={W - 12}
-          y2={py(0)}
-          stroke="#e9e2d2"
-          strokeWidth="2"
-        />
-        {/* eixo y */}
-        <line
-          x1={PAD}
-          y1={12}
-          x2={PAD}
-          y2={H - 12}
-          stroke="#e9e2d2"
-          strokeWidth="2"
-        />
+        {/* Eixo x */}
+        <line x1={PAD} y1={py(0)} x2={W - 12} y2={py(0)} stroke="#e9e2d2" strokeWidth="2" />
+        {/* Eixo y */}
+        <line x1={PAD} y1={12} x2={PAD} y2={H - 12} stroke="#e9e2d2" strokeWidth="2" />
 
-        {/* linha-alvo */}
+        {/* Linha-alvo */}
         {targetY !== undefined && (
           <>
             <line
@@ -620,19 +593,13 @@ function FunctionGraph({
               strokeWidth="3"
               strokeDasharray="8 6"
             />
-            <text
-              x={PAD + 6}
-              y={py(targetY) - 6}
-              fontSize="9.5"
-              fontWeight="800"
-              fill="#b98f00"
-            >
+            <text x={PAD + 6} y={py(targetY) - 6} fontSize="9.5" fontWeight="800" fill="#b98f00">
               alvo: {yFmt(targetY)}
             </text>
           </>
         )}
 
-        {/* curva */}
+        {/* Curva */}
         <polyline
           points={pts.join(" ")}
           fill="none"
@@ -640,9 +607,10 @@ function FunctionGraph({
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
+          style={{ stroke: color }}
         />
 
-        {/* marcador */}
+        {/* Marcador */}
         <line
           x1={px(markerX)}
           x2={px(markerX)}
@@ -656,29 +624,28 @@ function FunctionGraph({
           cx={px(markerX)}
           cy={py(markerY)}
           r="8"
-          fill={markerOnTarget ? "#58cc02" : color}
+          fill={markerOnTarget ? "var(--success)" : color}
           stroke="#fff"
           strokeWidth="3"
           className="anim-pop"
+          style={{ fill: markerOnTarget ? "var(--success)" : color }}
         />
         <text
           x={clamp(px(markerX) + 10, PAD, W - 70)}
           y={clamp(py(markerY) - 10, 16, H - 16)}
           fontSize="10"
           fontWeight="800"
-          fill={markerOnTarget ? "#46a302" : "#3c3a4e"}
+          fill={markerOnTarget ? "var(--success-dark)" : "#3c3a4e"}
+          style={{ fill: markerOnTarget ? "var(--success-dark)" : "#3c3a4e" }}
+          stroke="#ffffff"
+          strokeWidth="3"
+          paintOrder="stroke"
         >
           {yFmt(markerY)}
         </text>
 
-        {/* rótulos dos eixos */}
-        <text
-          x={W - 34}
-          y={py(0) + 14}
-          fontSize="9"
-          fill="#8783a0"
-          fontWeight="700"
-        >
+        {/* Rótulos dos eixos */}
+        <text x={W - 34} y={py(0) + 14} fontSize="9" fill="#8783a0" fontWeight="700">
           {xMax} {xLabel}
         </text>
         <text x={6} y={20} fontSize="9" fill="#8783a0" fontWeight="700">

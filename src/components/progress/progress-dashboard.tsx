@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * ProgressDashboard — painel de progresso do estudante.
+ * ProgressDashboard: painel de progresso do estudante.
  *
- * - Visão geral: X/12 jogos, Y/36 selos, barra geral
+ * - Visão geral: jogos concluídos, selos conquistados e barra geral
  * - Trilha por área com mini-cartões e selos
  * - Próximas recomendações (primeiros jogos não concluídos de cada área)
- * - Zerar progresso (com confirmação — nunca automático)
+ * - Zerar progresso (com confirmação: nunca automático)
  */
 
 import { useState } from "react";
@@ -19,15 +19,7 @@ import {
   countCompleted,
 } from "@/lib/progress";
 import { GameIcon } from "@/components/game-shell/game-icon";
-import {
-  Medal,
-  ScanSearch,
-  KeyRound,
-  Trophy,
-  Trash2,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { Medal, ScanSearch, KeyRound, Trophy, Trash2, Sparkles, ArrowRight } from "lucide-react";
 import { hrefFor } from "@/lib/router";
 import { formatDate } from "@/lib/format";
 
@@ -42,9 +34,7 @@ export function ProgressDashboard() {
 
   const recommendations = AREA_ORDER.map((areaId) => ({
     area: AREAS[areaId],
-    game: GAMES.find(
-      (g) => g.area === areaId && !isGameCompleted(progress[g.id]),
-    ),
+    game: GAMES.find((g) => g.area === areaId && !isGameCompleted(progress[g.id])),
   })).filter((r) => r.game);
 
   const handleReset = () => {
@@ -60,12 +50,9 @@ export function ProgressDashboard() {
     <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold text-ink sm:text-4xl">
-            Seu progresso
-          </h1>
+          <h1 className="font-display text-3xl font-bold text-ink sm:text-4xl">Seu progresso</h1>
           <p className="mt-1 text-sm font-semibold text-ink-soft sm:text-base">
-            Progresso só soma: selos nunca expiram e casos podem ser revisitados
-            sempre.
+            Progresso só soma: selos nunca expiram e casos podem ser revisitados sempre.
           </p>
         </div>
         <button
@@ -80,16 +67,13 @@ export function ProgressDashboard() {
       </header>
 
       {/* Visão geral */}
-      <section
-        className="mt-6 grid gap-4 sm:grid-cols-3"
-        aria-label="Resumo geral"
-      >
+      <section className="mt-6 grid gap-4 sm:grid-cols-3" aria-label="Resumo geral">
         <BigStat
           icon={<Trophy className="size-6" strokeWidth={2.2} aria-hidden />}
           label="Jogos concluídos"
           value={`${completed}/${GAMES.length}`}
           pct={pct}
-          color="#58cc02"
+          color="var(--success)"
         />
         <BigStat
           icon={<Medal className="size-6" strokeWidth={2.2} aria-hidden />}
@@ -103,16 +87,12 @@ export function ProgressDashboard() {
           label="Áreas exploradas"
           value={`${
             AREA_ORDER.filter((a) =>
-              GAMES.filter((g) => g.area === a).every((g) =>
-                isGameCompleted(progress[g.id]),
-              ),
+              GAMES.filter((g) => g.area === a).every((g) => isGameCompleted(progress[g.id])),
             ).length
           }/${AREA_ORDER.length}`}
           pct={
             (AREA_ORDER.filter((a) =>
-              GAMES.filter((g) => g.area === a).every((g) =>
-                isGameCompleted(progress[g.id]),
-              ),
+              GAMES.filter((g) => g.area === a).every((g) => isGameCompleted(progress[g.id])),
             ).length /
               AREA_ORDER.length) *
             100
@@ -124,10 +104,7 @@ export function ProgressDashboard() {
       {/* Recomendações */}
       {recommendations.length > 0 && (
         <section className="mt-8" aria-labelledby="reco-title">
-          <h2
-            id="reco-title"
-            className="font-display text-xl font-bold text-ink sm:text-2xl"
-          >
+          <h2 id="reco-title" className="font-display text-xl font-bold text-ink sm:text-2xl">
             Próximas investigações
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -142,11 +119,7 @@ export function ProgressDashboard() {
                   style={{ background: area.color }}
                   aria-hidden
                 >
-                  <GameIcon
-                    name={game!.icon}
-                    className="size-6"
-                    strokeWidth={2.2}
-                  />
+                  <GameIcon name={game!.icon} className="size-6" strokeWidth={2.2} />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-display text-sm font-bold text-ink">
@@ -156,10 +129,7 @@ export function ProgressDashboard() {
                     {area.shortName} · Nível {game!.level}
                   </span>
                 </span>
-                <ArrowRight
-                  className="size-5 shrink-0 text-ink-faint"
-                  aria-hidden
-                />
+                <ArrowRight className="size-5 shrink-0 text-ink-faint" aria-hidden />
               </a>
             ))}
           </div>
@@ -167,21 +137,16 @@ export function ProgressDashboard() {
       )}
 
       {/* Trilha por área */}
-      <section
-        className="mt-8 flex flex-col gap-6"
-        aria-label="Trilha por área"
-      >
+      <section className="mt-8 flex flex-col gap-6" aria-label="Trilha por área">
         {AREA_ORDER.map((areaId) => {
           const area = AREAS[areaId];
           const games = GAMES.filter((g) => g.area === areaId);
-          const done = games.filter((g) =>
-            isGameCompleted(progress[g.id]),
-          ).length;
+          const done = games.filter((g) => isGameCompleted(progress[g.id])).length;
           const areaPct = Math.round((done / games.length) * 100);
           return (
             <div
               key={areaId}
-              className="rounded-3xl border-2 border-border bg-white p-5 shadow-[0_5px_0_#e9e2d2]"
+              className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_#e9e2d2]"
             >
               <div className="flex flex-wrap items-center gap-3">
                 <span
@@ -189,23 +154,12 @@ export function ProgressDashboard() {
                   style={{ background: area.color }}
                   aria-hidden
                 >
-                  <GameIcon
-                    name={area.icon}
-                    className="size-6"
-                    strokeWidth={2.2}
-                  />
+                  <GameIcon name={area.icon} className="size-6" strokeWidth={2.2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-display text-lg font-bold text-ink">
-                    {area.name}
-                  </h3>
+                  <h3 className="font-display text-lg font-bold text-ink">{area.name}</h3>
                   <div className="ludus-track mt-2 max-w-md">
-                    <i
-                      style={{
-                        width: `${Math.max(areaPct, 2)}%`,
-                        background: area.color,
-                      }}
-                    />
+                    <i style={{ width: `${Math.max(areaPct, 2)}%`, background: area.color }} />
                   </div>
                 </div>
                 <span
@@ -230,7 +184,7 @@ export function ProgressDashboard() {
                         <span
                           className="flex size-10 shrink-0 items-center justify-center rounded-xl text-white"
                           style={{
-                            background: gameDone ? "#58cc02" : "#ece7db",
+                            background: gameDone ? "var(--success)" : "var(--cloud)",
                             color: gameDone ? "#fff" : "#8783a0",
                           }}
                           aria-hidden
@@ -238,11 +192,7 @@ export function ProgressDashboard() {
                           {gameDone ? (
                             <Trophy className="size-5" strokeWidth={2.4} />
                           ) : (
-                            <GameIcon
-                              name={game.icon}
-                              className="size-5"
-                              strokeWidth={2.2}
-                            />
+                            <GameIcon name={game.icon} className="size-5" strokeWidth={2.2} />
                           )}
                         </span>
                         <span className="min-w-0 flex-1">
@@ -252,27 +202,23 @@ export function ProgressDashboard() {
                           <span className="block text-xs font-semibold text-ink-faint">
                             {gameDone
                               ? `${count} ${count === 1 ? "partida" : "partidas"}${
-                                  p?.lastCompletedAt
-                                    ? ` · ${formatDate(p.lastCompletedAt)}`
-                                    : ""
+                                  p?.lastCompletedAt ? ` · ${formatDate(p.lastCompletedAt)}` : ""
                                 }`
                               : "A explorar"}
                           </span>
                         </span>
                         <span className="flex items-center gap-0.5" aria-hidden>
-                          {([ScanSearch, KeyRound, Medal] as const).map(
-                            (Icon, i) => (
-                              <Icon
-                                key={i}
-                                className={
-                                  i < (p?.badges.length ?? 0)
-                                    ? "size-4 text-success-dark"
-                                    : "size-4 text-ink-faint/40"
-                                }
-                                strokeWidth={2.4}
-                              />
-                            ),
-                          )}
+                          {([ScanSearch, KeyRound, Medal] as const).map((Icon, i) => (
+                            <Icon
+                              key={i}
+                              className={
+                                i < (p?.badges.length ?? 0)
+                                  ? "size-4 text-success-dark"
+                                  : "size-4 text-ink-faint/40"
+                              }
+                              strokeWidth={2.4}
+                            />
+                          ))}
                         </span>
                       </a>
                     </li>
@@ -301,7 +247,7 @@ function BigStat({
   color: string;
 }) {
   return (
-    <div className="rounded-3xl border-2 border-border bg-white p-5 shadow-[0_5px_0_#e9e2d2]">
+    <div className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_#e9e2d2]">
       <div className="flex items-center gap-3">
         <span
           className="flex size-11 items-center justify-center rounded-2xl text-white"
@@ -314,9 +260,7 @@ function BigStat({
           <p className="font-display text-[0.68rem] font-bold uppercase tracking-[0.12em] text-ink-soft">
             {label}
           </p>
-          <p className="font-display text-2xl font-extrabold text-ink">
-            {value}
-          </p>
+          <p className="font-display text-2xl font-extrabold text-ink">{value}</p>
         </div>
       </div>
       <div className="ludus-track mt-3">

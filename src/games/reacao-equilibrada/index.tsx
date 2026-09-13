@@ -1,23 +1,41 @@
 "use client";
 
 /**
- * Reação Equilibrada — palco do jogo.
+ * Reação Equilibrada: palco do jogo.
  *
- * Fase 1 · Explorar: escolher a receita da bancada (contexto real).
- * Fase 2 · Testar: esteiras de coeficientes + BALANÇA VIVA de átomos
- *   (contagem por elemento em reagentes × produtos, verde quando fecha).
- * Fase 3 · Decidir: pesar na balança → veredito com conservação da massa.
+ * Fase 1 (Explorar): escolher a receita da bancada.
+ * Fase 2 (Testar): esteiras de coeficientes e balança de átomos
+ *   (contagem por elemento em reagentes e produtos, verde quando fecha).
+ * Fase 3 (Decidir): pesar na balança e registrar o resultado.
  */
 
 import { useState } from "react";
 import { ArrowRight, FlaskConical, Minus, Plus, Check } from "lucide-react";
 import { GameShell } from "@/components/game-shell/game-shell";
 import { OptionTile } from "@/components/game-shell/option-tile";
+import { MathText } from "@/components/mathjax/math-text";
 import { useGameSession } from "@/games/_shared/use-game-session";
 import { GAME_BY_ID, AREAS } from "@/lib/catalog";
 import { REACTIONS, elementsOf, type Reaction, type Species } from "./content";
 
 const GAME_ID = "reacao-equilibrada";
+
+/** Converte subscritos unicode para a notação ASCII do mhchem. */
+const CE_DIGITS: Record<string, string> = {
+  "\u2080": "0",
+  "\u2081": "1",
+  "\u2082": "2",
+  "\u2083": "3",
+  "\u2084": "4",
+  "\u2085": "5",
+  "\u2086": "6",
+  "\u2087": "7",
+  "\u2088": "8",
+  "\u2089": "9",
+};
+function toCe(formula: string): string {
+  return formula.replace(/[\u2080-\u2089]/g, (d) => CE_DIGITS[d] ?? d);
+}
 
 export function ReacaoEquilibradaGame({ onExit }: { onExit: () => void }) {
   const game = GAME_BY_ID[GAME_ID];
@@ -89,19 +107,13 @@ function Stage({
     }
   });
 
-  const allBalanced = elements.every(
-    (el) => (leftTotals[el] ?? 0) === (rightTotals[el] ?? 0),
-  );
+  const allBalanced = elements.every((el) => (leftTotals[el] ?? 0) === (rightTotals[el] ?? 0));
 
   const bump = (i: number, delta: number) => {
-    setCoefs((prev) =>
-      prev.map((c, idx) =>
-        idx === i ? Math.max(1, Math.min(9, c + delta)) : c,
-      ),
-    );
+    setCoefs((prev) => prev.map((c, idx) => (idx === i ? Math.max(1, Math.min(9, c + delta)) : c)));
   };
 
-  /* ---------------------------------------------------- Fase 1 · Explorar */
+  /* ---------------------------------------------------- Fase 1 (Explorar) */
   if (session.phase === 1) {
     return (
       <div className="flex flex-col gap-5">
@@ -111,8 +123,8 @@ function Stage({
             Cantina-laboratório · bancada de reações
           </div>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Três receitas aguardam ajuste: a mesma natureza que escreveu as
-            reações exige a contagem exata de átomos. Escolha a sua.
+            Três receitas aguardam ajuste: a natureza escreveu as reações e exige a contagem exata
+            de átomos. Escolha a sua.
           </p>
         </div>
 
@@ -129,7 +141,7 @@ function Stage({
               onPick={() => {
                 if (r.id !== reaction.id) {
                   session.showInfo(
-                    `Receita lida: ${r.title}. Ela chega na próxima rodada — a da vez é ${reaction.title}.`,
+                    `Receita lida: ${r.title}. Ela chega na próxima rodada; a da vez é ${reaction.title}.`,
                   );
                   return false;
                 }
@@ -153,12 +165,12 @@ function Stage({
     );
   }
 
-  /* ------------------------------------------------------ Fase 2 · Testar */
+  /* ------------------------------------------------------ Fase 2 (Testar) */
   if (session.phase === 2) {
     return (
       <div className="flex flex-col gap-5">
         {/* Equação com esteiras de coeficientes */}
-        <div className="rounded-2xl border-2 border-border bg-white p-4">
+        <div className="rounded-2xl border-2 border-border bg-surface p-4">
           <p className="mb-3 text-center font-display text-[0.7rem] font-bold uppercase tracking-[0.12em] text-ink-faint">
             Toque nos números para ajustar os coeficientes
           </p>
@@ -195,9 +207,7 @@ function Stage({
                       <Plus className="size-4" strokeWidth={3} aria-hidden />
                     </button>
                   </span>
-                  <span className="font-display text-xl font-bold text-ink">
-                    {sp.formula}
-                  </span>
+                  <span className="font-display text-xl font-bold text-ink">{sp.formula}</span>
                 </span>
               </span>
             ))}
@@ -207,7 +217,7 @@ function Stage({
         {/* Balança de átomos */}
         <div className="rounded-2xl border-2 border-border bg-cloud/60 p-4">
           <p className="mb-3 font-display text-sm font-bold text-ink">
-            Balança de átomos · reagentes × produtos
+            Balança de átomos: reagentes e produtos
           </p>
           <div className="grid gap-2 sm:grid-cols-3">
             {elements.map((el) => {
@@ -218,15 +228,11 @@ function Stage({
                 <div
                   key={el}
                   className={`flex items-center justify-between rounded-2xl border-2 px-4 py-3 ${
-                    ok
-                      ? "border-success bg-success-soft"
-                      : "border-hint bg-hint-soft"
+                    ok ? "border-success bg-success-soft" : "border-hint bg-hint-soft"
                   }`}
                   aria-label={`${left === right ? "Equilibrado" : "Desequilibrado"}: elemento ${el} com ${left} átomos nos reagentes e ${right} nos produtos.`}
                 >
-                  <span className="font-display text-lg font-bold text-ink">
-                    {el}
-                  </span>
+                  <span className="font-display text-lg font-bold text-ink">{el}</span>
                   <span className="font-display text-lg font-bold text-ink-soft">
                     {left}
                     <span className="mx-1.5 text-ink-faint">·</span>
@@ -235,8 +241,8 @@ function Stage({
                   <span
                     className={`flex size-7 items-center justify-center rounded-full border-2 ${
                       ok
-                        ? "border-success bg-white text-success-dark"
-                        : "border-hint-dark bg-white text-hint-dark"
+                        ? "border-success bg-surface text-success-dark"
+                        : "border-hint-dark bg-surface text-hint-dark"
                     }`}
                     aria-hidden
                   >
@@ -257,9 +263,7 @@ function Stage({
           onClick={() => {
             if (allBalanced) {
               session.setPhase(3);
-              session.showSuccess(
-                "A balança fechou! Átomos conservados dos dois lados.",
-              );
+              session.showSuccess("A balança fechou! Átomos conservados dos dois lados.");
             } else {
               session.showError(
                 "A balança ainda torta: algum elemento difere entre reagentes e produtos. Ajuste e pese de novo.",
@@ -276,35 +280,32 @@ function Stage({
     );
   }
 
-  /* ----------------------------------------------------- Fase 3 · Decidir */
+  /* ----------------------------------------------------- Fase 3 (Decidir) */
+  const ceLeft = coefs
+    .slice(0, nReagents)
+    .map((c, i) => `${c}${toCe(reaction.reagents[i].formula)}`)
+    .join(" + ");
+  const ceRight = coefs
+    .slice(nReagents)
+    .map((c, i) => `${c}${toCe(reaction.products[i].formula)}`)
+    .join(" + ");
+  const closedEquationTex = `\\(\\ce{${ceLeft} -> ${ceRight}}\\)`;
+
   return (
     <div className="flex flex-col gap-5">
+      {/* Equação fechada */}
       <div className="rounded-2xl border-2 border-success bg-success-soft p-4">
-        <p className="font-display text-sm font-bold text-success-dark">
-          Equação fechada
-        </p>
+        <p className="font-display text-sm font-bold text-success-dark">Equação fechada</p>
         <p className="mt-1 text-center font-display text-xl font-bold leading-relaxed text-ink">
-          {coefs
-            .slice(0, nReagents)
-            .map((c, i) => `${c}${reaction.reagents[i].formula}`)
-            .join(" + ")}
-          {" → "}
-          {coefs
-            .slice(nReagents)
-            .map((c, i) => `${c}${reaction.products[i].formula}`)
-            .join(" + ")}
+          <MathText text={closedEquationTex} />
         </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-3">
           {elements.map((el) => (
             <p
               key={el}
-              className="flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 font-display text-sm font-bold text-ink"
+              className="flex items-center justify-center gap-2 rounded-xl bg-surface px-3 py-2 font-display text-sm font-bold text-ink"
             >
-              <Check
-                className="size-4 text-success-dark"
-                strokeWidth={3.5}
-                aria-hidden
-              />
+              <Check className="size-4 text-success-dark" strokeWidth={3.5} aria-hidden />
               {el}: {leftTotals[el] ?? 0} = {rightTotals[el] ?? 0}
             </p>
           ))}

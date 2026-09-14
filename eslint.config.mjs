@@ -48,6 +48,18 @@ const eslintConfig = [
     },
   },
   {
+    // Exceções pontuais para padrões legados que o React Compiler sinaliza.
+    files: [
+      "src/components/ui/carousel.tsx",
+      "src/games/_shared/use-game-session.ts",
+      "src/hooks/use-mobile.ts",
+    ],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/refs": "off",
+    },
+  },
+  {
     ignores: [
       "node_modules/**",
       ".next/**",

@@ -1,5 +1,5 @@
 import { AppRoot } from "@/components/app-shell/app-root";
 
-export default function HubPage() {
+export default function ProgressPage() {
   return <AppRoot />;
 }

@@ -20,6 +20,7 @@ import {
 } from "@/lib/progress";
 import { GameIcon } from "@/components/game-shell/game-icon";
 import { Medal, ScanSearch, KeyRound, Trophy, Trash2, Sparkles, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { hrefFor } from "@/lib/router";
 import { formatDate } from "@/lib/format";
 
@@ -109,13 +110,13 @@ export function ProgressDashboard() {
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {recommendations.map(({ area, game }) => (
-              <a
+              <Link
                 key={game!.id}
                 href={hrefFor({ view: "game", gameId: game!.id })}
                 className="ludus-card flex items-center gap-3 p-4"
               >
                 <span
-                  className="flex size-11 shrink-0 items-center justify-center rounded-2xl text-white"
+                  className="ludus-tile flex size-11 shrink-0 items-center justify-center rounded-2xl text-white"
                   style={{ background: area.color }}
                   aria-hidden
                 >
@@ -130,7 +131,7 @@ export function ProgressDashboard() {
                   </span>
                 </span>
                 <ArrowRight className="size-5 shrink-0 text-ink-faint" aria-hidden />
-              </a>
+              </Link>
             ))}
           </div>
         </section>
@@ -146,11 +147,11 @@ export function ProgressDashboard() {
           return (
             <div
               key={areaId}
-              className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_#e9e2d2]"
+              className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_var(--line)]"
             >
               <div className="flex flex-wrap items-center gap-3">
                 <span
-                  className="flex size-12 items-center justify-center rounded-2xl text-white"
+                  className="ludus-tile flex size-12 items-center justify-center rounded-2xl text-white"
                   style={{ background: area.color }}
                   aria-hidden
                 >
@@ -177,16 +178,14 @@ export function ProgressDashboard() {
                   const count = p?.completions ?? 0;
                   return (
                     <li key={game.id}>
-                      <a
+                      <Link
                         href={hrefFor({ view: "game", gameId: game.id })}
                         className="flex items-center gap-3 rounded-2xl border-2 border-border bg-cloud/40 p-3 transition-colors hover:border-ink-faint"
                       >
                         <span
-                          className="flex size-10 shrink-0 items-center justify-center rounded-xl text-white"
-                          style={{
-                            background: gameDone ? "var(--success)" : "var(--cloud)",
-                            color: gameDone ? "#fff" : "#8783a0",
-                          }}
+                          className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
+                            gameDone ? "bg-success text-white" : "bg-cloud text-ink-faint"
+                          }`}
                           aria-hidden
                         >
                           {gameDone ? (
@@ -220,7 +219,7 @@ export function ProgressDashboard() {
                             />
                           ))}
                         </span>
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
@@ -247,10 +246,10 @@ function BigStat({
   color: string;
 }) {
   return (
-    <div className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_#e9e2d2]">
+    <div className="rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_var(--line)]">
       <div className="flex items-center gap-3">
         <span
-          className="flex size-11 items-center justify-center rounded-2xl text-white"
+          className="ludus-tile flex size-11 items-center justify-center rounded-2xl text-white"
           style={{ background: color }}
           aria-hidden
         >

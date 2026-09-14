@@ -7,6 +7,7 @@
  */
 
 import { Dices, Contrast, Type, Trophy, GraduationCap } from "lucide-react";
+import Link from "next/link";
 import { useA11y } from "@/components/a11y/a11y-provider";
 import { hrefFor, type Route } from "@/lib/router";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ export function AppHeader({ current }: { current: Route["view"] }) {
     <header className="sticky top-0 z-40 border-b-2 border-border bg-paper/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-2 sm:px-6">
         {/* Marca */}
-        <a
+        <Link
           href={hrefFor({ view: "hub" })}
           className="flex min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-offset-4"
           aria-label="Ludus, página inicial"
@@ -43,7 +44,7 @@ export function AppHeader({ current }: { current: Route["view"] }) {
               Jogos do Ensino Médio
             </span>
           </span>
-        </a>
+        </Link>
 
         {/* Navegação (a partir de sm; no mobile vive na barra inferior) */}
         <nav
@@ -53,7 +54,7 @@ export function AppHeader({ current }: { current: Route["view"] }) {
           {NAV.map((item) => {
             const active = current === item.match;
             return (
-              <a
+              <Link
                 key={item.match}
                 href={hrefFor(item.route)}
                 aria-current={active ? "page" : undefined}
@@ -72,7 +73,7 @@ export function AppHeader({ current }: { current: Route["view"] }) {
                   <GraduationCap className="size-4" strokeWidth={2.4} aria-hidden />
                 )}
                 {item.label}
-              </a>
+              </Link>
             );
           })}
         </nav>

@@ -411,7 +411,7 @@
   .bottom-nav {
     background: var(--paper);
     border-top: 2px solid var(--line);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding: 0.375rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
   }
   .bottom-nav-link {
     @apply flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl
@@ -719,10 +719,15 @@ html.a11y-contrast .ludus-btn:not(:disabled) {
   --btn-fg: #000000;
   color: #000000;
 }
-html.a11y-contrast .ludus-btn-ink:not(:disabled),
 html.a11y-contrast .ludus-btn-danger:not(:disabled) {
   --btn-fg: #ffffff;
   color: #ffffff;
+}
+html.a11y-contrast .ludus-btn-ink:not(:disabled) {
+  --btn-bg: #ffd600;
+  --btn-fg: #000000;
+  background: #ffd600;
+  color: #000000;
 }
 html.a11y-contrast .ludus-btn-paper:not(:disabled) {
   --btn-bg: #000000;
@@ -745,6 +750,28 @@ html.a11y-contrast .ludus-track {
 }
 html.a11y-contrast .ludus-chip {
   background: #000000;
+}
+
+/* Fundos que antes dependiam de --ink (selecionados e chips escuros). */
+html.a11y-contrast .bg-ink {
+  background-color: #ffd600;
+  color: #000000;
+}
+
+/* Ícones e rótulos sobre cores vivas passam a preto no alto contraste. */
+html.a11y-contrast .bg-success,
+html.a11y-contrast .bg-danger,
+html.a11y-contrast .bg-hint,
+html.a11y-contrast .bg-linguagens,
+html.a11y-contrast .bg-linguagens-dark,
+html.a11y-contrast .bg-matematica,
+html.a11y-contrast .bg-matematica-dark,
+html.a11y-contrast .bg-natureza,
+html.a11y-contrast .bg-natureza-dark,
+html.a11y-contrast .bg-humanas,
+html.a11y-contrast .bg-humanas-dark,
+html.a11y-contrast .ludus-tile {
+  color: #000000;
 }
 
 /* Painéis com cor de área aplicada por variável local. */
@@ -783,6 +810,15 @@ html.a11y-contrast svg [stroke="#8783a0"] {
 }
 html.a11y-contrast svg [fill="#9693ab"] {
   fill: #cfcfcf;
+}
+html.a11y-contrast svg [fill="#635f7c"] {
+  fill: #d6d6d6;
+}
+html.a11y-contrast svg [fill="#b9b2a0"] {
+  fill: #8a8a8a;
+}
+html.a11y-contrast svg [stroke="#b9b2a0"] {
+  stroke: #8a8a8a;
 }
 html.a11y-contrast svg text {
   fill: #eeeeee;

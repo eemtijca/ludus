@@ -80,7 +80,7 @@ export function EvidenceCard({
           )}
         >
           <span
-            className="flex size-14 shrink-0 items-center justify-center rounded-2xl border-2 text-white sm:size-16"
+            className="ludus-tile flex size-14 shrink-0 items-center justify-center rounded-2xl border-2 text-white sm:size-16"
             style={{ background: color, borderColor: color }}
           >
             <GameIcon name={data.icon} className="size-7 sm:size-8" strokeWidth={2.2} />
@@ -107,7 +107,7 @@ export function EvidenceCard({
         >
           <div className="flex items-center justify-between gap-2">
             <span
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-display text-[0.72rem] font-bold uppercase tracking-wider text-white"
+              className="ludus-tile inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-display text-[0.72rem] font-bold uppercase tracking-wider text-white"
               style={{ background: color }}
             >
               <Check className="size-3.5" strokeWidth={3} aria-hidden />

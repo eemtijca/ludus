@@ -7,6 +7,7 @@
  */
 
 import { Check, Play, Medal, ScanSearch, KeyRound } from "lucide-react";
+import Link from "next/link";
 import { AREAS, LEVEL_LABEL, type GameMeta } from "@/lib/catalog";
 import { AREA_BG, AREA_CHIP } from "@/lib/area-styles";
 import { isGameCompleted, type GameProgress } from "@/lib/progress";
@@ -20,7 +21,7 @@ export function GameCard({ game, progress }: { game: GameMeta; progress?: GamePr
   const badges = progress?.badges.length ?? 0;
 
   return (
-    <a
+    <Link
       href={hrefFor({ view: "game", gameId: game.id })}
       className="ludus-card group flex flex-col p-5"
       aria-label={`Jogar ${game.title}. ${area.shortName}, ${LEVEL_LABEL[game.level]}.${
@@ -96,6 +97,6 @@ export function GameCard({ game, progress }: { game: GameMeta; progress?: GamePr
           {done ? "Revisar" : "Jogar"}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }

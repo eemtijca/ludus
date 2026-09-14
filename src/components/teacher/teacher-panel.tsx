@@ -5,7 +5,7 @@
  *
  * - Como usar em sala (roteiro sugerido de 50 min)
  * - Fichas dos jogos: BNCC, objetivo, habilidades e duração
- * - Link compartilhável por jogo (deep link #/jogo/<id>)
+ * - Link compartilhável por jogo (deep link /jogo/<id>)
  * - Painel de acompanhamento local (progresso do dispositivo)
  * - Notas sobre DUA/AEE e privacidade (nada sai do dispositivo)
  */
@@ -56,7 +56,7 @@ export function TeacherPanel() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const copyLink = async (game: GameMeta) => {
-    const url = `${window.location.origin}${window.location.pathname}#/jogo/${game.id}`;
+    const url = `${window.location.origin}/jogo/${game.id}`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
@@ -69,16 +69,16 @@ export function TeacherPanel() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
       {/* Cabeçalho */}
-      <header className="rounded-3xl border-2 border-border bg-surface p-6 shadow-[0_5px_0_#e9e2d2] sm:p-8">
+      <header className="rounded-3xl border-2 border-border bg-surface p-6 shadow-[0_5px_0_var(--line)] sm:p-8">
         <div className="flex items-center gap-4">
           <span
-            className="flex size-14 items-center justify-center rounded-2xl text-white"
-            style={{ background: "#3c3a4e" }}
+            className="ludus-tile flex size-12 shrink-0 items-center justify-center rounded-2xl text-white sm:size-14"
+            style={{ background: "var(--ink)" }}
             aria-hidden
           >
-            <GraduationCap className="size-7" strokeWidth={2.2} />
+            <GraduationCap className="size-6 sm:size-7" strokeWidth={2.2} />
           </span>
-          <div>
+          <div className="min-w-0 flex-1">
             <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Modo Professor</h1>
             <p className="text-sm font-semibold text-ink-soft">
               Guia pedagógico dos jogos: BNCC, roteiro de uso e acompanhamento.
@@ -91,7 +91,7 @@ export function TeacherPanel() {
           {LESSON_STEPS.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-start gap-3 rounded-2xl bg-cloud/70 p-4">
               <span
-                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface text-ink shadow-[0_3px_0_#e9e2d2]"
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface text-ink shadow-[0_3px_0_var(--line)]"
                 aria-hidden
               >
                 <Icon className="size-5" strokeWidth={2.2} />
@@ -124,7 +124,7 @@ export function TeacherPanel() {
             <section key={areaId} aria-labelledby={`tea-${areaId}`}>
               <div className="flex items-center gap-3">
                 <span
-                  className="flex size-11 items-center justify-center rounded-2xl text-white"
+                  className="ludus-tile flex size-11 shrink-0 items-center justify-center rounded-2xl text-white"
                   style={{ background: area.color }}
                   aria-hidden
                 >
@@ -141,7 +141,7 @@ export function TeacherPanel() {
                   return (
                     <article
                       key={game.id}
-                      className="flex flex-col gap-3 rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_#e9e2d2]"
+                      className="flex flex-col gap-3 rounded-3xl border-2 border-border bg-surface p-5 shadow-[0_5px_0_var(--line)]"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <h3 className="font-display text-lg font-bold text-ink">{game.title}</h3>

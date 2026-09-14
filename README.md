@@ -1,185 +1,181 @@
-# 🎲 Ludus
+# Ludus
 
-**Ludus** é uma coleção de jogos de investigação do ensino médio, construída
-para a Sala de Recursos da **EEMTI José Cláudio de Araújo**. Cada jogo é uma
-investigação curta, resolvida por toque, teclado ou voz, no tempo que o
-estudante precisar.
+Aplicação web de jogos educacionais de investigação para o ensino médio, organizada por áreas do conhecimento da BNCC. O projeto é um recurso de apoio ao Atendimento Educacional Especializado (AEE) e segue os princípios do Desenho Universal para a Aprendizagem (DUA): atividades sem cronômetro, leitura em voz alta, repetição livre e ritmo próprio do estudante.
 
-> Recurso de apoio ao **Atendimento Educacional Especializado (AEE)**, construído
-> segundo o **Desenho Universal para a Aprendizagem (DUA)**: sem cronômetro, com
-> leitura em voz alta, repetição livre e ritmo próprio.
+A coleção reúne 12 jogos, três por área (Linguagens, Matemática, Ciências da Natureza e Ciências Humanas), e cada jogo oferece três casos. Não há contas, banco de dados ou servidor de aplicação: todo o estado permanece no navegador do dispositivo.
 
----
+## Requisitos
 
-## ✨ O que tem dentro
+- Node.js 20 ou superior
+- Bun 1.1 ou superior (opcional, utilizado pelo script de produção)
 
-| Área | Nível | Jogo | BNCC | O desafio |
-|---|---|---|---|---|
-| **Linguagens** | 1 | Fonte Suspeita | EM13LP39 | Virar 3 evidências, cruzar pistas e decidir o que sobe no canal do grêmio |
-| | 2 | Revisor Crítico | EM13LP15 | Encontrar o reparo de coesão/registro e publicar a versão final |
-| | 3 | Tese e Antítese | EM13LGG303 | Montar tese forte + prova, responder à objeção e fechar a síntese |
-| **Matemática** | 1 | Orçamento no Limite | EM13MAT303 | Simular juros compostos ao vivo e decidir entre parcelar e guardar |
-| | 2 | Função Viva | EM13MAT302 | Explorar reta e parábola com gráfico vivo; achar interseção e vértice |
-| | 3 | Risco Provável | EM13MAT312 | Montar a urna, simular 100+ sorteios e comparar teoria × frequência |
-| **Natureza** | 1 | O Circuito Falhou | EM13CNT107 | Bancada elétrica viva: chave, associação, curto e Lei de Ohm |
-| | 2 | Reação Equilibrada | EM13CNT101 | Balancear equações com balança de átomos em tempo real |
-| | 3 | Dilema do Gene | EM13CNT205 | Escolher ambiente e pressão; ver a seleção agir nas gerações |
-| **Humanas** | 1 | Fonte Histórica | EM13CHS101 | Criticar fontes (data, autor, intenção) antes de publicar no mural |
-| | 2 | Território em Disputa | EM13CHS206 | Alocar projetos no mapa e enfrentar a chuva de março |
-| | 3 | Dilema Ético | EM13CHS502 | Viver 3 turnos de escolhas e ver o preço em dinheiro, tempo e saúde |
-
-Cada jogo tem **3 casos completos**, com contexto, dramaturgia leve e feedback
-pedagógico que explica o *porquê*.
-
-### Estrutura de uma partida
-
-Toda partida segue a mesma gramática de 3 fases (rotina previsível = segurança
-cognitiva):
-
-```
-Explorar  →  Testar  →  Decidir
-(Lente)      (Chave)    (Selo Final)
-```
-
-- **Fases e selos**: selos nunca expiram, nunca diminuem; progresso só soma.
-- **Veredito**: tela de conclusão com confete, bastidor pedagógico e ações
-  (jogar de novo, outro caso, outros jogos).
-- **Painel de progresso**: coleção de selos, % por área, próximas recomendações.
-- **Modo professor**: fichas BNCC, roteiro de uso em sala e links diretos por jogo.
-- **Fórmulas com MathJax**: expressões matemáticas e químicas renderizadas
-  profissionalmente, servidas localmente (`public/mathjax`), sem CDN externo.
-
-### Acessibilidade (DUA/AEE): não é extra, é fundação
-
-- 🔊 **Voz em toda parte**: Web Speech API em pt-BR: instruções, evidências e
-  vereditos podem ser ouvidos, com realce amarelo acompanhando a leitura.
-  Um único botão de voz por tela, alternando entre "Ouvir" e "Parar".
-- 🖤 **Alto contraste**: tema preto/amarelo que transforma toda a interface:
-  fundos, cartões, botões, gráficos e foco.
-- 🔤 **Texto amplo**: base tipográfica +18% com entrelinha maior.
-- 🌀 **Menos movimento**: desliga animações (além do `prefers-reduced-motion`).
-- ⌨️ **Teclado completo**: toda a jornada por Tab/Enter com foco visível.
-- 👆 **Alvos ≥ 44px**: botões grandes (verificado via DOM).
-- 🎨 **Dupla codificação**: nunca só cor, sempre ícone + texto + cor.
-- ⏱️ **Sem cronômetro, sem punição**: o erro ensina, e tentar de novo é grátis.
-- 🔒 **Privacidade por desenho**: progresso no `localStorage` do dispositivo;
-  sem contas, sem servidores, sem dado pessoal.
-
-### Mobile-first
-
-A navegação principal vive na **barra inferior** (ícone + rótulo por item) em
-telas pequenas, com atalhos de acessibilidade fixos na topbar. Dentro dos jogos
-a barra se recolhe para o palco ter a tela inteira. Filtros, cartões e controles
-reorganizam-se para toque em 320px+.
-
----
-
-## 🚀 Como rodar
-
-Requisitos: **Node.js 20+** (ou **Bun 1.1+**).
+## Instalação e execução
 
 ```bash
-# instalar dependências
-npm install        # ou: bun install
+# dependências
+npm install
 
-# desenvolvimento (http://localhost:3000)
-npm run dev        # ou: bun run dev
+# desenvolvimento em http://localhost:3000
+npm run dev
 
-# produção
+# build de produção
 npm run build
-npm run start      # ou: bun run start
+npm run start
 ```
 
-> Não usa banco de dados: todo o estado é local ao navegador.
-> Funciona em qualquer hospedagem Node (Vercel, Railway, servidor da escola).
+O build usa a saída `standalone` do Next.js e copia os arquivos estáticos e a pasta `public` para `.next/standalone`. O script `start` executa o servidor standalone com Bun. Sem Bun instalado, use:
 
----
+```bash
+NODE_ENV=production node .next/standalone/server.js
+```
 
-## 🧱 Stack e arquitetura
+Não existem variáveis de ambiente obrigatórias nem banco de dados. Funciona em qualquer hospedagem Node.js, como Vercel, Railway ou um servidor local da escola.
 
-| Camada | Escolha |
-|---|---|
-| Framework | **Next.js 16** (App Router, React 19) |
-| Linguagem | **TypeScript 5** (strict) |
-| Estilo | **Tailwind CSS 4** + design system próprio (`ludus-*`) |
-| Componentes | shadcn/ui (base) + componentes de jogo autorais |
-| Matemática | **MathJax 3** + mhchem, servido localmente (`public/mathjax`) |
-| Animação | CSS keyframes com curva de mola; desligáveis por preferência |
-| Estado | **Zustand** (progresso) + external store (`useSyncExternalStore`) para preferências |
-| Ícones | Lucide (registro central por nome) |
-| Fontes | **Baloo 2** (display) + **Nunito** (corpo), self-hosted via `next/font` |
+## Scripts
 
-### Mapa do código
+| Script  | Comando                                  | Função                                    |
+| ------- | ---------------------------------------- | ----------------------------------------- |
+| `dev`   | `next dev -p 3000`                       | Servidor de desenvolvimento na porta 3000 |
+| `build` | `next build` e cópia da saída standalone | Build de produção                         |
+| `start` | `bun .next/standalone/server.js`         | Executa o build de produção               |
+| `lint`  | `eslint .`                               | Análise estática do código                |
+
+Observação: o projeto não possui suíte de testes automatizados. A verificação principal é o `lint`, complementada por `npx tsc --noEmit` para checagem de tipos.
+
+## Stack
+
+| Camada      | Tecnologia                                                    |
+| ----------- | ------------------------------------------------------------- |
+| Framework   | Next.js 16 com App Router e React 19                          |
+| Linguagem   | TypeScript 5 em modo `strict`                                 |
+| Estilo      | Tailwind CSS 4 e design system próprio                        |
+| Componentes | shadcn/ui como base e componentes autorais de jogo            |
+| Estado      | Zustand para progresso e external store para preferências     |
+| Matemática  | MathJax 3 com mhchem, servido localmente em `public/mathjax`  |
+| Ícones      | Lucide React com registro central por nome                    |
+| Tipografia  | Baloo 2 (títulos) e Nunito (corpo) via `next/font`            |
+| Voz         | Web Speech API em pt-BR                                       |
+| Som         | Web Audio API com efeitos sintetizados, sem arquivos de áudio |
+
+## Arquitetura
+
+### Roteamento
+
+A aplicação usa as rotas reais do App Router, com caminhos limpos e sem hash:
+
+- `/` para o hub de jogos
+- `/jogo/<id>` para uma partida
+- `/progresso` para o painel do estudante
+- `/professores` para o modo professor
+
+As páginas de jogo são pré-renderizadas em tempo de build a partir do catálogo (`generateStaticParams`). Identificadores desconhecidos caem em uma tela de jogo não encontrado, renderizada sob demanda. A navegação client-side usa `next/link` e `next/navigation`, e a lógica de parsing e montagem de URLs está em `src/lib/router.ts`. O componente `src/components/app-shell/app-root.tsx` é compartilhado por todas as rotas.
+
+### Catálogo e registro
+
+`src/lib/catalog.ts` é a fonte única de verdade da coleção: área, nível, códigos BNCC, habilidades, ícone e duração estimada de cada jogo. `src/games/registry.ts` mapeia o identificador do catálogo ao componente React correspondente.
+
+### Sessão de jogo
+
+Cada jogo é composto por conteúdo (`content.ts`) e palco (`index.tsx`). A mecânica comum fica em dois lugares:
+
+- `src/games/_shared/use-game-session.ts`: fases, selos, feedback imediato, veredito, sons, voz e reinício.
+- `src/components/game-shell/game-shell.tsx`: moldura da partida, com cabeçalho, missão, indicador de fases, área do palco, banner de feedback e atalhos de acessibilidade.
+
+As fases são fixas para toda a coleção: Explorar, Testar e Decidir. Os selos são `lente`, `chave` e `selo-final`, concedidos ao avançar de fase e ao concluir a partida.
+
+### Progresso
+
+`src/lib/progress.ts` mantém o progresso em um store Zustand persistido no `localStorage` sob a chave `ludus:progress:v1`. O registro inclui selos, número de partidas concluídas, data da última conclusão e o último caso jogado. Progresso apenas acumula: selos não expiram.
+
+### Acessibilidade
+
+As preferências ficam em `src/components/a11y/a11y-provider.tsx`, implementado como external store com `useSyncExternalStore`. As escolhas são aplicadas como classes no elemento `html`:
+
+- `a11y-contrast`: tema preto e amarelo de alto contraste
+- `a11y-text-large`: base tipográfica ampliada
+- `a11y-reduced-motion`: desliga animações de décor
+
+O motor de voz está em `src/lib/speech.ts` e os efeitos sonoros em `src/lib/sound.ts`. A conversão de TeX para fala está em `src/lib/tex.ts`.
+
+### Estrutura de diretórios
 
 ```
 src/
-├── app/                        # layout (fontes/metadata) + page (casca + hash router)
-├── lib/
-│   ├── catalog.ts              # jogos: área, nível, BNCC, habilidades, objetivos
-│   ├── area-styles.ts          # classes utilitárias por área (tema-aware)
-│   ├── tex.ts                  # conversão de TeX para texto falado
-│   ├── speech.ts               # motor TTS pt-BR (voz preferida + realce)
-│   ├── sound.ts                # efeitos sonoros sintetizados (Web Audio, sem arquivos)
-│   ├── progress.ts             # store de progresso (zustand + localStorage)
-│   ├── router.ts               # hash router (#/jogo/<id>, #/progresso, #/professores)
-│   └── format.ts               # formatadores pt-BR (moeda, número, data)
+├── app/                    layout, metadata, rotas (/jogo/[gameId], /progresso, /professores) e estilos globais
+├── lib/                    catálogo, roteador, progresso, voz, som, TeX e utilitários
 ├── components/
-│   ├── a11y/                   # provider de preferências DUA (external store)
-│   ├── app-shell/              # header, bottom nav, footer
-│   ├── hub/                    # hero, cards, busca + filtros
-│   ├── game-shell/             # moldura de partida: HUD, fases, selos, feedback,
-│   │                           #   veredito com confete, cartas de evidência, opções
-│   ├── mathjax/                # provedor MathJax + MathText (texto misto com TeX)
-│   ├── progress/               # painel de progresso
-│   └── teacher/                # modo professor
+│   ├── a11y/               provider de preferências de acessibilidade
+│   ├── app-shell/          cabeçalho, navegação inferior e rodapé
+│   ├── hub/                hero, cards, busca e filtros
+│   ├── game-shell/         moldura de partida, fases, selos, feedback e veredito
+│   ├── mathjax/            provider do MathJax e texto misto com TeX
+│   ├── progress/           painel de progresso
+│   ├── teacher/            modo professor com fichas BNCC
+│   └── ui/                 componentes base no padrão shadcn/ui
 └── games/
-    ├── _shared/use-game-session.ts   # motor de partida (fases/selos/feedback/veredito)
-    └── <12 pastas>/                  # cada jogo: content.ts (dados) + index.tsx (palco)
+    ├── _shared/            motor de partida compartilhado
+    └── <jogo>/             content.ts com os casos e index.tsx com o palco
 ```
 
-### O padrão de jogo
+## Catálogo de jogos
 
-Cada jogo é apenas **conteúdo + palco**; toda a mecânica compartilhada
-(fases, selos, feedback, veredito, progresso) vem do hook `useGameSession` e do
-componente `GameShell`:
+| Área       | Nível | Jogo                  | BNCC       | Foco                                              |
+| ---------- | ----- | --------------------- | ---------- | ------------------------------------------------- |
+| Linguagens | 1     | Fonte Suspeita        | EM13LP39   | Checagem de informação e credibilidade da fonte   |
+| Linguagens | 2     | Revisor Crítico       | EM13LP15   | Coesão, coerência e registro na revisão de texto  |
+| Linguagens | 3     | Tese e Antítese       | EM13LGG303 | Argumentação, objeção e síntese                   |
+| Matemática | 1     | Orçamento no Limite   | EM13MAT303 | Juros compostos e decisão de consumo              |
+| Matemática | 2     | Função Viva           | EM13MAT302 | Funções do 1º e 2º grau com gráfico interativo    |
+| Matemática | 3     | Risco Provável        | EM13MAT312 | Probabilidade teórica e frequência simulada       |
+| Natureza   | 1     | O Circuito Falhou     | EM13CNT107 | Circuitos série e paralelo e Lei de Ohm           |
+| Natureza   | 2     | Reação Equilibrada    | EM13CNT101 | Balanceamento de equações e conservação de átomos |
+| Natureza   | 3     | Dilema do Gene        | EM13CNT205 | Herança dominante e seleção natural               |
+| Humanas    | 1     | Fonte Histórica       | EM13CHS101 | Crítica de fontes históricas                      |
+| Humanas    | 2     | Território em Disputa | EM13CHS206 | Uso do solo e risco hidrológico                   |
+| Humanas    | 3     | Dilema Ético          | EM13CHS502 | Conflitos entre renda, saúde e legislação         |
 
-```tsx
-const session = useGameSession("fonte-suspeita");
+## Design system
 
-<GameShell game={meta} session={session} mission={…} instruction={…}>
-  <Stage session={session} caso={caso} … />   {/* só o palco muda por jogo */}
-</GameShell>
-```
+Os tokens de cor e tipografia ficam em `src/app/globals.css` e apontam para variáveis de runtime, o que permite trocar o tema sem reconstruir o CSS. Os principais grupos são:
 
-**Como adicionar um jogo:**
+- Superfícies e texto: `--ink`, `--ink-soft`, `--ink-faint`, `--surface`, `--paper`, `--cloud`, `--line`
+- Cores semânticas: `--success`, `--danger`, `--hint`
+- Cores de área: `--linguagens`, `--matematica`, `--natureza`, `--humanas` e variantes
 
-1. Registre os metadados em `src/lib/catalog.ts` (área, nível, BNCC, ícones).
-2. Crie `src/games/meu-jogo/content.ts` com os casos e `index.tsx` com o palco
-   (as três fases), usando `useGameSession`.
-3. Adicione ao mapa em `src/games/registry.ts`.
-4. Pronto: hub, progresso, professor e acessibilidade já o cobrem.
+Os componentes reutilizáveis usam prefixo `ludus-`:
 
----
+- `ludus-btn`: botão com sombra inferior e variantes por área
+- `ludus-card`: cartão clicável com borda e sombra
+- `ludus-panel`: painel de conteúdo
+- `ludus-chip`: etiqueta arredondada
+- `ludus-track`: trilha de progresso
+- `ludus-tile`: bloco de ícone sobre cor sólida, com tratamento específico no alto contraste
 
-## 📐 Decisões de design
+## Alto contraste e temas
 
-- **Cor principal verde #008241**, com áreas BNCC em roxo (Linguagens), azul
-  (Matemática), verde-esmeralda (Natureza) e laranja (Humanas), todos calibrados
-  para contraste AA.
-- **Botões 3D com sombra inferior** que afunda ao pressionar, cantos 16-20px e
-  tipografia arredondada (Baloo 2 + Nunito 600).
-- **Feedback com parcimônia**: pulso no acerto, shake no erro, confete só no
-  veredito; tudo desligável (reduced motion).
-- **Sons sintetizados** via Web Audio API: zero assets, zero rede.
-- **Rota única com hash**: deep links `#/jogo/<id>` funcionam em qualquer
-  hospedagem sem configuração de servidor.
+O tema de alto contraste é aplicado pela classe `a11y-contrast` no elemento `html`. Nesse modo, a paleta preto e amarela redefine os tokens de runtime em `globals.css`, incluindo regras específicas para botões, cartões, gráficos SVG, ícones sobre cores sólidas e elementos antes baseados em `--ink`.
 
----
+O modo escuro baseado em classe (`.dark`) existe no CSS, mas a interface do produto utiliza o tema claro e o tema de alto contraste.
 
-## 📄 Licença e créditos
+## Como adicionar um jogo
 
-- **Licença MIT**: veja [LICENSE](./LICENSE).
-- **Créditos**: Sala de Recursos · EEMTI José Cláudio de Araújo · 2026.
-- Reconstrução completa (arquitetura, design e conteúdo) do projeto
-  *Jogos Interdisciplinares*, preservando seus princípios pedagógicos DUA/AEE
-  e sua coleção de mecânicas.
+1. Registre os metadados em `src/lib/catalog.ts` com área, nível, BNCC, ícone e habilidades.
+2. Crie `src/games/<id>/content.ts` com os três casos e `src/games/<id>/index.tsx` com o palco, usando `useGameSession` e `GameShell`.
+3. Adicione o componente ao mapa em `src/games/registry.ts`.
+4. O hub, o progresso, o modo professor e os recursos de acessibilidade passam a cobrir o novo jogo automaticamente.
+
+## API
+
+Existe um único endpoint de verificação de saúde em `GET /api`, que responde com nome da aplicação, status e horário. Não há outras rotas de servidor.
+
+## Limitações conhecidas
+
+- Não há suíte de testes automatizados.
+- `next.config.ts` define `typescript.ignoreBuildErrors: true` e `reactStrictMode: false`. Por isso, a checagem de tipos deve ser executada separadamente com `npx tsc --noEmit`.
+- O estado é local ao navegador. Não há sincronização entre dispositivos.
+- A leitura em voz alta depende da disponibilidade de vozes pt-BR no sistema operacional e no navegador.
+
+## Licença e créditos
+
+- Licença MIT. Consulte o arquivo [LICENSE](./LICENSE).
+- Sala de Recursos da EEMTI José Cláudio de Araújo, 2026.

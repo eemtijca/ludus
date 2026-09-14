@@ -635,8 +635,8 @@ function FunctionGraph({
           y={clamp(py(markerY) - 10, 16, H - 16)}
           fontSize="10"
           fontWeight="800"
-          fill={markerOnTarget ? "var(--success-dark)" : "#3c3a4e"}
-          style={{ fill: markerOnTarget ? "var(--success-dark)" : "#3c3a4e" }}
+          fill={markerOnTarget ? "var(--success-dark)" : "var(--ink)"}
+          style={{ fill: markerOnTarget ? "var(--success-dark)" : "var(--ink)" }}
           stroke="#ffffff"
           strokeWidth="3"
           paintOrder="stroke"

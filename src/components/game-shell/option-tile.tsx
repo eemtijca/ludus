@@ -66,7 +66,7 @@ export function OptionTile({
     >
       {icon && (
         <span
-          className="flex size-14 shrink-0 items-center justify-center rounded-2xl text-white sm:size-16"
+          className="ludus-tile flex size-14 shrink-0 items-center justify-center rounded-2xl text-white sm:size-16"
           style={{ background: correct ? "var(--success)" : color }}
           aria-hidden
         >

@@ -3,6 +3,7 @@ import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { MathJaxProvider } from "@/components/mathjax/mathjax-provider";
+import { A11yProvider } from "@/components/a11y/a11y-provider";
 
 const baloo = Baloo_2({
   variable: "--font-baloo",
@@ -52,7 +53,9 @@ export default function RootLayout({
       <body
         className={`${baloo.variable} ${nunito.variable} antialiased bg-background text-foreground`}
       >
-        <MathJaxProvider>{children}</MathJaxProvider>
+        <MathJaxProvider>
+          <A11yProvider>{children}</A11yProvider>
+        </MathJaxProvider>
         <Toaster />
       </body>
     </html>

@@ -6,6 +6,7 @@
  */
 
 import { Dices, Trophy, GraduationCap } from "lucide-react";
+import Link from "next/link";
 import { hrefFor, type Route } from "@/lib/router";
 import { cn } from "@/lib/utils";
 
@@ -21,14 +22,14 @@ export function AppBottomNav({ current, hidden }: { current: Route["view"]; hidd
       aria-label="Navegação principal"
       hidden={hidden}
       className={cn(
-        "bottom-nav fixed inset-x-0 bottom-0 z-40 flex items-stretch gap-1 px-2 pt-1 sm:hidden",
+        "bottom-nav fixed inset-x-0 bottom-0 z-40 flex items-stretch gap-1.5 sm:hidden",
         hidden && "invisible",
       )}
     >
       {ITEMS.map(({ label, route, match, Icon }) => {
         const active = current === match;
         return (
-          <a
+          <Link
             key={match}
             href={hrefFor(route)}
             aria-current={active ? "page" : undefined}
@@ -36,7 +37,7 @@ export function AppBottomNav({ current, hidden }: { current: Route["view"]; hidd
           >
             <Icon className="size-6" strokeWidth={active ? 2.6 : 2.2} aria-hidden />
             {label}
-          </a>
+          </Link>
         );
       })}
     </nav>

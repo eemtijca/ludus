@@ -90,6 +90,7 @@ function Stage({
     parallel: false,
     lampIn: caso.id === "curto-perigoso" ? false : true,
   });
+  const [read, setRead] = useState<string[]>([]);
 
   /* Corrente pela Lei de Ohm conforme o estado da bancada. */
   const current = (() => {
@@ -114,6 +115,20 @@ function Stage({
       hook: c.symptom,
       evidence: c.brief,
     }));
+    const allRead = read.length === CASES.length;
+
+    const handleRead = (c: CircuitCase) => {
+      if (read.includes(c.id)) return;
+      const next = [...read, c.id];
+      setRead(next);
+      if (next.length === CASES.length) {
+        session.showSuccess("As três bancadas estão na mesa. Teste a bancada da rodada.");
+      } else if (c.id === caso.id) {
+        session.showSuccess(`Bancada aberta: ${c.title}. ${c.symptom}`);
+      } else {
+        session.showInfo(`Prontuário lido: ${c.title}. Chega na próxima rodada.`);
+      }
+    };
 
     return (
       <div className="flex flex-col gap-5">
@@ -124,34 +139,35 @@ function Stage({
           </div>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
             Três avarias chegaram hoje: um celular mudo, um quarto no escuro e um fio esquentando.
-            Escolha por onde começar.
+            Vire os três prontuários para conhecer as bancadas e depois teste a da rodada.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {CASES.map((c, i) => (
-            <EvidenceCard
-              key={c.id}
-              data={cards[i]}
-              color={c.id === caso.id ? areaColorDark : areaColor}
-              onReveal={() => {
-                if (c.id === caso.id) {
-                  session.showSuccess(`Bancada aberta: ${c.title}. ${c.symptom}`);
-                } else {
-                  session.showInfo(`Prontuário lido: ${c.title}. Chega na próxima rodada.`);
-                }
-              }}
-            />
-          ))}
+        <div>
+          <p className="mb-3 font-display text-sm font-bold text-ink-soft">
+            Bancadas examinadas · {read.length}/{CASES.length}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {CASES.map((c, i) => (
+              <EvidenceCard
+                key={c.id}
+                data={cards[i]}
+                color={c.id === caso.id ? areaColorDark : areaColor}
+                onReveal={() => handleRead(c)}
+              />
+            ))}
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={onPhase2}
-          className="ludus-btn ludus-btn-xl text-white"
-          style={{ background: areaColor, borderColor: areaColorDark }}
-        >
-          Testar “{caso.title}”
-          <ArrowRight className="size-5" aria-hidden />
-        </button>
+        {allRead && (
+          <button
+            type="button"
+            onClick={onPhase2}
+            className="ludus-btn ludus-btn-xl anim-bounce-in text-white"
+            style={{ background: areaColor, borderColor: areaColorDark }}
+          >
+            Testar “{caso.title}”
+            <ArrowRight className="size-5" aria-hidden />
+          </button>
+        )}
       </div>
     );
   }
@@ -178,12 +194,7 @@ function Stage({
 
     return (
       <div className="flex flex-col gap-5">
-        <CircuitDiagram
-          voltage={caso.voltage}
-          bench={bench}
-          currentState={currentState}
-          color={areaColor}
-        />
+        <CircuitDiagram voltage={caso.voltage} bench={bench} currentState={currentState} />
 
         {/* Medidor */}
         <div
@@ -321,20 +332,21 @@ function CircuitDiagram({
   voltage,
   bench,
   currentState,
-  color,
 }: {
   voltage: number;
   bench: BenchState;
   currentState: "off" | "ok" | "danger";
-  color: string;
 }) {
   const flowing = bench.switchClosed;
-  const stroke =
-    currentState === "danger" ? "#ff4b4b" : currentState === "ok" ? "#10b981" : "#b9b2a0";
-  const wireStyle = flowing
-    ? { stroke: stroke, strokeWidth: 5 }
-    : { stroke: "#c8c2b2", strokeWidth: 4 };
+  const wireStroke = flowing
+    ? currentState === "danger"
+      ? "var(--danger)"
+      : "var(--success)"
+    : "#b9b2a0";
+  const wireWidth = flowing ? 5 : 4;
   const glow = currentState === "ok";
+  const labelFill = "var(--ink-soft)";
+  const softFill = "var(--cloud)";
 
   return (
     <figure className="rounded-2xl border-2 border-border bg-surface p-4">
@@ -342,114 +354,208 @@ function CircuitDiagram({
         Diagrama da bancada · fonte {voltage} V
       </figcaption>
       <svg
-        viewBox="0 0 360 200"
+        viewBox="0 0 360 224"
         className="w-full"
         role="img"
-        aria-label={`Diagrama do circuito: fonte de ${voltage} volts, ${bench.switchClosed ? "chave fechada" : "chave aberta"}, ${bench.parallel ? "associação em paralelo" : "caminho único"}, ${bench.lampIn ? "lâmpada inserida" : "sem lâmpada, fio direto"}.`}
+        aria-label={`Diagrama do circuito: fonte de ${voltage} volts, ${bench.switchClosed ? "chave fechada" : "chave aberta"}, ${bench.parallel ? "associação em paralelo com dois ramos" : "caminho único"}, ${bench.lampIn ? "lâmpada inserida" : "sem lâmpada, fio direto"}.`}
       >
-        {/* fios (base) */}
-        <path d="M60 60 H300 V140 H60 Z" fill="none" {...wireStyle} strokeLinecap="round" />
+        <defs>
+          <radialGradient id="lamp-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#ffc800" stopOpacity="0.5" />
+            <stop offset="60%" stopColor="#ffc800" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#ffc800" stopOpacity="0" />
+          </radialGradient>
+        </defs>
 
-        {/* fluxo animado */}
+        {/* Fios do caminho principal, com vãos para a bateria e a lâmpada. */}
+        <path
+          d="M60 60 H300 V140 H206 M154 140 H60 V124 M60 76 V60"
+          fill="none"
+          style={{ stroke: wireStroke, strokeWidth: wireWidth, transition: "stroke 200ms ease" }}
+          strokeLinecap="round"
+        />
+
+        {/* Fluxo animado da corrente. */}
         {flowing && (
-          <path
-            d="M60 60 H300 V140 H60 Z"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="2.5"
-            strokeDasharray="10 14"
-            strokeLinecap="round"
-            className="flow-dash"
-          />
+          <>
+            <path
+              d="M60 60 H300 V140 H60 Z"
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="2.5"
+              strokeDasharray="10 14"
+              strokeLinecap="round"
+              className="flow-dash"
+            />
+            {bench.parallel && (
+              <path
+                d="M110 140 V190 H250 V140"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+                strokeDasharray="10 14"
+                strokeLinecap="round"
+                className="flow-dash"
+              />
+            )}
+          </>
         )}
 
-        {/* bateria */}
+        {/* Bateria */}
         <g>
-          <rect x="48" y="76" width="24" height="48" rx="6" fill="#3c3a4e" />
-          <text x="60" y="145" fontSize="10" fontWeight="800" fill="#3c3a4e" textAnchor="middle">
+          <rect x="48" y="76" width="24" height="48" rx="6" style={{ fill: "var(--ink)" }} />
+          <line x1="72" y1="88" x2="82" y2="88" style={{ stroke: "var(--ink)" }} strokeWidth="4" />
+          <line
+            x1="72"
+            y1="112"
+            x2="82"
+            y2="112"
+            style={{ stroke: "var(--ink)" }}
+            strokeWidth="2"
+          />
+          <text
+            x="26"
+            y="104"
+            fontSize="10"
+            fontWeight="800"
+            style={{ fill: labelFill }}
+            textAnchor="middle"
+          >
             {voltage}V
           </text>
-          <line x1="72" y1="88" x2="82" y2="88" stroke="#3c3a4e" strokeWidth="4" />
-          <line x1="72" y1="112" x2="82" y2="112" stroke="#3c3a4e" strokeWidth="2" />
         </g>
 
-        {/* chave (interruptor) */}
+        {/* Chave (interruptor) */}
         <g>
-          <circle cx="140" cy="60" r="6" fill={bench.switchClosed ? "#10b981" : "#b9b2a0"} />
-          <circle cx="190" cy="60" r="6" fill={bench.switchClosed ? "#10b981" : "#b9b2a0"} />
+          <circle
+            cx="140"
+            cy="60"
+            r="6"
+            style={{ fill: bench.switchClosed ? "var(--success)" : "#b9b2a0" }}
+          />
+          <circle
+            cx="190"
+            cy="60"
+            r="6"
+            style={{ fill: bench.switchClosed ? "var(--success)" : "#b9b2a0" }}
+          />
           <line
             x1="140"
             y1="60"
             x2="188"
             y2={bench.switchClosed ? "60" : "34"}
-            stroke={bench.switchClosed ? "#10b981" : "#8783a0"}
+            style={{ stroke: bench.switchClosed ? "var(--success)" : "#8783a0" }}
             strokeWidth="5"
             strokeLinecap="round"
-            style={{ transition: "all 200ms ease" }}
           />
-          <text x="165" y="24" fontSize="10" fontWeight="800" fill="#635f7c" textAnchor="middle">
+          <text
+            x="165"
+            y="30"
+            fontSize="10"
+            fontWeight="800"
+            style={{ fill: labelFill }}
+            textAnchor="middle"
+          >
             {bench.switchClosed ? "chave fechada" : "chave aberta"}
           </text>
         </g>
 
-        {/* lâmpada (ou fio direto) */}
+        {/* Lâmpada principal no trilho inferior (ou fio direto) */}
         {bench.lampIn ? (
           <g>
+            {glow && <circle cx="180" cy="140" r="46" fill="url(#lamp-glow)" />}
             <circle
-              cx="240"
-              cy="100"
+              cx="180"
+              cy="140"
               r="26"
-              fill={glow ? "#ffc800" : "var(--cloud)"}
-              style={{ fill: glow ? "#ffc800" : "var(--cloud)" }}
-              stroke={glow ? "#dda500" : "#b9b2a0"}
+              style={{
+                fill: glow ? "#ffc800" : softFill,
+                stroke: glow ? "#dda500" : "#b9b2a0",
+              }}
               strokeWidth="4"
-              className={glow ? "anim-pulse-soft" : undefined}
             />
             <path
-              d="M230 100 h20 M235 108 h10 M235 92 h10"
+              d="M170 140 h20 M175 148 h10 M175 132 h10"
               stroke="#8783a0"
               strokeWidth="2.5"
               strokeLinecap="round"
             />
-            <text x="240" y="145" fontSize="10" fontWeight="800" fill="#635f7c" textAnchor="middle">
+            <text
+              x="180"
+              y="102"
+              fontSize="10"
+              fontWeight="800"
+              style={{ fill: labelFill }}
+              textAnchor="middle"
+            >
               {glow ? "acesa" : "apagada"}
             </text>
           </g>
         ) : (
           <g>
-            <path d="M240 60 V140" stroke="#ff4b4b" strokeWidth="6" strokeLinecap="round" />
-            <text x="240" y="155" fontSize="10" fontWeight="800" fill="#ff4b4b" textAnchor="middle">
+            <path
+              d="M154 140 H206"
+              fill="none"
+              style={{ stroke: "var(--danger)" }}
+              strokeWidth="6"
+              strokeLinecap="round"
+            />
+            <text
+              x="180"
+              y="102"
+              fontSize="10"
+              fontWeight="800"
+              style={{ fill: "var(--danger)" }}
+              textAnchor="middle"
+            >
               fio direto (curto)
             </text>
           </g>
         )}
 
-        {/* ramo paralelo */}
+        {/* Ramo paralelo: segunda lâmpada entre os mesmos trilhos */}
         {bench.parallel && (
-          <>
+          <g>
             <path
-              d="M120 60 V180 H320 V140"
+              d="M110 140 V190 H250 V140"
               fill="none"
-              stroke={bench.switchClosed ? stroke : "#c8c2b2"}
-              strokeWidth="4"
+              style={{
+                stroke: wireStroke,
+                strokeWidth: wireWidth,
+                transition: "stroke 200ms ease",
+              }}
               strokeLinecap="round"
             />
+            {glow && bench.switchClosed && (
+              <circle cx="180" cy="190" r="30" fill="url(#lamp-glow)" />
+            )}
             <circle
-              cx="220"
-              cy="180"
+              cx="180"
+              cy="190"
               r="16"
-              fill={glow && bench.switchClosed ? "#ffc800" : "var(--cloud)"}
-              style={{ fill: glow && bench.switchClosed ? "#ffc800" : "var(--cloud)" }}
-              stroke={glow && bench.switchClosed ? "#dda500" : "#b9b2a0"}
+              style={{
+                fill: glow && bench.switchClosed ? "#ffc800" : softFill,
+                stroke: glow && bench.switchClosed ? "#dda500" : "#b9b2a0",
+              }}
               strokeWidth="3.5"
             />
             <path
-              d="M214 180 h12 M217 186 h6 M217 174 h6"
+              d="M174 190 h12 M177 196 h6 M177 184 h6"
               stroke="#8783a0"
               strokeWidth="2"
               strokeLinecap="round"
             />
-          </>
+            <text
+              x="180"
+              y="219"
+              fontSize="10"
+              fontWeight="800"
+              style={{ fill: labelFill }}
+              textAnchor="middle"
+            >
+              ramo paralelo
+            </text>
+          </g>
         )}
       </svg>
     </figure>
@@ -482,7 +588,7 @@ function BenchToggle({
       style={active ? { boxShadow: "0 5px 0 #46a302" } : undefined}
     >
       <span
-        className="flex size-12 items-center justify-center rounded-2xl text-white"
+        className="ludus-tile flex size-12 items-center justify-center rounded-2xl text-white"
         style={{ background: active ? "var(--success)" : color, opacity: active ? 1 : 0.75 }}
         aria-hidden
       >
@@ -524,7 +630,7 @@ function BenchToggle({
       <span className="text-[0.7rem] font-semibold leading-snug text-ink-soft">{hint}</span>
       <span
         className={`ludus-chip ${active ? "border-success text-success-dark" : "text-ink-faint"}`}
-        style={active ? { background: "var(--success-soft)" } : { background: "#f4f1ea" }}
+        style={active ? { background: "var(--success-soft)" } : { background: "var(--cloud)" }}
       >
         {active ? "Ativo" : "Inativo"}
       </span>

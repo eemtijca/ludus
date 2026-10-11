@@ -24,7 +24,7 @@ const result = windows
         `TEST_BASE_URL=${process.env.TEST_BASE_URL || "http://host.docker.internal:3000"}`,
         "-e",
         "PLAYWRIGHT_SKIP_WEBSERVER=1",
-        process.env.PLAYWRIGHT_IMAGE || "mcr.microsoft.com/playwright:v1.63.0-noble",
+        process.env.PLAYWRIGHT_IMAGE || "mcr.microsoft.com/playwright:v1.64.0-noble",
         // A imagem oficial do Playwright não expõe o binário global; npx resolve o pacote embutido.
         "npx",
         "playwright",

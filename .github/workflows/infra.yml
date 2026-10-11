@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/docker-cache
-          key: docker-ludus-${{ hashFiles('package-lock.json', 'Dockerfile') }}
+          key: docker-ludus-${{ hashFiles('pnpm-lock.yaml', 'Dockerfile') }}
 
       - name: Construir a imagem da aplicação
         run: |

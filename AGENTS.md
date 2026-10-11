@@ -5,11 +5,11 @@ Ludus: aplicação web de 20 jogos de investigação para o ensino médio, com c
 ## Diretrizes do repositório
 
 - Leia o `CONTRIBUTING.md` antes de qualquer mudança: ele reúne o fluxo de issues, etiquetas, branches, commits, pull requests, padrões de código, acessibilidade e testes.
-- O `next.config.ts` define `typescript.ignoreBuildErrors: true` e `reactStrictMode: false`; rode `npm run tsc` e `npm run lint` em toda mudança.
+- O `next.config.ts` define `typescript.ignoreBuildErrors: true` e `reactStrictMode: false`; rode `pnpm run tsc` e `pnpm run lint` em toda mudança.
 - Commits seguem Conventional Commits em português, no imperativo, com escopo opcional: `fix(jogo): corrige ...`. Branches usam `tipo/descricao-curta`, inclusive as criadas por agentes de IA; a autoria assistida fica no rodapé `Assisted-by` do commit.
-- O gerenciador é npm, com `package-lock.json`; não use bun, yarn nem pnpm.
+- O gerenciador é pnpm, com `pnpm-lock.yaml`; não use bun, yarn nem npm nos comandos.
 - Nomes de domínio em português (`jogos`, `fases`, `selos`), termos de infraestrutura em inglês quando consagrados (`build`, `standalone`).
-- A suíte de fumaça do Playwright roda primariamente em contêiner: `npm run test:e2e:docker`.
+- A suíte de fumaça do Playwright roda primariamente em contêiner: `pnpm run test:e2e:docker`.
 
 ## Padrões de código
 
@@ -27,22 +27,22 @@ Ludus: aplicação web de 20 jogos de investigação para o ensino médio, com c
 
 Pré-requisitos: Node 20 ou superior e, para a suíte em contêiner, Docker. Não há variáveis de ambiente obrigatórias nem banco.
 
-- `npm install`; `npm run dev` em `http://localhost:3000`; `npm run build`; `npm start`.
-- Verificação antes do pull request: `npm run lint`, `npm run tsc` e `npm run test:e2e:docker`.
-- A suíte em contêiner usa a imagem oficial e espera o aplicativo no ar; `npm run test:e2e` e `npm run test:e2e:install` são a alternativa local.
+- `pnpm install`; `pnpm run dev` em `http://localhost:3000`; `pnpm run build`; `pnpm start`.
+- Verificação antes do pull request: `pnpm run lint`, `pnpm run tsc` e `pnpm run test:e2e:docker`.
+- A suíte em contêiner usa a imagem oficial e espera o aplicativo no ar; `pnpm run test:e2e` e `pnpm run test:e2e:install` são a alternativa local.
 - Os scripts Node em `scripts/` tornam dev, build, start e contêiner portáveis. No Windows, o Playwright usa `host.docker.internal`; no Linux, mantém o script Bash e a rede host.
 - O CI separa `qualidade.yml` (lint, tipos e build) e `testes.yml` (ponta a ponta no Chromium em contêiner).
-- Etiquetas: `npm run etiquetas:sync` cria ou atualiza as etiquetas do GitHub conforme `.github/labels.json`.
-- Capturas do README: `npm run capturas:readme` ou `npm run capturas:readme:docker`, com o aplicativo no ar. Os PNGs ficam em `docs/imagens/` e não são editados à mão.
+- Etiquetas: `pnpm run etiquetas:sync` cria ou atualiza as etiquetas do GitHub conforme `.github/labels.json`.
+- Capturas do README: `pnpm run capturas:readme` ou `pnpm run capturas:readme:docker`, com o aplicativo no ar. Os PNGs ficam em `docs/imagens/` e não são editados à mão.
 
 ## Ferramentas externas
 
 - GitHub: opere issues, pull requests, execuções de workflow e releases pelo GitHub CLI (`gh`), não pela interface web. Confirme a sessão com `gh auth status` e, se necessário, autentique com `gh auth login`. Exemplos: `gh issue create`, `gh pr create`, `gh pr checks --watch`, `gh run watch` e `gh release create`. Nunca inclua segredos ou dados de estudantes.
-- Playwright: rode a suíte na imagem oficial da Microsoft, com o aplicativo no ar, usando `npm run test:e2e:docker` (ou `npm run test:e2e:docker:chromium`). O script `tests/playwright-container.sh` aceita `PLAYWRIGHT_IMAGE`, `PLAYWRIGHT_DOCKER_NETWORK` e `PLAYWRIGHT_DOCKER_USER`. Mantenha a versão da imagem igual à do `@playwright/test`. A instalação local é alternativa.
+- Playwright: rode a suíte na imagem oficial da Microsoft, com o aplicativo no ar, usando `pnpm run test:e2e:docker` (ou `pnpm run test:e2e:docker:chromium`). O script `tests/playwright-container.sh` aceita `PLAYWRIGHT_IMAGE`, `PLAYWRIGHT_DOCKER_NETWORK` e `PLAYWRIGHT_DOCKER_USER`. Mantenha a versão da imagem igual à do `@playwright/test`. A instalação local é alternativa.
 
 ## Fluxo de issues e pull requests
 
-- Aplique etiquetas em toda issue e todo pull request: uma de tipo e, fora do tipo `docs`, uma de área. Use `gh issue create --label "bug" --label "area: acessibilidade"` e `gh pr edit <número> --add-label "area: jogos"`. O catálogo fica em `.github/labels.json` e é sincronizado com `npm run etiquetas:sync`. Pull requests do Dependabot recebem `dependencies` e dispensam as demais.
+- Aplique etiquetas em toda issue e todo pull request: uma de tipo e, fora do tipo `docs`, uma de área. Use `gh issue create --label "bug" --label "area: acessibilidade"` e `gh pr edit <número> --add-label "area: jogos"`. O catálogo fica em `.github/labels.json` e é sincronizado com `pnpm run etiquetas:sync`. Pull requests do Dependabot recebem `dependencies` e dispensam as demais.
 - Faça apenas commits atômicos: uma mudança lógica completa por commit, sem trabalho em andamento nem correção de revisão. Use `git commit --fixup` durante o desenvolvimento e `git rebase -i --autosquash` antes de publicar.
 - Organize todos os commits do assunto em uma única branch e um único pull request. Abra o pull request somente quando estiver finalizado, com título em Conventional Commits, verificações locais, documentação e CHANGELOG prontos. Não use `gh pr create --fill`.
 - Todo pull request precisa da aprovação de um mantenedor do `.github/CODEOWNERS` antes do merge; quem abriu pode mesclar depois da aprovação. Agentes não mesclam sem essa aprovação.
@@ -59,8 +59,8 @@ Pré-requisitos: Node 20 ou superior e, para a suíte em contêiner, Docker. Nã
 
 ## Armadilhas
 
-- O build ignora erros de tipo e o modo estrito do React está desligado; a verificação real é `npm run tsc` e o lint.
-- `npm start` exige `npm run build` antes, porque executa o standalone.
+- O build ignora erros de tipo e o modo estrito do React está desligado; a verificação real é `pnpm run tsc` e o lint.
+- `pnpm start` exige `pnpm run build` antes, porque executa o standalone.
 - O Prettier ignora `src/components/ui` e `public/mathjax`; não reformate esses diretórios à mão.
 - `next-auth`, `next-intl` e `z-ai-web-dev-sdk` estão declarados no `package.json` sem uso no código: não há autenticação, tradução nem serviço externo.
 - O estado é local ao navegador: não há sincronização entre dispositivos nem coleta de dados pessoais.

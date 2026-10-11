@@ -17,29 +17,29 @@ Guia de desenvolvimento do Ludus: como preparar o ambiente, abrir issues, propor
 Pré-requisitos: Node 20 ou superior e, para a suíte em contêiner, Docker. Não há variáveis de ambiente obrigatórias nem banco de dados.
 
 ```bash
-npm install
-npm run dev      # http://localhost:3000
+pnpm install
+pnpm run dev      # http://localhost:3000
 ```
 
 Build de produção:
 
 ```bash
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 Comandos úteis na raiz:
 
 | Comando                   | Efeito                                           |
 | ------------------------- | ------------------------------------------------ |
-| `npm run dev`             | Servidor de desenvolvimento na porta 3000.       |
-| `npm run build`           | Build de produção e cópia da saída standalone.   |
-| `npm start`               | Executa o build de produção com Node.            |
-| `npm run lint`            | Análise estática com o ESLint.                   |
-| `npm run tsc`             | Checagem de tipos (o build não a executa).       |
-| `npm run test:e2e:docker` | Suíte de fumaça na imagem oficial do Playwright. |
-| `npm run test:e2e`        | Alternativa local, sobe o servidor sozinho.      |
-| `npm run etiquetas:sync`  | Sincroniza as etiquetas do GitHub com o catálogo. |
+| `pnpm run dev`             | Servidor de desenvolvimento na porta 3000.       |
+| `pnpm run build`           | Build de produção e cópia da saída standalone.   |
+| `pnpm start`               | Executa o build de produção com Node.            |
+| `pnpm run lint`            | Análise estática com o ESLint.                   |
+| `pnpm run tsc`             | Checagem de tipos (o build não a executa).       |
+| `pnpm run test:e2e:docker` | Suíte de fumaça na imagem oficial do Playwright. |
+| `pnpm run test:e2e`        | Alternativa local, sobe o servidor sozinho.      |
+| `pnpm run etiquetas:sync`  | Sincroniza as etiquetas do GitHub com o catálogo. |
 
 ## Fluxo de contribuição e pull requests
 
@@ -92,7 +92,7 @@ Toda issue e todo pull request recebe ao menos uma etiqueta de tipo e uma de ár
 | Prioridade | `prioridade: alta`, `prioridade: media`, `prioridade: baixa`                                  | Urgência definida na triagem.                      |
 | Triagem    | `triagem`                                                                                     | Aguardando confirmação de tipo, área e prioridade. |
 
-O catálogo fica em [.github/labels.json](../.github/labels.json) e é aplicado com `npm run etiquetas:sync`, que cria ou atualiza as etiquetas pelo GitHub CLI. O workflow `etiquetas.yml` aplica `area:` pelos caminhos alterados e o tipo pelo prefixo do título, e o check `validar` reprova pull requests sem etiqueta obrigatória ou com título fora do padrão Conventional Commits. Pull requests do tipo `docs` dispensam etiqueta de área.
+O catálogo fica em [.github/labels.json](../.github/labels.json) e é aplicado com `pnpm run etiquetas:sync`, que cria ou atualiza as etiquetas pelo GitHub CLI. O workflow `etiquetas.yml` aplica `area:` pelos caminhos alterados e o tipo pelo prefixo do título, e o check `validar` reprova pull requests sem etiqueta obrigatória ou com título fora do padrão Conventional Commits. Pull requests do tipo `docs` dispensam etiqueta de área.
 
 Antes de criar uma etiqueta nova, confirme que ela tem público, dono e regra automatizada no mesmo pull request, seja pelo catálogo, pelo mapeamento de caminhos ou pelo título. Etiqueta sem automação tende a não ser aplicada.
 
@@ -187,9 +187,9 @@ A descrição deve conter:
 Antes de abrir, rode as verificações locais:
 
 ```bash
-npm run lint
-npm run tsc
-npm run test:e2e:docker   # imagem oficial, com o aplicativo no ar
+pnpm run lint
+pnpm run tsc
+pnpm run test:e2e:docker   # imagem oficial, com o aplicativo no ar
 ```
 
 Preencha o checklist do template de pull request. Ao alterar comportamento, atualize o README e o CHANGELOG.md.
@@ -200,7 +200,7 @@ Toda mudança passa por revisão e pelos workflows do GitHub Actions:
 
 | Workflow        | Etapas                                                                    |
 | --------------- | ------------------------------------------------------------------------- |
-| `qualidade.yml` | `npm ci`, `lint`, `tsc` e `build` em pull requests.                       |
+| `qualidade.yml` | `pnpm install --frozen-lockfile`, `lint`, `tsc` e `build` em pull requests.                       |
 | `etiquetas.yml` | Aplica etiquetas de área e de tipo e valida o título e as etiquetas em pull requests fora de rascunho. |
 | `testes.yml`    | Sobe o aplicativo e roda a suíte do Playwright no Chromium, em contêiner. |
 
@@ -249,20 +249,20 @@ A suíte do Playwright cobre o hub, uma partida completa de fumaça, o progresso
 Também cobre as 20 rotas de jogos, os 60 casos, integridade dos conteúdos, progressão dos cinco níveis, preservação de registros anteriores, pistas e apoio, filtros combinados, falha de cópia de link, teclado e responsividade.
 
 ```bash
-npm run test:e2e:docker            # todos os projetos, na imagem oficial
-npm run test:e2e:docker:chromium   # apenas o Chromium
-npm run test:e2e                   # alternativa local, sobe o servidor
-npm run capturas:readme            # capturas do README em docs/imagens
+pnpm run test:e2e:docker            # todos os projetos, na imagem oficial
+pnpm run test:e2e:docker:chromium   # apenas o Chromium
+pnpm run test:e2e                   # alternativa local, sobe o servidor
+pnpm run capturas:readme            # capturas do README em docs/imagens
 ```
 
-As capturas do README ficam em `docs/imagens/` e são geradas por `tests/e2e/imagens.spec.ts`, com o aplicativo no ar: `npm run capturas:readme` no host ou `npm run capturas:readme:docker` na imagem oficial. Os PNGs são versionados e não devem ser editados à mão.
+As capturas do README ficam em `docs/imagens/` e são geradas por `tests/e2e/imagens.spec.ts`, com o aplicativo no ar: `pnpm run capturas:readme` no host ou `pnpm run capturas:readme:docker` na imagem oficial. Os PNGs são versionados e não devem ser editados à mão.
 
 Regras:
 
 - Cada spec cria o próprio estado e limpa o que alterar no `localStorage`.
 - As preferências de acessibilidade são restauradas ao final de cada teste.
 - Ao corrigir um bug, adicione um caso que falharia antes da correção.
-- O `next.config.ts` ignora erros de tipo no build; `npm run tsc` é obrigatório no fluxo local e no CI.
+- O `next.config.ts` ignora erros de tipo no build; `pnpm run tsc` é obrigatório no fluxo local e no CI.
 
 ## Documentação
 

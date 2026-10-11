@@ -37,6 +37,7 @@ Versão de desenvolvimento fixada em 0.1.0. A primeira release será a `v1.0.0`;
 
 ### Modificado
 
+- Gerenciamento de dependências migrado de npm para pnpm, com o `packageManager` fixado, `pnpm-lock.yaml` versionado e `pnpm-workspace.yaml` autorizando os scripts de build.
 - Capturas de evidência movidas de `docs/evidencias/` para `docs/imagens/`; o resumo de execução em JSON foi removido e os links do relatório atualizados.
 - Guia de contribuição e AGENTS.md passam a exigir etiquetas em issues e pull requests, commits atômicos organizados em um único pull request e abertura somente com o trabalho finalizado.
 - Recriados os 12 jogos anteriores com hipóteses, limites das evidências, decisões fundamentadas e três casos progressivos por jogo.

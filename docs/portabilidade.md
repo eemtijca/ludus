@@ -24,4 +24,4 @@ O release é o artefato: a tag `vX.Y.Z` e a imagem publicada no GHCR são a font
 
 1. Gerar a imagem pela `publicacao.yml` (dispatch manual) ou com `docker build`.
 2. Executar o contêiner e conferir `/api`.
-3. Rodar `npm run infra:floci` para exercitar o Terraform nos emuladores.
+3. Rodar `pnpm run infra:floci` para exercitar o Terraform nos emuladores.

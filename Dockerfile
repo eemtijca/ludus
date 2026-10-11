@@ -1,19 +1,24 @@
 # Ludus. Imagem da aplicação (Next.js standalone).
 # Multi-estágio para manter a imagem final pequena.
 
+# Base comum: habilita o pnpm via Corepack em todos os estágios.
+FROM node:24-bookworm-slim AS base
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
+
 # 1. Dependências
-FROM node:24-bookworm-slim AS dependencias
+FROM base AS dependencias
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # 2. Compilação
-FROM node:24-bookworm-slim AS compilacao
+FROM base AS compilacao
 WORKDIR /app
 COPY --from=dependencias /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN pnpm run build
 
 # 3. Execução (somente o necessário)
 FROM node:24-bookworm-slim AS execucao

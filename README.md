@@ -57,14 +57,14 @@ Não há variáveis de ambiente obrigatórias nem banco de dados.
 
 ```bash
 # dependências
-npm install
+pnpm install
 
 # desenvolvimento em http://localhost:3000
-npm run dev
+pnpm run dev
 
 # build de produção
-npm run build
-npm run start
+pnpm run build
+pnpm run start
 ```
 
 O build usa a saída `standalone` do Next.js e copia os arquivos estáticos e a pasta `public` para `.next/standalone`. O script `start` executa o servidor standalone com Node.
@@ -85,7 +85,7 @@ Os scripts Node em `scripts/` são portáveis entre Windows e Linux. Para testar
 | `test:e2e:install` | instala os navegadores no host           | Alternativa local                         |
 | `capturas:readme`  | `playwright test tests/e2e/imagens.spec.ts` | Regenera as capturas de `docs/imagens/` |
 
-Observação: o `next.config.ts` ignora erros de tipo no build, por isso a checagem de tipos roda separadamente com `npm run tsc`. A suíte cobre as 20 rotas, os 60 casos, integridade de conteúdo e modelos, jornadas completas por área, preservação do progresso, filtros, modo professor, teclado, preferências, responsividade e API de saúde. A execução principal usa a imagem oficial do Playwright.
+Observação: o `next.config.ts` ignora erros de tipo no build, por isso a checagem de tipos roda separadamente com `pnpm run tsc`. A suíte cobre as 20 rotas, os 60 casos, integridade de conteúdo e modelos, jornadas completas por área, preservação do progresso, filtros, modo professor, teclado, preferências, responsividade e API de saúde. A execução principal usa a imagem oficial do Playwright.
 
 ## Como usar
 
@@ -257,10 +257,10 @@ Existe um único endpoint de verificação de saúde em `GET /api`, que responde
 
 | Comando              | Efeito                                                        |
 | -------------------- | ------------------------------------------------------------- |
-| `npm run lint`       | Análise estática do código.                                   |
-| `npm run tsc`        | Checagem de tipos, separada do build.                         |
-| `npm run test:e2e:docker` | Suíte de fumaça na imagem oficial, com o aplicativo no ar. |
-| `npm run capturas:readme` | Regenera as capturas do README em `docs/imagens/`.       |
+| `pnpm run lint`       | Análise estática do código.                                   |
+| `pnpm run tsc`        | Checagem de tipos, separada do build.                         |
+| `pnpm run test:e2e:docker` | Suíte de fumaça na imagem oficial, com o aplicativo no ar. |
+| `pnpm run capturas:readme` | Regenera as capturas do README em `docs/imagens/`.       |
 
 A suíte roda primariamente em contêiner, conforme [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -305,7 +305,7 @@ Em uma issue no GitHub. Vulnerabilidades seguem o [SECURITY.md](SECURITY.md).
 ## Limitações conhecidas
 
 - A suíte automatizada combina fumaça de interface e verificações estruturais e numéricas. Não demonstra eficácia de aprendizagem nem certifica acessibilidade em toda tecnologia assistiva.
-- `next.config.ts` define `typescript.ignoreBuildErrors: true` e `reactStrictMode: false`. Por isso, a checagem de tipos deve ser executada separadamente com `npm run tsc`.
+- `next.config.ts` define `typescript.ignoreBuildErrors: true` e `reactStrictMode: false`. Por isso, a checagem de tipos deve ser executada separadamente com `pnpm run tsc`.
 - O estado é local ao navegador. Não há sincronização entre dispositivos.
 - A leitura em voz alta depende da disponibilidade de vozes pt-BR no sistema operacional e no navegador.
 

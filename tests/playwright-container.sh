@@ -1,5 +1,6 @@
 #!/bin/bash
 # Roda o Playwright na imagem oficial da Microsoft com o aplicativo já no ar.
+# A imagem oficial não expõe o binário global; npx resolve o pacote embutido.
 
 set -euo pipefail
 

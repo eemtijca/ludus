@@ -40,4 +40,4 @@ arquivos locais não há rede envolvida e o resultado é determinístico.
    esperada traz URLs `https://fonts.gstatic.com/s/...woff2`.
 3. Salve a URL do bloco `/* latin */` de cada família como `baloo-2.woff2` e
    `nunito.woff2` e confira os bytes mágicos `wOF2`.
-4. Rode `npm run lint`, `npm run tsc` e `npm run test:e2e:docker`.
+4. Rode `pnpm run lint`, `pnpm run tsc` e `pnpm run test:e2e:docker`.

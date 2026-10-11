@@ -2,6 +2,7 @@
   "name": "ludus",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.11.2",
   "scripts": {
     "dev": "node scripts/runtime.mjs dev",
     "build": "node scripts/runtime.mjs build",
@@ -104,12 +105,5 @@
     "typescript": "^5"
   },
   "description": "Ludus: jogos de investigação do ensino médio (BNCC) com DUA/AEE, voz, sem cronômetro e ritmo próprio. Sala de Recursos, EEMTI José Cláudio de Araújo.",
-  "license": "MIT",
-  "allowScripts": {
-    "@parcel/watcher@2.6.0": true,
-    "@swc/core@1.16.2": true,
-    "es5-ext@0.10.64": true,
-    "sharp@0.34.5": true,
-    "unrs-resolver@1.12.2": true
-  }
+  "license": "MIT"
 }

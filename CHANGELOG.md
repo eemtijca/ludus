@@ -34,6 +34,7 @@ Versão de desenvolvimento fixada em 0.1.0. A primeira release será a `v1.0.0`;
 - Harness `infra/floci` com Compose dos emuladores e script de aplicação, verificação e destruição por nuvem.
 - Workflow `infra.yml` para formatar, validar e aplicar o Terraform no Floci, e scripts npm `infra:fmt`, `infra:validar` e `infra:floci` com variantes por nuvem.
 - Documento `docs/implantacao-nuvem.md` e etiqueta `area: infra` no catálogo de etiquetas.
+- Diálogo Sobre no rodapé, com os desenvolvedores, o repositório, a instituição e a licença.
 
 ### Modificado
 

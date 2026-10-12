@@ -2,6 +2,8 @@
  * AppFooter: crédito institucional e princípios DUA/AEE.
  */
 
+import { SobreDialog } from "@/components/app-shell/sobre-dialog";
+
 export function AppFooter() {
   return (
     <footer className="mt-auto border-t-2 border-border bg-surface">
@@ -15,6 +17,7 @@ export function AppFooter() {
           Desenho Universal para a Aprendizagem (DUA): sem cronômetro, com voz, repetição livre e
           ritmo próprio.
         </p>
+        <SobreDialog />
       </div>
     </footer>
   );

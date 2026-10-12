@@ -255,7 +255,7 @@ pnpm run test:e2e                   # alternativa local, sobe o servidor
 pnpm run capturas:readme            # capturas do README em docs/imagens
 ```
 
-As capturas do README ficam em `docs/imagens/` e são geradas por `tests/e2e/imagens.spec.ts`, com o aplicativo no ar: `pnpm run capturas:readme` no host ou `pnpm run capturas:readme:docker` na imagem oficial. Os PNGs são versionados e não devem ser editados à mão.
+As capturas do README ficam em `docs/imagens/` e são geradas por `tests/e2e/imagens.spec.ts`, com o aplicativo no ar: `pnpm run capturas:readme` no host ou `pnpm run capturas:readme:docker` na imagem oficial. Os PNGs são versionados e não devem ser editados à mão. A captura de progresso parte do estado semeado determinístico de `tests/e2e/helpers/progresso.ts`, montado com identificadores reais do catálogo e dos casos; as demais capturas seguem com estado limpo.
 
 Regras:
 

@@ -1,6 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { expect, expectNoPageOverflow, test } from "./fixtures";
+import { semearProgresso } from "./helpers/progresso";
 
 const evidenceDirectory = path.resolve(process.cwd(), "docs/imagens");
 
@@ -53,6 +54,7 @@ test.describe("Capturas revisáveis de estados sem dados reais", () => {
     });
     await page.getByRole("button", { name: "Alto contraste", exact: true }).click();
     await page.getByRole("button", { name: "Texto amplo", exact: true }).click();
+    await semearProgresso(page);
     await page.goto("/progresso");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Seu progresso");
     await expectNoPageOverflow(page);

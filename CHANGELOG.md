@@ -58,3 +58,4 @@ Versão de desenvolvimento fixada em 0.1.0. A primeira release será a `v1.0.0`;
 - Cancelamento da leitura do feedback quando sua resposta muda, sem interromper a leitura pertencente a outro botão.
 - Confirmação de exclusão de progresso com opção explícita de manter os registros.
 - Fontes Baloo 2 e Nunito servidas de arquivos locais (subset latino, licenças OFL), eliminando a consulta ao Google Fonts no desenvolvimento e no build e a falha intermitente do `next/font/google` com o Turbopack ([vercel/next.js#99114](https://github.com/vercel/next.js/issues/99114)).
+- Imagem do contêiner do Playwright derivada da versão instalada, evitando falha da suíte quando o Dependabot atualiza o pacote.

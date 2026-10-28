@@ -38,7 +38,7 @@ Pré-requisitos: Node 20 ou superior e, para a suíte em contêiner, Docker. Nã
 ## Ferramentas externas
 
 - GitHub: opere issues, pull requests, execuções de workflow e releases pelo GitHub CLI (`gh`), não pela interface web. Confirme a sessão com `gh auth status` e, se necessário, autentique com `gh auth login`. Exemplos: `gh issue create`, `gh pr create`, `gh pr checks --watch`, `gh run watch` e `gh release create`. Nunca inclua segredos ou dados de estudantes.
-- Playwright: rode a suíte na imagem oficial da Microsoft, com o aplicativo no ar, usando `pnpm run test:e2e:docker` (ou `pnpm run test:e2e:docker:chromium`). O script `tests/playwright-container.sh` aceita `PLAYWRIGHT_IMAGE`, `PLAYWRIGHT_DOCKER_NETWORK` e `PLAYWRIGHT_DOCKER_USER`. Mantenha a versão da imagem igual à do `@playwright/test`. A instalação local é alternativa.
+- Playwright: rode a suíte na imagem oficial da Microsoft, com o aplicativo no ar, usando `pnpm run test:e2e:docker` (ou `pnpm run test:e2e:docker:chromium`). O script `tests/playwright-container.sh` aceita `PLAYWRIGHT_IMAGE`, `PLAYWRIGHT_DOCKER_NETWORK` e `PLAYWRIGHT_DOCKER_USER`. A imagem padrão é derivada da versão instalada de `@playwright/test`; `PLAYWRIGHT_IMAGE` sobrescreve. A instalação local é alternativa.
 
 ## Fluxo de issues e pull requests
 

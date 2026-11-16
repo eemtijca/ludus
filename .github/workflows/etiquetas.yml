@@ -1,6 +1,5 @@
-# Etiqueta pull requests pelos caminhos e pelo título, e valida etiquetas e
-# título antes da revisão. O check de validação roda apenas em pull requests
-# fora de rascunho e não se aplica a pull requests do Dependabot.
+# Etiqueta pull requests pelos caminhos e pelo título. A validação de título e
+# etiquetas fica no workflow validar.yml, em pull_request.
 name: Etiquetas
 
 on:
@@ -68,72 +67,3 @@ jobs:
               });
             }
 
-  validar:
-    name: validar
-    if: github.event.pull_request.draft == false
-    needs: classificar
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validar título e etiquetas
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        with:
-          script: |
-            const TIPOS = [
-              'bug',
-              'enhancement',
-              'documentation',
-              'dependencies',
-              'refactor',
-              'testes',
-              'ci',
-              'desempenho',
-              'manutencao',
-            ];
-            const titulo = context.payload.pull_request.title;
-            const convencional = /^[a-z]+(?:\([^)]+\))?!?: .+/.test(titulo);
-            const correspondencia = titulo.match(/^([a-z]+)(?:\([^)]+\))?(!)?:/);
-            const tipo = correspondencia?.[1];
-            const quebra = Boolean(correspondencia?.[2]);
-            const resposta = await github.rest.issues.listLabelsOnIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-            const etiquetas = resposta.data.map((etiqueta) => etiqueta.name);
-            const ehDependabot = context.payload.pull_request.user.login === 'dependabot[bot]';
-            const ehReleasePlease =
-              context.payload.pull_request.user.login === 'release-please[bot]' ||
-              etiquetas.some((etiqueta) => etiqueta.startsWith('autorelease: '));
-            const ehDocumentacao = /^docs(?:\([^)]+\))?!?:/.test(titulo);
-            const problemas = [];
-            if (!convencional) {
-              problemas.push('O título deve seguir o padrão Conventional Commits, como em "fix(jogo): corrige a leitura em voz".');
-            }
-            if (!ehDependabot && !ehReleasePlease) {
-              if (!etiquetas.some((etiqueta) => TIPOS.includes(etiqueta))) {
-                problemas.push('Falta uma etiqueta de tipo: bug, enhancement, documentation, refactor, testes, ci, desempenho ou manutencao.');
-              }
-              if (!ehDocumentacao && !etiquetas.some((etiqueta) => etiqueta.startsWith('area: '))) {
-                problemas.push('Falta uma etiqueta de área: area: jogos, area: progresso, area: acessibilidade, area: professor ou area: plataforma.');
-              }
-              const etiquetasVersao = etiquetas.filter((etiqueta) => etiqueta.startsWith('versao: '));
-              const versaoEsperada = quebra
-                ? 'versao: maior'
-                : tipo === 'feat'
-                  ? 'versao: menor'
-                  : ['fix', 'perf', 'refactor', 'revert', 'deps'].includes(tipo)
-                    ? 'versao: correcao'
-                    : undefined;
-              if (versaoEsperada && !etiquetasVersao.includes(versaoEsperada)) {
-                problemas.push(`Falta a etiqueta de impacto: ${versaoEsperada}.`);
-              }
-              if (!versaoEsperada && etiquetasVersao.length > 0) {
-                problemas.push(`O título não indica impacto de versão; remova ${etiquetasVersao.join(', ')}.`);
-              }
-            }
-            if (problemas.length > 0) {
-              core.setFailed(problemas.join(' '));
-            } else {
-              await core.summary.addRaw('Título e etiquetas em conformidade.').write();
-            }

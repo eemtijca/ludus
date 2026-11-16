@@ -92,7 +92,7 @@ Toda issue e todo pull request recebe ao menos uma etiqueta de tipo e uma de ár
 | Prioridade | `prioridade: alta`, `prioridade: media`, `prioridade: baixa`                                  | Urgência definida na triagem.                      |
 | Triagem    | `triagem`                                                                                     | Aguardando confirmação de tipo, área e prioridade. |
 
-O catálogo fica em [.github/labels.json](../.github/labels.json) e é aplicado com `pnpm run etiquetas:sync`, que cria ou atualiza as etiquetas pelo GitHub CLI. O workflow `etiquetas.yml` aplica `area:` pelos caminhos alterados e o tipo pelo prefixo do título, e o check `validar` reprova pull requests sem etiqueta obrigatória ou com título fora do padrão Conventional Commits. Pull requests do tipo `docs` dispensam etiqueta de área.
+O catálogo fica em [.github/labels.json](../.github/labels.json) e é aplicado com `pnpm run etiquetas:sync`, que cria ou atualiza as etiquetas pelo GitHub CLI. O workflow `etiquetas.yml` aplica `area:` pelos caminhos alterados e o tipo pelo prefixo do título, e o workflow `validar.yml` reprova pull requests sem etiqueta obrigatória ou com título fora do padrão Conventional Commits. Pull requests do tipo `docs` dispensam etiqueta de área.
 
 Antes de criar uma etiqueta nova, confirme que ela tem público, dono e regra automatizada no mesmo pull request, seja pelo catálogo, pelo mapeamento de caminhos ou pelo título. Etiqueta sem automação tende a não ser aplicada.
 
@@ -201,7 +201,8 @@ Toda mudança passa por revisão e pelos workflows do GitHub Actions:
 | Workflow        | Etapas                                                                    |
 | --------------- | ------------------------------------------------------------------------- |
 | `qualidade.yml` | `pnpm install --frozen-lockfile`, `lint`, `tsc` e `build` em pull requests.                       |
-| `etiquetas.yml` | Aplica etiquetas de área e de tipo e valida o título e as etiquetas em pull requests fora de rascunho. |
+| `etiquetas.yml` | Aplica etiquetas de área e de tipo em pull requests. |
+| `validar.yml` | Valida título e etiquetas em pull requests fora de rascunho, em `pull_request`. |
 | `testes.yml`    | Sobe o aplicativo e roda a suíte do Playwright no Chromium, em contêiner. |
 
 A `main` é protegida por rulesets: pull request obrigatório, checks verdes, conversas resolvidas e squash como único método. Todo pull request precisa da aprovação de um mantenedor do [CODEOWNERS](.github/CODEOWNERS); depois da aprovação, quem abriu pode mesclar. A autoaprovação não existe no GitHub; donos da organização podem mesclar com o bypass da regra de revisão, mas continuam sujeitos aos checks de qualidade.

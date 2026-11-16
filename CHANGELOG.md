@@ -13,7 +13,7 @@ Versão de desenvolvimento fixada em 0.1.0. A primeira release será a `v1.0.0`;
 - README reestruturado no padrão de repositórios de referência, com selos, sumário, demonstração, como usar, deploy, FAQ, suporte e créditos.
 - Scripts `capturas:readme` e `capturas:readme:docker` e spec renomeado para `tests/e2e/imagens.spec.ts`, gerando as capturas em `docs/imagens/`.
 - Catálogo de etiquetas em `.github/labels.json` e script `npm run etiquetas:sync` para sincronizá-las pelo GitHub CLI.
-- Workflow `etiquetas.yml`, que aplica etiquetas de área pelos caminhos e de tipo pelo título e valida título e etiquetas em pull requests.
+- Workflows `etiquetas.yml` (aplica etiquetas de área e de tipo) e `validar.yml` (valida título e etiquetas em `pull_request`), separando a etiquetagem da validação obrigatória.
 - Templates de issue ampliados (Bug, Melhoria e Tarefa) e template de pull request com etiquetas, commits atômicos, ciclo de rascunho e uso de IA.
 - Oito jogos, completando cinco níveis em cada área e 60 casos na coleção.
 - Matriz de progressão, diagnóstico dos jogos anteriores e pesquisa com fontes oficiais e acadêmicas em `docs/`.
